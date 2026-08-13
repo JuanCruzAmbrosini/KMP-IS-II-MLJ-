@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS productos (
+    codigo INTEGER PRIMARY KEY AUTOINCREMENT,
+    nombre TEXT NOT NULL,
+    precio REAL NOT NULL
+);
