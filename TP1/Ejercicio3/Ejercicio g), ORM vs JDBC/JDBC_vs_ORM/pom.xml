@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- Le indica a Maven que este proyecto hereda de las configuraciones base de Spring Boot. -->
+    <!-- Busca en los repositorios de internet (como Maven Central) ese paquete y todas las librerías que necesita por detrás-->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.4.3</version>
+        <relativePath/> <!-- Indica a Maven que busque el parent en los repositorios centrales y no en carpetas locales -->
+    </parent>
+
+    <groupId>com.mycompany</groupId> 
+    <artifactId>JDBC_vs_ORM</artifactId> 
+    <version>1.0-SNAPSHOT</version>
+    <name>Prueba Springboot con JDBC</name> <!-- Nombre descriptivo visible -->
+    <description>DAO con JDBC</description> <!-- Breve descripción de lo que hace la app -->
+    <packaging>jar</packaging> 
+
+    <!-- Define variables reutilizables en todo el archivo para mantener la consistencia. -->
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        
+        <!-- Indica al compilador de Java que genere código compatible con la versión 17 -->
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        
+        <!-- Variable personalizada para reutilizar la versión exacta de Spring Boot -->
+        <spring.boot.version>3.4.3</spring.boot.version>
+        
+        <!-- Rutas hacia la clase principal (Main) con la anotación @SpringBootApplication. -->
+        <!-- Se agregan ambas para asegurar la detección tanto por NetBeans como por los plugins de Maven. -->
+        <exec.mainClass>com.mycompany.jdbc_vs_orm.JDBC_vs_ORM</exec.mainClass>
+        <start-class>com.mycompany.jdbc_vs_orm.JDBC_vs_ORM</start-class>
+    </properties>
+   
+    <!-- 5. DEPENDENCIAS (Maven descarga de internet) -->
+    <dependencies>
+        
+        <!-- Starter Web: Descarga servidor Tomcat embebido, Spring MVC y Jackson (Java a JSON) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>3.4.3</version>
+        </dependency>
+
+        <!-- Starter JDBC: Descarga herramientas para BD relacionales (JdbcTemplate y HikariCP para pool de conexiones) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+            <version>3.4.3</version>
+        </dependency>
+        
+        <!-- Driver JDBC para SQLite: Permite a Java comunicarse directamente con el motor de BD de SQLite -->
+        <dependency>
+            <groupId>org.xerial</groupId>
+            <artifactId>sqlite-jdbc</artifactId>
+            <version>3.49.1.0</version>
+        </dependency>
+
+    </dependencies>
+    
+    <!-- 6. HERRAMIENTAS DE CONSTRUCCIÓN (Plugins) -->
+    <build>
+        <plugins>
+            <!-- Plugin oficial de Spring Boot para empaquetar todo (código + librerías + Tomcat) en un solo archivo .jar ejecutable -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>3.4.3</version>
+            </plugin>
+        </plugins>
+    </build>
+</project>
