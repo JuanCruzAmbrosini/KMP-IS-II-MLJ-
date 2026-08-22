@@ -31,6 +31,11 @@ y actuará como intermediario entre el cliente y la lógica de negocio.*/
 @Controller
 public class PaisController {
 
+
+	/* @Autowired: Indica que Spring debe inyectar automáticamente una instancia del servicio PaisService en esta clase.
+	 * Esto permite que la clase PaisController pueda interactuar con la lógica de negocio relacionada con países
+	 * sin necesidad de crear manualmente una instancia de este servicio.
+	 */
 	@Autowired
    	private PaisService paisService;
 	
@@ -38,7 +43,8 @@ public class PaisController {
 	   a una URL diferente. Esto se suele emplear después de acciones como el envío de formularios, 
 	   cuando se mueve un recurso o para dirigir a los usuarios a páginas específicas según la lógica. 
 	 */
-	
+
+	// Definición de las vistas utilizadas por el controlador.
 	private String viewList= "view/pais/lPais.html";
 	private String redirectList= "redirect:/pais/listPais";
 	private String viewEdit= "view/pais/ePais.html"; 
@@ -146,6 +152,7 @@ public class PaisController {
 	
 	/* @GetMapping se utiliza para asignar solicitudes 
 	 * HTTP GET a métodos específicos de un controlador.
+	 * En este caso, se utiliza para acceder a la vista de baja de un país.
 	 */
 	
 	@GetMapping("/pais/baja/{id}")

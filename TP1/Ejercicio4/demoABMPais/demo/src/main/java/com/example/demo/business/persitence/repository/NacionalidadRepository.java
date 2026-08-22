@@ -17,11 +17,19 @@ Los repositorios son interfaces que extienden de JpaRepository u otras interface
 lo que les permite heredar una amplia gama de métodos para interactuar con la base de datos
 sin necesidad de implementar esos métodos manualmente.*/
 
+/* La anotación @Query se utiliza para definir consultas personalizadas en el repositorio.
+ * Permite escribir consultas JPQL (Java Persistence Query Language) directamente en la interfaz del repositorio,
+ * lo que proporciona flexibilidad para realizar búsquedas complejas sin necesidad de crear métodos adicionales en la implementación.
+ */
+
 public interface NacionalidadRepository extends JpaRepository<Nacionalidad, String> {
 
+
+	/* Recibe un String “nombre”. Para encontrar países por nombre y con su bit de eliminado en 0. */
 	@Query("SELECT n FROM Nacionalidad n WHERE n.nombre = :nombre AND n.eliminado = FALSE")
 	public Nacionalidad buscarNacionalidadPorNombre(@Param("nombre")String nombre);
-	
+
+	/* Encuentra países, aún con su bit de eliminado en 0.*/
 	@Query("SELECT n FROM Nacionalidad n WHERE n.eliminado = FALSE")
 	public List<Nacionalidad> listarNacionalidadActivo();
 	

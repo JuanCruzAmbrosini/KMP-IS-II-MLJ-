@@ -17,11 +17,18 @@ import com.example.demo.business.domain.entity.Pais;
  * sin necesidad de implementar esos métodos manualmente.
  */
 
+/* La anotación @Query se utiliza para definir consultas personalizadas en el repositorio.
+ * Permite escribir consultas JPQL (Java Persistence Query Language) directamente en la interfaz del repositorio,
+ * lo que proporciona flexibilidad para realizar búsquedas complejas sin necesidad de crear métodos adicionales en la implementación.
+ */
+
 public interface PaisRepository extends JpaRepository<Pais, String> {
 
+	/* Recibe un String “nombre”. Para encontrar nacionalidades por nombre y con su bit de eliminado en 0. */
 	@Query("SELECT p FROM Pais p WHERE p.nombre = :nombre AND p.eliminado = FALSE")
 	public Pais buscarPaisPorNombre(@Param("nombre")String nombre);
-	
+
+	/* Encuentra nacionalidades, aún con su bit de eliminado en 0.*/
 	@Query("SELECT p FROM Pais p WHERE p.eliminado = FALSE")
 	public Collection<Pais> listarPaisActivo();
 	

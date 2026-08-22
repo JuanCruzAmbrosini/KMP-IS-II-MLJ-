@@ -15,10 +15,24 @@ import com.example.demo.business.persitence.repository.NacionalidadRepository;
 
 import jakarta.persistence.NoResultException;
 
+/* @Service: Indica que esta clase es un componente de servicio de Spring,
+ * lo que permite la inyección de dependencias y otras funcionalidades proporcionadas
+ * por el contenedor de Spring.
+ */
 @Service
+
 public class NacionalidadService {
 
+    /*
+     * @Autowired: Indica que Spring debe inyectar automáticamente una instancia del repositorio NacionalidadRepository en esta clase.
+     * Esto permite que la clase NacionalidadService pueda interactuar con la base de datos a través del repositorio sin necesidad
+     * de crear manualmente una instancia de este.
+     */
 	@Autowired
+
+    /*
+     * El método validar se encarga de verificar que el nombre de la nacionalidad no sea nulo ni vacío.
+     */
 	private NacionalidadRepository repository; 
     
     public void validar(String nombre)throws ErrorServiceException {
@@ -37,6 +51,12 @@ public class NacionalidadService {
         }
     }
 
+    /* @Transactional: Indica que el método debe ejecutarse dentro de una transacción.
+     * Esto significa que todas las operaciones de base de datos dentro del método
+     * serán tratadas como una única unidad de trabajo, y pueden ser confirmadas (commit) o revertidas (rollback) juntas.
+     * El método crearNacionalidad asegura que la creación de una nacionalidad se realice de manera atómica, recibe un nombre como parámetro,
+     * lo valida y lanza una excepción personalizada ErrorServiceException en caso de errores.
+     */
 	@Transactional
     public void crearNacionalidad(String nombre) throws ErrorServiceException {
 
@@ -66,6 +86,13 @@ public class NacionalidadService {
         }
     }
 
+
+    /* @Transactional: Indica que el método debe ejecutarse dentro de una transacción.
+     * Esto significa que todas las operaciones de base de datos dentro del método
+     * serán tratadas como una única unidad de trabajo, y pueden ser confirmadas (commit) o revertidas (rollback) juntas.
+     * El método modificarNacionalidad asegura que la modificación de una nacionalidad se realice de manera atómica, recibe un id y un nombre como parámetros,
+     * lo valida y lanza una excepción personalizada ErrorServiceException en caso de errores.
+     */
 	@Transactional
     public void modificarNacionalidad(String idNacionalidad, String nombre) throws ErrorServiceException {
 
@@ -94,7 +121,15 @@ public class NacionalidadService {
             throw new ErrorServiceException("Error de Sistemas");
         }
     }
-	
+
+    /* El método findById heredado de JpaRepository para buscar la entidad por su ID.
+     * Este método devuelve un Optional<E>, que puede contener la entidad si se encuentra,
+     * o estar vacío si no se encuentra.
+     * ¿Qué es Optional?
+     * Un Optional<E> es un contenedor que puede o no contener un valor no nulo de tipo E.
+     * Los Optional se utilizan para evitar NullPointerException
+     * y para expresar la ausencia de un valor de manera más clara.
+     */
 	public Nacionalidad buscarNacionalidad(String id) throws ErrorServiceException {
 
         try {
@@ -122,6 +157,13 @@ public class NacionalidadService {
         }
     }
 
+    /* @Transactional: Indica que el método debe ejecutarse dentro de una transacción.
+     * Esto significa que todas las operaciones de base de datos dentro del método
+     * serán tratadas como una única unidad de trabajo, y pueden ser confirmadas (commit) o revertidas (rollback) juntas.
+     * En el método eliminarNacionalidad, @Transactional asegura que la operación
+     * de marcar la entidad como eliminada y guardarla nuevamente ocurra dentro de una transacción.
+     * Esto garantiza que ambos pasos se ejecuten correctamente o ninguno se ejecute en caso de un error.
+     */
     @Transactional
     public void eliminarNacionalidad(String id) throws ErrorServiceException {
 
@@ -141,6 +183,10 @@ public class NacionalidadService {
 
     }
 
+    /* findAll(): Este método de JpaRepository
+     * se utiliza para obtener todas las entidades del tipo E desde la base de datos.
+     * Devuelve una lista (List<E>) de todas las entidades.
+     */
     public Collection<Nacionalidad> listarNacionalidad() throws ErrorServiceException {
         try {
             
@@ -152,6 +198,10 @@ public class NacionalidadService {
         }
     }
     
+    /* listarNacionalidadActivo(): Este método personalizado de JpaRepository
+     * se utiliza para obtener todas las nacionalidades activas desde la base de datos.
+     * Devuelve una lista (List<Nacionalidad>) de todas las nacionalidades activas.
+     */
     public List<Nacionalidad> listarNacionalidadActivo() throws ErrorServiceException {
         try {
             

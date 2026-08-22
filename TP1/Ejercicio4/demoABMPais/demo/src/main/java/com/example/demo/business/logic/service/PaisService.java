@@ -22,33 +22,33 @@ import jakarta.persistence.NoResultException;
 @Service
 public class PaisService {
 
-	/* Repositorio que permite la interacción con la base de datos.
-	 * @Autowired realiza la inyección de dependencia.
-	 */ 
-	@Autowired
-	private PaisRepository repository; 
-    
-	/* @Transactional: Indica que el método debe ejecutarse dentro de una transacción.
+    /* Repositorio que permite la interacción con la base de datos.
+     * @Autowired realiza la inyección de dependencia.
+     */
+    @Autowired
+    private PaisRepository repository;
+
+    /* @Transactional: Indica que el método debe ejecutarse dentro de una transacción.
      * Esto significa que todas las operaciones de base de datos dentro del método
      * serán tratadas como una única unidad de trabajo, y pueden ser confirmadas (commit) o revertidas (rollback) juntas.
-     * En el método delete, @Transactional asegura que la operación
-     * de marcar la entidad como eliminada y guardarla nuevamente ocurra dentro de una transacción.
-     * Esto garantiza que ambos pasos se ejecuten correctamente o ninguno se ejecute en caso de un error.
+     * El método crearPais asegura que la creación de un país se realice de manera atómica, recibe un nombre como parámetro,
+     *lo valida y lanza una excepción personalizada ErrorServiceException en caso de errores.
      */
-	
-	@Transactional
+
+    @Transactional
     public void crearPais(String nombre) throws ErrorServiceException {
 
         try {
-            
+
             validar(nombre);
 
             try {
-            	Pais paisAux = repository.buscarPaisPorNombre(nombre);
-            	if (paisAux != null && !paisAux.isEliminado()) {
-                 throw new ErrorServiceException("Existe un país con el nombre indicado");
-            	} 
-            } catch (NoResultException ex) {}
+                Pais paisAux = repository.buscarPaisPorNombre(nombre);
+                if (paisAux != null && !paisAux.isEliminado()) {
+                    throw new ErrorServiceException("Existe un país con el nombre indicado");
+                }
+            } catch (NoResultException ex) {
+            }
 
             Pais pais = new Pais();
             pais.setId(UUID.randomUUID().toString());
@@ -59,12 +59,16 @@ public class PaisService {
 
         } catch (ErrorServiceException e) {
             throw e;
-        } catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
             throw new ErrorServiceException("Error de Sistemas");
         }
-	}
-	
+    }
+
+    /*
+     * El método validar se encarga de verificar que el nombre del país no sea nulo ni vacío.
+     */
+
     public void validar(String nombre)throws ErrorServiceException {
         
         try{
@@ -84,9 +88,8 @@ public class PaisService {
     /* @Transactional: Indica que el método debe ejecutarse dentro de una transacción.
      * Esto significa que todas las operaciones de base de datos dentro del método
      * serán tratadas como una única unidad de trabajo, y pueden ser confirmadas (commit) o revertidas (rollback) juntas.
-     * En el método delete, @Transactional asegura que la operación
-     * de marcar la entidad como eliminada y guardarla nuevamente ocurra dentro de una transacción.
-     * Esto garantiza que ambos pasos se ejecuten correctamente o ninguno se ejecute en caso de un error.
+     * El método modificarPais asegura que la modificación de un país se realice de manera atómica, recibe un id y un nombre como parámetros,
+     * lo valida y lanza una excepción personalizada ErrorServiceException en caso de errores.
      */
     
 	@Transactional
@@ -117,7 +120,16 @@ public class PaisService {
             throw new ErrorServiceException("Error de Sistemas");
         }
     }
-	
+
+    /* El método findById heredado de JpaRepository para buscar la entidad por su ID.
+     * Este método devuelve un Optional<E>, que puede contener la entidad si se encuentra,
+     * o estar vacío si no se encuentra.
+     * ¿Qué es Optional?
+     * Un Optional<E> es un contenedor que puede o no contener un valor no nulo de tipo E.
+     * Los Optional se utilizan para evitar NullPointerException
+     * y para expresar la ausencia de un valor de manera más clara.
+     */
+
 	public Pais buscarPais(String id) throws ErrorServiceException {
 
         try {
@@ -125,16 +137,6 @@ public class PaisService {
             if (id == null || id.isEmpty()) {
                 throw new ErrorServiceException("Debe indicar el país");
             }
-
-            /* El método findById heredado de JpaRepository para buscar la entidad por su ID.
-             * Este método devuelve un Optional<E>, que puede contener la entidad si se encuentra,
-             * o estar vacío si no se encuentra.
-             * ¿Qué es Optional?
-             * Un Optional<E> es un contenedor que puede o no contener un valor no nulo de tipo E.
-             * Los Optional se utilizan para evitar NullPointerException
-             * y para expresar la ausencia de un valor de manera más clara.
-             */
-            
             Optional<Pais> optional = repository.findById(id);
             Pais pais = null;
             if (optional.isPresent()) {
@@ -165,11 +167,10 @@ public class PaisService {
 	/* @Transactional: Indica que el método debe ejecutarse dentro de una transacción.
      * Esto significa que todas las operaciones de base de datos dentro del método
      * serán tratadas como una única unidad de trabajo, y pueden ser confirmadas (commit) o revertidas (rollback) juntas.
-     * En el método delete, @Transactional asegura que la operación
+     * En el método eliminarPais, @Transactional asegura que la operación
      * de marcar la entidad como eliminada y guardarla nuevamente ocurra dentro de una transacción.
      * Esto garantiza que ambos pasos se ejecuten correctamente o ninguno se ejecute en caso de un error.
      */
-	
     @Transactional
     public void eliminarPais(String id) throws ErrorServiceException {
 
@@ -189,13 +190,13 @@ public class PaisService {
 
     }
 
+    /* findAll(): Este método de JpaRepository
+     * se utiliza para obtener todas las entidades del tipo E desde la base de datos.
+     * Devuelve una lista (List<E>) de todas las entidades.
+     */
+
     public Collection<Pais> listarPais() throws ErrorServiceException {
         try {
-            
-        	/* findAll(): Este método de JpaRepository
-             * se utiliza para obtener todas las entidades del tipo E desde la base de datos.
-             * Devuelve una lista (List<E>) de todas las entidades.
-             */
         	
             return repository.findAll();
 
@@ -204,7 +205,11 @@ public class PaisService {
             throw new ErrorServiceException("Error de sistema");
         }
     }
-    
+
+    /* listarPaisActivo(): Este método personalizado de JpaRepository
+     * se utiliza para obtener todas las nacionalidades activas desde la base de datos.
+     * Devuelve una lista (List<Nacionalidad>) de todas las nacionalidades activas.
+     */
     public Collection<Pais> listarPaisActivo() throws ErrorServiceException {
         try {
             
