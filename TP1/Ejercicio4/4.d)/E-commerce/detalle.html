@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Producto</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+</head>
+<body>
+    
+    <nav class="navbar navbar-expand-md navbar-light bg-light fixed-top">
+        <!-- lo que hace navbar-expand-md es que se expande en dispositivos medianos y grandes, y fixed-top es que se fija en la parte superior -->
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Gran Sabor</a>
+        </div>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <!-- data bs toggle es para que se despliegue el menu y data bs target es para que se despliegue en el id que le pongamos -->
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <!-- el collapse es para que se pueda colapsar y expandir.
+             cuando se apriete el button de arriba, se viene a hacer lo que se haga en este div -->
+             <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/">Inicio</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Categorias
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="categoriasDropdown">
+                        <a class="dropdown-item" href=""> Harina </a>
+                        <a class="dropdown-item" href=""> Levadura</a>
+                        <a class="dropdown-item" href=""> Sal</a>
+                    </div>
+                </li>
+             </ul>
+             <div class="d-md-none">
+                <ul class="navbar-nav me-auto-mb-2 mb-md-0">
+                    <li class="nav-item">
+                        <a class="nav-link"href="">Carrito</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="">Perfil</a>
+                    </li>
+                     <li class="nav-item">
+                        <a class="nav-link" href="/registrarse.html">Registrarse</a>
+                    </li>
+                </ul>
+             </div>
+             <div class="d-none d-md-flex gap-2">
+                <a class="nav-item nav-link p-1"href="">
+                    <!-- CArrito--> 
+                    <i class="bi bi-cart2" style="font-size: 1.2rem;"></i>
+                </a>
+                <a class="nav-item nav-link p-1" href="">
+                    <i class="bi bi-person-lines-fill" style="font-size: 1.2rem;"></i>
+                    <!-- Perfil -->
+                </a>
+             </div>
+        </div>
+    </nav>
+
+    <section class="py-5">
+        <div class="container px-4 px-lg my-5">
+            <div class="row gx-4 gx-lg-5 align-items-center"></div>
+            <div class="col-md-6">
+                <img id="product-image" class="card-img-top mb-5 mb-md0" src="https://dummyimage.com/600x700/000/fff" alt="">
+            </div>
+            <div class="col-md-6">
+                <h1 
+                id="product-title"
+                class="display-5 fw-bolder"
+                >titulo</h1>
+                <div class="f5-5 mb-5">
+                    <span id="product-price">$10.00</span>
+                </div> 
+                <p id="product-description" class="lead">Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste repellendus corrupti rerum velit qui! Inventore officia quis sequi ut debitis, incidunt delectus, totam ullam nulla ea exercitationem quibusdam iusto! Corporis?</p>
+                <div class="d-flex">
+                    <input type="text" class="form-control text-center me-3" id="inputQuantity" type="num" value="1" style="max-width: 3rem;">
+                    <button class="btn btn-outline-success flex-shrink-0" type="button">
+                        <i class="bi bi-cart"></i>
+                    </button>
+                </div>
+            </div> 
+        </div>
+    </section>
+
+    <!-- productos relacionados-->
+
+    <section class="py-5 bg-light">
+        <div class="container px-4 px-lg-5 mt-5">
+            <h2 class="fw-bolder mb-4"> Productos relacionados</h2>
+            <div id="productos-relacionados" class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                <!-- REanderizacion de productos-->
+            </div>
+        </div>
+    </section>
+
+     <div class="container">
+        <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top-">
+            <div class="col-md-4 d-flex align-items-center">
+                <a href="/" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">Gran Sabor</a>
+                <span class="mb-3 mb-md-0 text-body-secondary"> &copy; 2026 Gran Sabor Mateo Peralta</span>
+            </div>
+        <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
+            <li class="ms-3">
+                <a class="text-body-secondary" href=""><i class="bi bi-instagram"></i></a>
+            </li> <!-- el text-body-secondary es para que no aparezca azul el boton-->
+            <li class="ms-3">
+                <a class="text-body-secondary"href=""><i class="bi bi-twitter-x"></i></a>
+            </li>
+            <li class="ms-3">
+                <a class="text-body-secondary" href=""><i class="bi bi-whatsapp"></i></a>
+            </li>
+        </ul>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script type="module" src="./lib/pages/detalle.js"></script>
+    
+
+</body>
+</html>

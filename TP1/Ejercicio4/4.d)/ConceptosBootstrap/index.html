@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <style>
+        div{
+            border: 1px solid black
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="">
+                <img src="Speed.jpeg" alt="Logo de prueba" width="80" height="70" class="d-inline-block align-text-top">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Inicio</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" href="#">Acerca de</a>
+                </li>
+                <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    categorias
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="#">Speed</a></li>
+                    <li><a class="dropdown-item" href="#">Kai Cenat</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#">Logan Paul</a></li>
+                </ul>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                </li>
+            </ul>
+            <form class="d-flex">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+            </div>
+        </div>
+    </nav>
+
+<h3 class="text-center">Carrusel</h3>
+
+    <div id="carouselExampleSlidesOnly" class="carousel slide mx-auto" data-bs-ride="carousel"  style="max-width: 700px;">
+        <!-- la difrencia entre mx-auto y text-center es que mx-auto centra el elemento horizontalmente mientras que text-center lo centra verticalmente -->
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+            <img src="Speed Slide.jpeg" class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+            <img src="kai cenat slide.jpeg" class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+            <img src="Logan slide.jpeg" class="d-block w-100" alt="...">
+            </div>
+        </div>
+    </div>
+
+
+    <form   class="container mt-5 mb-3"> <!-- mt y mb lo que hacen es agregar margen superior e inferior al formulario -->
+        <h5> formulario </h5>    
+        <div style="border: 1px solid white;" class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Direcciond e correo</label>
+            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+        </div>
+        <div style="border: 1px solid white;" class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Contraseña</label>
+            <input type="password" class="form-control" id="exampleInputPassword1">
+        </div>
+        <div style="border: 1px solid white;" class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+            <label class="form-check-label" for="exampleCheck1">Verificar</label>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+    <h3 class="text-center">Containers</h3>
+
+    <div class="container text-center bg-warning"> <!--(amarillo, texto centrado) container es un contenedor que tiene un ancho máximo y se centra en la pantalla -->
+        <h5>Container</h5>
+        <div class="row"> 
+            <div class="col-sm-12 col-md-6 col-lg-4">Columna 1</div> <!-- col sm y md significa que en pantallas pequeñas ocupará todo el ancho y en pantallas medianas ocupará la mitad -->
+            <div class="col-sm-12 col-md-6 col-lg-4">Columna 2</div> 
+            <div class="col-sm-12 col-lg-4">Columna 3</div>
+        </div>
+    </div>
+    <div class="container-fluid text-center bg-warning mb-2"> <!-- container fluido es un contenedor que ocupa el 100% del ancho de la pantalla -->
+        <h5>Container Fluid</h5>
+        <div class="row"> 
+            <div class="col-sm-12 col-md-6 col-lg-4">Columna 1</div> <!-- col sm y md significa que en pantallas pequeñas ocupará todo el ancho y en pantallas medianas ocupará la mitad -->
+            <div class="col-sm-12 col-md-6 col-lg-4">Columna 2</div> 
+            <div class="col-sm-12 col-lg-4">Columna 3</div>
+        </div>
+    </div>
+    <div class="container-xxl text-center bg-warning mb-2"> <!-- container xxl es un contenedor que tiene un ancho máximo de 1320px -->
+        <h5>Container XXL</h5>
+        <div class="row"> 
+            <div class="col-sm-12 col-md-6 col-lg-4">Columna 1</div> <!-- col sm y md significa que en pantallas pequeñas ocupará todo el ancho y en pantallas medianas ocupará la mitad -->
+            <div class="col-sm-12 col-md-6 col-lg-4">Columna 2</div> 
+            <div class="col-sm-12 col-lg-4 col-xl-4">Columna 3</div>
+        </div>
+    </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+</body>
+</html>

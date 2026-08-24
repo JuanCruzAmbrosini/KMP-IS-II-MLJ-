@@ -1,0 +1,97 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Iniciar Sesion</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"> 
+
+    </head>
+    <body>
+
+        <nav class="navbar navbar-expand-md navbar-light bg-light fixed-top">
+        <!-- lo que hace navbar-expand-md es que se expande en dispositivos medianos y grandes, y fixed-top es que se fija en la parte superior -->
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Gran Sabor</a>
+        </div>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <!-- data bs toggle es para que se despliegue el menu y data bs target es para que se despliegue en el id que le pongamos -->
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <!-- el collapse es para que se pueda colapsar y expandir.
+             cuando se apriete el button de arriba, se viene a hacer lo que se haga en este div -->
+             <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/">Inicio</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Categorias
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="categoriasDropdown">
+                        <a class="dropdown-item" href=""> Harina </a>
+                        <a class="dropdown-item" href=""> Levadura</a>
+                        <a class="dropdown-item" href=""> Sal</a>
+                    </div>
+                </li>
+             </ul>
+                <div class="d-md-none">
+                    <ul class="navbar-nav me-auto-mb-2 mb-md-0">
+                        <li class="nav-item">
+                            <a class="nav-link"href="">Carrito</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/iniciar-sesion.html">Iniciar Sesion</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/registrarse.html">Registrarse</a>
+                        </li>
+                    </ul>
+                </div>
+        </div>
+    </nav>
+
+
+        <main class="container row m-auto d-flex align-items-center justify-content-between bg-success" style="height: calc(100vh - 56px);" >
+            <form class="col-12 col-md-6 bs-warning">
+                <h3 class="mb-3 fw-normal">Iniciar Sesion</h3>
+                <div class="d-flex flex-column fap-1">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" name="user" id="user" placeholder="nombre de usuario">
+                        <label for="user"> Nombre de Usuario</label>
+                    </div>
+                </div>
+
+
+            </form>
+        </main>
+
+        
+        <div class="container">
+            <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top-">
+                <div class="col-md-4 d-flex align-items-center">
+                    <a href="/" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">Gran Sabor</a>
+                    <span class="mb-3 mb-md-0 text-body-secondary"> &copy; 2026 Gran Sabor Mateo Peralta</span>
+                </div>
+            <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
+                <li class="ms-3">
+                    <a class="text-body-secondary" href=""><i class="bi bi-instagram"></i></a>
+                </li> <!-- el text-body-secondary es para que no aparezca azul el boton-->
+                <li class="ms-3">
+                    <a class="text-body-secondary"href=""><i class="bi bi-twitter-x"></i></a>
+                </li>
+                <li class="ms-3">
+                    <a class="text-body-secondary" href=""><i class="bi bi-whatsapp"></i></a>
+                </li>
+            </ul>
+            </footer>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+        <script type="module" src="./lib/pages/iniciar-sesion.js"></script>
+        
+    </body>
+    </html>
