@@ -7,10 +7,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.ui.ModelMap;
 import jakarta.servlet.http.HttpSession;
 
-import ingsoftware.gatinder.entity.User;
+import ingsoftware.gatinder.config.RememberMeInterceptor;
+import ingsoftware.gatinder.dto.AuthenticatedUserDto;
+import ingsoftware.gatinder.dto.LoginDto;
+import ingsoftware.gatinder.dto.RegisterDto;
+import ingsoftware.gatinder.dto.UserDto;
 import ingsoftware.gatinder.entity.Zone;
 import ingsoftware.gatinder.service.ZoneService;
 import ingsoftware.gatinder.service.UserService;
@@ -21,9 +28,9 @@ public class UserController {
     @Autowired private UserService userService;
     @Autowired private ZoneService zoneService;
 
-    @PostMapping("/register") public String register(ModelMap model, @RequestParam String firstName, @RequestParam String lastName, @RequestParam String email, @RequestParam String password, @RequestParam String repeatPassword, @RequestParam String zoneId) {
+    @PostMapping("/register") public String register(ModelMap model, @ModelAttribute RegisterDto request) {
         try {
-            userService.create(null, firstName, lastName, email, repeatPassword, password, zoneId);
+            userService.register(request);
         } catch (Exception e) {
             try {
                 Collection<Zone> zones = zoneService.findAll();
@@ -32,37 +39,43 @@ public class UserController {
                 model.put("error", "Error al obtener las zonas");
             }
             model.put("error", e.getMessage());
-            model.put("firstName", firstName);
-            model.put("lastName", lastName);
-            model.put("email", email);
-            model.put("password", password);
-            model.put("repeatPassword", repeatPassword);
+            model.put("firstName", request.getFirstName());
+            model.put("lastName", request.getLastName());
+            model.put("email", request.getEmail());
+            model.put("password", request.getPassword());
+            model.put("repeatPassword", request.getRepeatPassword());
             return "/register";
         }
         model.put("success", "Usuario registrado correctamente");
         return "/success";
     }
 
-    @PostMapping("/login") public String login(ModelMap model, HttpSession session, @RequestParam String email, @RequestParam String password) {
+    @PostMapping("/login") public String login(ModelMap model, HttpSession session,
+            @ModelAttribute LoginDto request, HttpServletResponse response) {
         try {
-            User user = userService.authenticate(email, password);
-            session.setAttribute("loggedUser", user);
+            AuthenticatedUserDto authenticatedUser = userService.authenticate(request);
+            session.setAttribute("loggedUser", authenticatedUser.getUser());
+            RememberMeInterceptor.addCookie(response, authenticatedUser.getRememberToken());
             return "redirect:/home";
         } catch (Exception e) {
             model.put("error", e.getMessage());
-            model.put("email", email);
-            model.put("password", password);
+            model.put("email", request.getEmail());
+            model.put("password", request.getPassword());
             return "/login";
         }
     }
 
-    @GetMapping("/logout") public String logout(HttpSession session) {
+    @GetMapping("/logout") public String logout(HttpSession session,
+            @CookieValue(value = RememberMeInterceptor.COOKIE_NAME, required = false) String token,
+            HttpServletResponse response) {
+        userService.clearRememberToken(token);
         session.invalidate();
+        RememberMeInterceptor.deleteCookie(response);
         return "redirect:/login";
     }
 
     @GetMapping("/profile/edit") public String editProfile(HttpSession session, ModelMap model) {
-        User loggedUser = (User) session.getAttribute("loggedUser");
+        UserDto loggedUser = (UserDto) session.getAttribute("loggedUser");
         if (loggedUser == null) {
             return "redirect:/login";
         }
@@ -70,23 +83,23 @@ public class UserController {
             Collection<Zone> zones = zoneService.findAll();
             model.put("zones", zones);
             model.put("user", loggedUser);
-            return "profile-edit";
+            return "profile";
         } catch (Exception e) {
             throw new RuntimeException("Error al obtener las zonas", e);
         }
     }
 
     @GetMapping("/profile/update") public String updateProfile(HttpSession session, ModelMap model, @RequestParam String firstName, @RequestParam String lastName, @RequestParam String email, @RequestParam String password, @RequestParam String repeatPassword, @RequestParam String zoneId) {
-        User loggedUser = (User) session.getAttribute("loggedUser");
+        UserDto loggedUser = (UserDto) session.getAttribute("loggedUser");
         if (loggedUser == null) {
             return "redirect:/login";
         }
         try {
             userService.update(null, loggedUser.getId(), firstName, lastName, email, repeatPassword, password, zoneId);
-            User updatedUser = userService.findById(loggedUser.getId());
+            UserDto updatedUser = userService.findDtoById(loggedUser.getId());
             session.setAttribute("loggedUser", updatedUser);
             model.put("success", "Perfil actualizado correctamente");
-            return "profile-edit";
+            return "profile";
         } catch (Exception e) {
             try {
                 Collection<Zone> zones = zoneService.findAll();
@@ -96,7 +109,7 @@ public class UserController {
             }
             model.put("error", e.getMessage());
             model.put("user", loggedUser);
-            return "profile-edit";
+            return "profile";
         }
     }
 }

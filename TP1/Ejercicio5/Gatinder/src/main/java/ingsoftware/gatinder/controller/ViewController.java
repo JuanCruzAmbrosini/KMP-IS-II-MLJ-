@@ -1,7 +1,6 @@
 package ingsoftware.gatinder.controller;
 
 import java.util.Collection;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,13 +33,8 @@ public class ViewController {
         }
     }
 
-    @GetMapping("/home") public String home(HttpSession session, Model model) {
+    @GetMapping("/home") public String home(Model model) {
         return "home";
-    }
-
-    @GetMapping("/logout") public String logout(HttpSession session) {
-        session.setAttribute("userSession", null);
-        return "redirect:/login";
     }
 
 }

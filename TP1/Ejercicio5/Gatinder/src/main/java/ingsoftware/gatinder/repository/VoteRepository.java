@@ -10,9 +10,9 @@ import ingsoftware.gatinder.entity.Vote;
 
 @Repository
 public interface VoteRepository extends JpaRepository<Vote, String> {
-    @Query("SELECT v FROM Vote v WHERE v.voter.id = :id")
+    @Query("SELECT v FROM Vote v WHERE v.senderPet.id = :id")
     public List<Vote> findSelfVotes(@Param("id") String id);
 
-    @Query("SELECT v FROM Vote v WHERE v.voted.id = :id")
+    @Query("SELECT v FROM Vote v WHERE v.receiverPet.id = :id")
     public List<Vote> findReceivedVotes(@Param("id") String id);
 }

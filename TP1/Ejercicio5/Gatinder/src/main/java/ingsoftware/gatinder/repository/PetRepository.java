@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import ingsoftware.gatinder.entity.Pet;
 
 @Repository
-public interface PetRepository extends JpaRepository<Pet, Long> {
+public interface PetRepository extends JpaRepository<Pet, String> {
     public List<Pet> findByDeletedFalse();
 
     @Query("SELECT p FROM Pet p WHERE p.user.id = :id AND p.deleted = false")

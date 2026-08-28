@@ -3,6 +3,8 @@ package ingsoftware.gatinder.service;
 import java.util.Optional;
 import java.util.List;
 import java.util.UUID;
+import java.time.Duration;
+import java.time.Instant;
 import jakarta.persistence.NoResultException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,12 +15,73 @@ import ingsoftware.gatinder.entity.Zone;
 import ingsoftware.gatinder.entity.Picture;
 import ingsoftware.gatinder.entity.User;
 import ingsoftware.gatinder.repository.UserRepository;
+import ingsoftware.gatinder.dto.AuthenticatedUserDto;
+import ingsoftware.gatinder.dto.LoginDto;
+import ingsoftware.gatinder.dto.RegisterDto;
+import ingsoftware.gatinder.dto.UserDto;
 
 @Service
 public class UserService {
+    private static final Duration REMEMBER_TOKEN_DURATION = Duration.ofDays(2);
+
     @Autowired private UserRepository userRepository;
     @Autowired private ZoneService zoneService;
     @Autowired private PictureService pictureService;
+
+    @Transactional public UserDto register(RegisterDto request) throws ErrorService {
+        create(null, request.getFirstName(), request.getLastName(), request.getEmail(),
+                request.getPassword(), request.getRepeatPassword(), request.getZoneId());
+        return toDto(userRepository.findByEmail(request.getEmail()));
+    }
+
+    @Transactional public AuthenticatedUserDto authenticate(LoginDto request) throws ErrorService {
+        User user = authenticate(request.getEmail(), request.getPassword());
+        user.setRememberToken(UUID.randomUUID().toString());
+        user.setRememberTokenExpiresAt(Instant.now().plus(REMEMBER_TOKEN_DURATION));
+        userRepository.save(user);
+        return new AuthenticatedUserDto(toDto(user), user.getRememberToken());
+    }
+
+    public UserDto findByRememberToken(String token) {
+        if (token == null || token.isBlank()) {
+            return null;
+        }
+        Optional<User> response = userRepository.findByRememberToken(token);
+        if (response.isEmpty()) {
+            return null;
+        }
+        User user = response.get();
+        if (user.isDeleted() || user.getRememberTokenExpiresAt() == null
+                || user.getRememberTokenExpiresAt().isBefore(Instant.now())) {
+            return null;
+        }
+        return toDto(user);
+    }
+
+    @Transactional public void clearRememberToken(String token) {
+        if (token == null || token.isBlank()) {
+            return;
+        }
+        userRepository.findByRememberToken(token).ifPresent(user -> {
+            user.setRememberToken(null);
+            user.setRememberTokenExpiresAt(null);
+            userRepository.save(user);
+        });
+    }
+
+    public UserDto toDto(User user) {
+        if (user == null) {
+            return null;
+        }
+        String pictureUrl = user.getPicture() == null ? null : "/pictures/user/" + user.getId();
+        String zoneId = user.getZone() == null ? null : user.getZone().getId();
+        return new UserDto(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(),
+                zoneId, pictureUrl, user.isDeleted());
+    }
+
+    public UserDto findDtoById(String userId) throws ErrorService {
+        return toDto(findById(userId));
+    }
 
     @Transactional public void create(MultipartFile file, String firstName, String lastName, String email, String password, String repeatedPassword, String zoneId) throws ErrorService {
         try {
@@ -40,8 +103,10 @@ public class UserService {
             user.setEmail(email);
             user.setPassword(password);
             user.setZone(zone);
-            Picture picture = pictureService.create(file);
-            user.setPicture(picture);
+            if (file != null && !file.isEmpty()) {
+                Picture picture = pictureService.create(file);
+                user.setPicture(picture);
+            }
             userRepository.save(user);
         } catch (ErrorService e) {
             throw e;

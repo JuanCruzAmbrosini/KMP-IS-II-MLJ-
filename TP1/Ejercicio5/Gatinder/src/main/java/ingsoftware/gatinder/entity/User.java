@@ -17,4 +17,6 @@ public class User {
     private Instant createdAt;
     private Instant deletedAt;
     private boolean deleted;
+    private String rememberToken;
+    private Instant rememberTokenExpiresAt;
 }

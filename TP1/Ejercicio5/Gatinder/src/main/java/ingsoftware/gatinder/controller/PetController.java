@@ -11,8 +11,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.ui.ModelMap;
 import jakarta.servlet.http.HttpSession;
 
-import ingsoftware.gatinder.entity.User;
 import ingsoftware.gatinder.entity.Pet;
+import ingsoftware.gatinder.dto.UserDto;
+import ingsoftware.gatinder.dto.PetDto;
 import ingsoftware.gatinder.enums.Gender;
 import ingsoftware.gatinder.enums.Animal;
 import ingsoftware.gatinder.service.PetService;
@@ -23,24 +24,24 @@ public class PetController {
     @Autowired private PetService petService;
 
     @GetMapping("/pets/list") public String listPets(HttpSession session, ModelMap model) {
-        User loggedUser = (User) session.getAttribute("loggedUser");
+        UserDto loggedUser = (UserDto) session.getAttribute("loggedUser");
         if (loggedUser == null) {
             return "redirect:/login";
         }
         try {
-            List<Pet> pets = petService.findByUserId(loggedUser.getId());
+            List<PetDto> pets = petService.findDtosByUserId(loggedUser.getId());
             model.addAttribute("pets", pets);
-            return "pet-list";
+            return "pets";
         } catch (Exception e) {
             throw new RuntimeException("Error al obtener la lista de mascotas", e);
         }
     }
 
-    @GetMapping("/pets/edit/{id}") public String editPet(HttpSession session, ModelMap model, @RequestParam(required = false) String id, @RequestParam(required = false) String action) {
+    @GetMapping({"/pets/edit", "/pets/edit/{id}"}) public String editPet(HttpSession session, ModelMap model, @org.springframework.web.bind.annotation.PathVariable(required = false) String id, @RequestParam(required = false) String action) {
         if (action == null) {
             action = "create";
         }
-        User loggedUser = (User) session.getAttribute("loggedUser");
+        UserDto loggedUser = (UserDto) session.getAttribute("loggedUser");
         if (loggedUser == null) {
             return "redirect:/login";
         }
@@ -60,7 +61,7 @@ public class PetController {
     }
 
     @PostMapping("/pets/update") public String updatePet(HttpSession session, ModelMap model, MultipartFile file, @RequestParam(required = false) String id, @RequestParam String name, @RequestParam Gender gender, @RequestParam Animal animal, @RequestParam String action) {
-        User loggedUser = (User) session.getAttribute("loggedUser");
+        UserDto loggedUser = (UserDto) session.getAttribute("loggedUser");
         if (loggedUser == null) {
             return "redirect:/login";
         }
@@ -87,7 +88,7 @@ public class PetController {
     }
 
     @PostMapping("/pets/delete") public String deletePet(HttpSession session, @RequestParam String id) {
-        User loggedUser = (User) session.getAttribute("loggedUser");
+        UserDto loggedUser = (UserDto) session.getAttribute("loggedUser");
         if (loggedUser == null) {
             return "redirect:/login";
         }

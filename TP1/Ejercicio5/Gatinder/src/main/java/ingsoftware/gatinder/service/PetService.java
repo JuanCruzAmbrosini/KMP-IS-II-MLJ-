@@ -14,6 +14,7 @@ import ingsoftware.gatinder.entity.Picture;
 import ingsoftware.gatinder.entity.User;
 import ingsoftware.gatinder.enums.*;
 import ingsoftware.gatinder.repository.PetRepository;
+import ingsoftware.gatinder.dto.PetDto;
 
 @Service
 public class PetService {
@@ -46,7 +47,7 @@ public class PetService {
     @Transactional public void update(MultipartFile file, String petId, String userId, String name, Gender gender, Animal animal) throws ErrorService {
         try {
             validate(name, gender);
-            Optional<Pet> response = petRepository.findById(Long.valueOf(petId));
+            Optional<Pet> response = petRepository.findById(petId);
             if (response.isPresent()) {
                 Pet pet = response.get();
                 if (pet.getUser().getId().equals(userId)) {
@@ -72,7 +73,7 @@ public class PetService {
 
     @Transactional public void delete(String petId, String userId) throws ErrorService {
         try {
-            Optional<Pet> response = petRepository.findById(Long.valueOf(petId));
+            Optional<Pet> response = petRepository.findById(petId);
             if (response.isPresent()) {
                 Pet pet = response.get();
                 if (pet.getUser().getId().equals(userId)) {
@@ -103,7 +104,7 @@ public class PetService {
 
     public Pet findById(String petId) throws ErrorService {
         try {
-            Optional<Pet> response = petRepository.findById(Long.valueOf(petId));
+            Optional<Pet> response = petRepository.findById(petId);
             if (response.isPresent()) {
                 return response.get();
             } else {
@@ -124,6 +125,16 @@ public class PetService {
             e.printStackTrace();
             throw new ErrorService("Error al listar las mascotas del usuario");
         }
+    }
+
+    public List<PetDto> findDtosByUserId(String userId) throws ErrorService {
+        List<PetDto> pets = new java.util.ArrayList<>();
+        for (Pet pet : findByUserId(userId)) {
+            String pictureUrl = pet.getPicture() == null ? null : "/pictures/pet/" + pet.getId();
+            pets.add(new PetDto(pet.getId(), pet.getName(), pet.getGender(), pet.getAnimal(),
+                    pet.getUser().getId(), pictureUrl));
+        }
+        return pets;
     }
 
     public void validate(String name, Gender gender) throws ErrorService {

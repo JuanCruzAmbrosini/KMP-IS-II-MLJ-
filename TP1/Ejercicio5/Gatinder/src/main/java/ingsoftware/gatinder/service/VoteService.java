@@ -3,6 +3,9 @@ package ingsoftware.gatinder.service;
 import java.util.Optional;
 import java.util.List;
 import java.util.UUID;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.time.Instant;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +14,7 @@ import org.springframework.stereotype.Service;
 import ingsoftware.gatinder.entity.Pet;
 import ingsoftware.gatinder.entity.Vote;
 import ingsoftware.gatinder.repository.VoteRepository;
+import ingsoftware.gatinder.dto.VoteReportDto;
 
 
 @Service
@@ -86,6 +90,24 @@ public class VoteService {
         } catch (Exception e) {
             e.printStackTrace();
             throw new ErrorService("Error al obtener el voto");
+        }
+    }
+
+    public List<VoteReportDto> buildVoteReport() throws ErrorService {
+        try {
+            Map<String, VoteReportDto> report = new LinkedHashMap<>();
+            for (Vote vote : voteRepository.findAll()) {
+                Pet pet = vote.getReceiverPet();
+                String petId = pet.getId();
+                VoteReportDto current = report.get(petId);
+                long count = current == null ? 1 : current.getVoteCount() + 1;
+                report.put(petId, new VoteReportDto(pet.getUser().getFirstName(),
+                        pet.getUser().getLastName(), pet.getName(), count));
+            }
+            return new ArrayList<>(report.values());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ErrorService("Error al generar el reporte de votos");
         }
     }
 
