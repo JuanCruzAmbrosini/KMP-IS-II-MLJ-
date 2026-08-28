@@ -42,7 +42,7 @@ public class DataLoadService implements CommandLineRunner {
 
     // Cargar 50mil clientes si no existen
     private void loadClients() {
-        for (int i = 1; i <= 10000; i++) {
+        for (int i = 1; i <= 50000; i++) {
             // Si el cliente no existe, lo creo
             if (!clientRepository.existsById((long) i)) {
                 Client client = new Client();
@@ -55,7 +55,7 @@ public class DataLoadService implements CommandLineRunner {
     }
 
     private void measureIndexedVsNonIndexedQueries() {
-        int randomNumber = (int) (Math.random() * 10000) + 1;
+        int randomNumber = (int) (Math.random() * 50000) + 1;
         int sampleDni = 20000000 + randomNumber;
         String sampleEmail = "client" + randomNumber + "@example.com";
         int iterations = 500;
