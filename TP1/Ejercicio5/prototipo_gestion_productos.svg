@@ -1,0 +1,103 @@
+<svg width="900" height="640" viewBox="0 0 900 640" xmlns="http://www.w3.org/2000/svg">
+<rect id="fondo" x="0" y="0" width="900" height="640" fill="#f4f4f2"/>
+<g id="pantalla-gestion-productos">
+<rect id="tarjeta-contenedora" x="20" y="20" width="860" height="600" rx="12" fill="#ffffff" stroke="#d9d9d9" stroke-width="1"/>
+<g id="encabezado">
+<text x="48" y="60" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#1a1a1a" text-anchor="start">Gestion de productos</text>
+<text x="48" y="78" font-family="Arial, sans-serif" font-size="12" font-weight="normal" fill="#6b6b6b" text-anchor="start">Catalogo de productos de tecnologia</text>
+<rect id="boton-nuevo-producto" x="700" y="42" width="160" height="34" rx="6" fill="#2563eb"/>
+<text x="780" y="64" font-family="Arial, sans-serif" font-size="13" font-weight="normal" fill="#ffffff" text-anchor="middle">+ Nuevo producto</text>
+</g>
+<g id="fila-busqueda">
+<rect id="campo-busqueda" x="48" y="100" width="620" height="34" rx="6" fill="#ffffff" stroke="#d9d9d9"/>
+<text x="60" y="121" font-family="Arial, sans-serif" font-size="13" font-weight="normal" fill="#6b6b6b" text-anchor="start">Buscar por nombre o codigo</text>
+<rect id="filtro-categoria" x="684" y="100" width="176" height="34" rx="6" fill="#ffffff" stroke="#d9d9d9"/>
+<text x="696" y="121" font-family="Arial, sans-serif" font-size="13" font-weight="normal" fill="#6b6b6b" text-anchor="start">Todas las categorias</text>
+</g>
+<g id="tabla-productos">
+<rect id="tabla-fondo" x="48" y="152" width="812" height="144" rx="6" fill="#ffffff" stroke="#d9d9d9"/>
+<rect id="tabla-encabezado" x="48" y="152" width="812" height="36" fill="#eeeeee"/>
+<text x="58" y="175" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#1a1a1a" text-anchor="start">Codigo</text>
+<text x="148" y="175" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#1a1a1a" text-anchor="start">Nombre</text>
+<text x="368" y="175" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#1a1a1a" text-anchor="start">Categoria</text>
+<text x="508" y="175" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#1a1a1a" text-anchor="start">Precio</text>
+<text x="618" y="175" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#1a1a1a" text-anchor="start">Stock</text>
+<text x="698" y="175" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#1a1a1a" text-anchor="start">Estado</text>
+<text x="808" y="175" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#1a1a1a" text-anchor="start">Acciones</text>
+<line x1="48" y1="188" x2="860" y2="188" stroke="#d9d9d9" stroke-width="1"/>
+<line x1="48" y1="224" x2="860" y2="224" stroke="#d9d9d9" stroke-width="1"/>
+<line x1="48" y1="260" x2="860" y2="260" stroke="#d9d9d9" stroke-width="1"/>
+<g id="fila-producto-NB-001">
+<text x="58" y="211" font-family="Arial, sans-serif" font-size="12" font-weight="normal" fill="#1a1a1a" text-anchor="start">NB-001</text>
+<text x="148" y="211" font-family="Arial, sans-serif" font-size="12" font-weight="normal" fill="#1a1a1a" text-anchor="start">Notebook 15" 16GB</text>
+<text x="368" y="211" font-family="Arial, sans-serif" font-size="12" font-weight="normal" fill="#1a1a1a" text-anchor="start">Notebooks</text>
+<text x="508" y="211" font-family="Arial, sans-serif" font-size="12" font-weight="normal" fill="#1a1a1a" text-anchor="start">$850.000</text>
+<text x="618" y="211" font-family="Arial, sans-serif" font-size="12" font-weight="normal" fill="#1a1a1a" text-anchor="start">12</text>
+<rect x="698" y="195" width="78" height="22" rx="11" fill="#e3f5e6"/>
+<text x="737.0" y="210" font-family="Arial, sans-serif" font-size="11" font-weight="normal" fill="#1e7a34" text-anchor="middle">Activo</text>
+<text x="806" y="211" font-family="Arial, sans-serif" font-size="11" font-weight="normal" fill="#6b6b6b" text-anchor="start">edit</text>
+<text x="838" y="211" font-family="Arial, sans-serif" font-size="11" font-weight="normal" fill="#6b6b6b" text-anchor="start">del</text>
+</g>
+<g id="fila-producto-PE-014">
+<text x="58" y="247" font-family="Arial, sans-serif" font-size="12" font-weight="normal" fill="#1a1a1a" text-anchor="start">PE-014</text>
+<text x="148" y="247" font-family="Arial, sans-serif" font-size="12" font-weight="normal" fill="#1a1a1a" text-anchor="start">Mouse inalambrico</text>
+<text x="368" y="247" font-family="Arial, sans-serif" font-size="12" font-weight="normal" fill="#1a1a1a" text-anchor="start">Perifericos</text>
+<text x="508" y="247" font-family="Arial, sans-serif" font-size="12" font-weight="normal" fill="#1a1a1a" text-anchor="start">$18.500</text>
+<text x="618" y="247" font-family="Arial, sans-serif" font-size="12" font-weight="normal" fill="#1a1a1a" text-anchor="start">3</text>
+<rect x="698" y="231" width="78" height="22" rx="11" fill="#fdf1d8"/>
+<text x="737.0" y="246" font-family="Arial, sans-serif" font-size="11" font-weight="normal" fill="#946200" text-anchor="middle">Stock bajo</text>
+<text x="806" y="247" font-family="Arial, sans-serif" font-size="11" font-weight="normal" fill="#6b6b6b" text-anchor="start">edit</text>
+<text x="838" y="247" font-family="Arial, sans-serif" font-size="11" font-weight="normal" fill="#6b6b6b" text-anchor="start">del</text>
+</g>
+<g id="fila-producto-LI-002">
+<text x="58" y="283" font-family="Arial, sans-serif" font-size="12" font-weight="normal" fill="#1a1a1a" text-anchor="start">LI-002</text>
+<text x="148" y="283" font-family="Arial, sans-serif" font-size="12" font-weight="normal" fill="#1a1a1a" text-anchor="start">Licencia Office 1 anio</text>
+<text x="368" y="283" font-family="Arial, sans-serif" font-size="12" font-weight="normal" fill="#1a1a1a" text-anchor="start">Licencias</text>
+<text x="508" y="283" font-family="Arial, sans-serif" font-size="12" font-weight="normal" fill="#1a1a1a" text-anchor="start">$45.000</text>
+<text x="618" y="283" font-family="Arial, sans-serif" font-size="12" font-weight="normal" fill="#1a1a1a" text-anchor="start">-</text>
+<rect x="698" y="267" width="78" height="22" rx="11" fill="#eeeeee"/>
+<text x="737.0" y="282" font-family="Arial, sans-serif" font-size="11" font-weight="normal" fill="#6b6b6b" text-anchor="middle">Inactivo</text>
+<text x="806" y="283" font-family="Arial, sans-serif" font-size="11" font-weight="normal" fill="#6b6b6b" text-anchor="start">edit</text>
+<text x="838" y="283" font-family="Arial, sans-serif" font-size="11" font-weight="normal" fill="#6b6b6b" text-anchor="start">del</text>
+</g>
+</g>
+<g id="panel-formulario">
+<rect id="formulario-fondo" x="48" y="326" width="812" height="230" rx="8" fill="#eeeeee"/>
+<text x="64" y="354" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#1a1a1a" text-anchor="start">Nuevo producto / editar producto</text>
+<g id="campo-codigo">
+<text x="64" y="370" font-family="Arial, sans-serif" font-size="11" font-weight="normal" fill="#6b6b6b" text-anchor="start">Codigo</text>
+<rect x="64" y="376" width="250" height="32" rx="6" fill="#ffffff" stroke="#d9d9d9"/>
+<text x="74" y="397" font-family="Arial, sans-serif" font-size="12" font-weight="normal" fill="#6b6b6b" text-anchor="start">NB-002</text>
+</g>
+<g id="campo-nombre">
+<text x="330" y="370" font-family="Arial, sans-serif" font-size="11" font-weight="normal" fill="#6b6b6b" text-anchor="start">Nombre</text>
+<rect x="330" y="376" width="250" height="32" rx="6" fill="#ffffff" stroke="#d9d9d9"/>
+<text x="340" y="397" font-family="Arial, sans-serif" font-size="12" font-weight="normal" fill="#6b6b6b" text-anchor="start">Nombre del producto</text>
+</g>
+<g id="campo-categoria">
+<text x="596" y="370" font-family="Arial, sans-serif" font-size="11" font-weight="normal" fill="#6b6b6b" text-anchor="start">Categoria</text>
+<rect x="596" y="376" width="250" height="32" rx="6" fill="#ffffff" stroke="#d9d9d9"/>
+<text x="606" y="397" font-family="Arial, sans-serif" font-size="12" font-weight="normal" fill="#6b6b6b" text-anchor="start">Notebooks</text>
+</g>
+<g id="campo-tipo">
+<text x="64" y="438" font-family="Arial, sans-serif" font-size="11" font-weight="normal" fill="#6b6b6b" text-anchor="start">Tipo</text>
+<rect x="64" y="444" width="250" height="32" rx="6" fill="#ffffff" stroke="#d9d9d9"/>
+<text x="74" y="465" font-family="Arial, sans-serif" font-size="12" font-weight="normal" fill="#6b6b6b" text-anchor="start">Producto fisico</text>
+</g>
+<g id="campo-precio-de-venta">
+<text x="330" y="438" font-family="Arial, sans-serif" font-size="11" font-weight="normal" fill="#6b6b6b" text-anchor="start">Precio de venta</text>
+<rect x="330" y="444" width="250" height="32" rx="6" fill="#ffffff" stroke="#d9d9d9"/>
+<text x="340" y="465" font-family="Arial, sans-serif" font-size="12" font-weight="normal" fill="#6b6b6b" text-anchor="start">$0</text>
+</g>
+<g id="campo-stock-inicial">
+<text x="596" y="438" font-family="Arial, sans-serif" font-size="11" font-weight="normal" fill="#6b6b6b" text-anchor="start">Stock inicial</text>
+<rect x="596" y="444" width="250" height="32" rx="6" fill="#ffffff" stroke="#d9d9d9"/>
+<text x="606" y="465" font-family="Arial, sans-serif" font-size="12" font-weight="normal" fill="#6b6b6b" text-anchor="start">0</text>
+</g>
+<rect id="boton-cancelar" x="700" y="506" width="76" height="32" rx="6" fill="#ffffff" stroke="#d9d9d9"/>
+<text x="738" y="527" font-family="Arial, sans-serif" font-size="12" font-weight="normal" fill="#1a1a1a" text-anchor="middle">Cancelar</text>
+<rect id="boton-guardar" x="784" y="506" width="150" height="32" rx="6" fill="#2563eb"/>
+<text x="859" y="527" font-family="Arial, sans-serif" font-size="12" font-weight="normal" fill="#ffffff" text-anchor="middle">Guardar producto</text>
+</g>
+</g>
+</svg>
