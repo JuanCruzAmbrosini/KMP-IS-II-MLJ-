@@ -1,0 +1,234 @@
+@startuml Gatinder_Auto
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+left to right direction
+
+package "gatinder" {
+  class GatinderApp {
+    + main(args): static void
+}
+  class SecurityConfig {
+
+}
+}
+
+package "controller" {
+  class ErrorController {
+    + renderErrorPage(httpRequest): ModelAndView
+    - getErrorCode(httpRequest): int
+}
+  class PictureController {
+
+}
+  class PetController {
+
+}
+  class ReportController {
+    + downloadVotes(session): ResponseEntity<byte[]>
+}
+  class UserController {
+
+}
+  class ViewController {
+
+}
+}
+
+package "entity" {
+  class Pet {
+    - name: String
+    - createdAt: Instant
+    - deletedAt: Instant
+    - deleted: boolean
+}
+  class Picture {
+    - mime: String
+    - deleted: boolean
+}
+  class Vote {
+    - date: Instant
+    - responseDate: Instant
+}
+  class Zone {
+    - name: String
+    - deleted: boolean
+}
+  class User {
+    - firstName: String
+    - lastName: String
+    - email: String
+    - password: String
+    - createdAt: Instant
+    - deletedAt: Instant
+    - deleted: boolean
+    - rememberToken: String
+    - rememberTokenExpiresAt: Instant
+}
+}
+
+package "enums" {
+  enum Animal {
+DOG
+CAT
+BUNNY
+BIRD
+REPTILE
+THERIAN
+}
+  enum Gender {
+MALE
+FEMALE
+OTHER
+}
+}
+
+package "repository" {
+  interface PictureRepository {
+
+}
+  interface ZoneRepository {
+    + findByDeletedFalse(): List<Zone>
+    + findByName(name): Zone
+}
+  interface PetRepository {
+    + findByDeletedFalse(): List<Pet>
+    + findPetsByUser(@Param("id"): List<Pet>
+    + findPetByName(@Param("id"): List<Pet>
+}
+  interface UserRepository {
+    + findByZoneId(@Param("id"): List<User>
+}
+  interface VoteRepository {
+    + findSelfVotes(@Param("id"): List<Vote>
+    + findReceivedVotes(@Param("id"): List<Vote>
+}
+}
+
+package "service" {
+  class ErrorService {
+
+}
+  class PictureService {
+
+}
+  class ZoneService {
+    + findById(zoneId): Zone
+    + findAll(): List<Zone>
+    + validate(name): void
+}
+  class PetService {
+    + findAll(): List<Pet>
+    + findById(petId): Pet
+    + findByUserId(userId): List<Pet>
+    + findDtosByUserId(userId): List<PetDto>
+    + validate(name, gender): void
+}
+  class UserService {
+    + findByRememberToken(token): UserDto
+    + toDto(user): UserDto
+    + findDtoById(userId): UserDto
+    + findAll(): List<User>
+    + findById(userId): User
+    + validate(firstName, lastName, email, password, repeatedPassword, zoneId): void
+}
+  class VoteService {
+    + findAll(): List<Vote>
+    + findById(voteId): Vote
+    + buildVoteReport(): List<VoteReportDto>
+}
+}
+
+package "config" {
+  class RememberMeInterceptor {
+    + COOKIE_NAME: static final String
+    + COOKIE_MAX_AGE: static final int
+    + SESSION_USER: static final String
+    + preHandle(request, response, handler): boolean
+    - findCookie(cookies): Cookie
+    + addCookie(response, token): static void
+    + deleteCookie(response): static void
+}
+  class WebConfig {
+    + addInterceptors(registry): void
+}
+}
+
+package "dto" {
+  class AuthenticatedUserDto {
+    - user: final UserDto
+    - rememberToken: final String
+    + getUser(): UserDto
+    + getRememberToken(): String
+}
+  class LoginDto {
+    - email: String
+    - password: String
+    + getEmail(): String
+    + setEmail(email): void
+    + getPassword(): String
+    + setPassword(password): void
+}
+  class PetDto {
+    - id: String
+    - name: String
+    - gender: Gender
+    - animal: Animal
+    - userId: String
+    - pictureUrl: String
+    + getId(): String
+    + getName(): String
+    + getGender(): Gender
+    + getAnimal(): Animal
+    + getUserId(): String
+    + getPictureUrl(): String
+    + getPicture(): String
+}
+  class RegisterDto {
+    - firstName: String
+    - lastName: String
+    - email: String
+    - password: String
+    - repeatPassword: String
+    - zoneId: String
+    + getFirstName(): String
+    + setFirstName(firstName): void
+    + getLastName(): String
+    + setLastName(lastName): void
+    + getEmail(): String
+    + setEmail(email): void
+    + getPassword(): String
+    + setPassword(password): void
+    + getRepeatPassword(): String
+    + setRepeatPassword(repeatPassword): void
+    + getZoneId(): String
+    + setZoneId(zoneId): void
+}
+  class UserDto {
+    - id: String
+    - firstName: String
+    - lastName: String
+    - email: String
+    - zoneId: String
+    - pictureUrl: String
+    - deleted: boolean
+    + getId(): String
+    + getFirstName(): String
+    + getLastName(): String
+    + getEmail(): String
+    + getZoneId(): String
+    + getPictureUrl(): String
+    + isDeleted(): boolean
+}
+  class VoteReportDto {
+    - firstName: final String
+    - lastName: final String
+    - petName: final String
+    - voteCount: final long
+    + getFirstName(): String
+    + getLastName(): String
+    + getPetName(): String
+    + getVoteCount(): long
+}
+}
+
+@enduml
