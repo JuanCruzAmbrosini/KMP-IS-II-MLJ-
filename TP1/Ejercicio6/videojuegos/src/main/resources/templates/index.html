@@ -2,9 +2,11 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Index</title>
+    <meta http-equiv="refresh" content="0; url=/inicio">
+    <title>UTN Videojuegos</title>
 </head>
 <body>
-    <h1 th:text="${saludo}">Hola</h1>
+    <p>Redirigiendo al catálogo...</p>
+    <p><a th:href="@{/inicio}">Abrir catálogo</a></p>
 </body>
 </html>
