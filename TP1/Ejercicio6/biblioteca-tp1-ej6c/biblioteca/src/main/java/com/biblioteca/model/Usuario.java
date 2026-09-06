@@ -2,6 +2,7 @@ package com.biblioteca.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import org.hibernate.envers.Audited;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -17,6 +18,7 @@ import java.util.Set;
  * La "clave" se persiste SIEMPRE encriptada con BCrypt (ver Servicio de Usuario).
  */
 @Entity
+@Audited
 @Table(name = "usuario")
 @Data
 @NoArgsConstructor

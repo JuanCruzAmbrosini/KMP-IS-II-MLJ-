@@ -8,7 +8,8 @@ y seguridad con **Spring Security**.
 
 - JDK 17+
 - Maven 3.9+ (o usar el wrapper si lo agregás con `mvn -N wrapper:wrapper`)
-- MySQL corriendo en `localhost:3306` (o cambiar `application.properties`)
+- MySQL corriendo en `localhost:3306` (si no está disponible, se usa automáticamente
+  el archivo SQLite `biblioteca-fallback.db`)
 
 ## Puesta en marcha
 
@@ -30,6 +31,10 @@ y seguridad con **Spring Security**.
    - clave: `admin123`
 
    Con ese usuario podés cargar Autores, Editoriales y Libros.
+
+6. Los administradores pueden consultar el historial en `/auditoria`. Hibernate
+  Envers registra altas, modificaciones y bajas de Autor, Editorial, Imagen,
+  Libro, Préstamo y Usuario.
 
 5. Cualquier otra persona puede registrarse desde "Crear cuenta nueva" en el
    login — queda con rol `USUARIO` y puede ver el catálogo y pedir préstamos.

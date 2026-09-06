@@ -9,6 +9,7 @@
             <a class="nav-link" th:href="@{/prestamos}">Prestamos</a>
             <a class="nav-link" sec:authorize="hasRole('ADMIN')" th:href="@{/autores}">Autores</a>
             <a class="nav-link" sec:authorize="hasRole('ADMIN')" th:href="@{/editoriales}">Editoriales</a>
+            <a class="nav-link" sec:authorize="hasRole('ADMIN')" th:href="@{/auditoria}">Auditoria</a>
         </div>
         <div class="d-flex align-items-center">
             <span class="text-light me-3" sec:authorize="isAuthenticated()" sec:authentication="name"></span>

@@ -1,6 +1,7 @@
 package com.biblioteca.model;
 
 import jakarta.persistence.*;
+import org.hibernate.envers.Audited;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,6 +14,7 @@ import java.time.LocalDate;
  * Relaciones: Libro 1..1 -> Prestamo 1..*   /   Usuario 1..1 -> Prestamo 1..*
  */
 @Entity
+@Audited
 @Table(name = "prestamo")
 @Data
 @NoArgsConstructor

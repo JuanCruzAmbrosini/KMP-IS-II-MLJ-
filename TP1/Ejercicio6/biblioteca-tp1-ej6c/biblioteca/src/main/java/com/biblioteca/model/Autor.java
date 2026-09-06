@@ -2,6 +2,7 @@ package com.biblioteca.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import org.hibernate.envers.Audited;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,6 +15,7 @@ import java.util.Set;
  * Autor de libros. Relacion muchos a muchos con Libro (1..* <-> 1..*).
  */
 @Entity
+@Audited
 @Table(name = "autor")
 @Data
 @NoArgsConstructor
