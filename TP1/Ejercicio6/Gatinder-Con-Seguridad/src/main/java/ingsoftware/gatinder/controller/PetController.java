@@ -12,6 +12,7 @@ import org.springframework.ui.ModelMap;
 import jakarta.servlet.http.HttpSession;
 
 import ingsoftware.gatinder.entity.Pet;
+import ingsoftware.gatinder.entity.PetAudit;
 import ingsoftware.gatinder.dto.UserDto;
 import ingsoftware.gatinder.dto.PetDto;
 import ingsoftware.gatinder.enums.Gender;
@@ -37,6 +38,16 @@ public class PetController {
         }
     }
 
+    @GetMapping("/audits") public String listAudits(HttpSession session, ModelMap model) {
+        UserDto loggedUser = (UserDto) session.getAttribute("loggedUser");
+        if (loggedUser == null) {
+            return "redirect:/login";
+        }
+        List<PetAudit> audits = petService.findAuditsByUserId(loggedUser.getId());
+        model.addAttribute("audits", audits);
+        return "pet-audits";
+    }
+
     @GetMapping({"/edit", "/edit/{id}"}) public String editPet(HttpSession session, ModelMap model, @org.springframework.web.bind.annotation.PathVariable(required = false) String id, @RequestParam(required = false) String action) {
         if (action == null) {
             action = "create";
@@ -48,7 +59,7 @@ public class PetController {
         Pet pet = new Pet();
         if (id != null) {
             try {
-                pet = petService.findById(id);
+                pet = petService.findByIdForUser(id, loggedUser.getId());
             } catch (Exception e) {
                 throw new RuntimeException("Error al obtener la mascota", e);
             }
@@ -60,7 +71,7 @@ public class PetController {
         return "pet";
     }
 
-    @PostMapping("/update") public String updatePet(HttpSession session, ModelMap model, @RequestParam("archivo") MultipartFile file, @RequestParam(required = false) String id, @RequestParam String name, @RequestParam Gender gender, @RequestParam Animal animal, @RequestParam String action) {
+    @PostMapping("/update") public String updatePet(HttpSession session, ModelMap model, @RequestParam(value = "archivo", required = false) MultipartFile file, @RequestParam(required = false) String id, @RequestParam String name, @RequestParam Gender gender, @RequestParam Animal animal, @RequestParam String action) {
         UserDto loggedUser = (UserDto) session.getAttribute("loggedUser");
         if (loggedUser == null) {
             return "redirect:/login";

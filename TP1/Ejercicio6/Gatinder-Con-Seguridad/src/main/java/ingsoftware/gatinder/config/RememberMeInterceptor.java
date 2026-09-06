@@ -3,6 +3,9 @@ package ingsoftware.gatinder.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import ingsoftware.gatinder.dto.UserDto;
 import ingsoftware.gatinder.service.UserService;
@@ -21,6 +24,7 @@ public class RememberMeInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         if (request.getSession().getAttribute(SESSION_USER) != null) {
+            authenticateSessionUser((UserDto) request.getSession().getAttribute(SESSION_USER));
             return true;
         }
         Cookie rememberCookie = findCookie(request.getCookies());
@@ -32,8 +36,17 @@ public class RememberMeInterceptor implements HandlerInterceptor {
             deleteCookie(response);
         } else {
             request.getSession().setAttribute(SESSION_USER, user);
+            authenticateSessionUser(user);
         }
         return true;
+    }
+
+    private void authenticateSessionUser(UserDto user) {
+        if (user != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            SecurityContextHolder.getContext().setAuthentication(
+                    new UsernamePasswordAuthenticationToken(user.getEmail(), null,
+                            java.util.List.of(new SimpleGrantedAuthority("ROLE_USER"))));
+        }
     }
 
     private Cookie findCookie(Cookie[] cookies) {

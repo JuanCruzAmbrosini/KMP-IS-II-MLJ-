@@ -12,7 +12,6 @@ import ingsoftware.gatinder.entity.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, String> {
     User findByEmail(String email);
-    User findByEmailAndPassword(String email, String password);
     User findByFirstName(String firstName);
     Optional<User> findByRememberToken(String rememberToken);
 

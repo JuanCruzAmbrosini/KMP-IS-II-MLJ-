@@ -36,7 +36,7 @@ public class PictureService {
     @Transactional public Picture update(String pictureId, MultipartFile file) throws ErrorService {
         try {
             if (file != null) {
-                Optional<Picture> response = pictureRepository.findById(Long.valueOf(pictureId));
+                Optional<Picture> response = pictureRepository.findById(pictureId);
                 if (response.isPresent()) {
                     Picture picture = response.get();
                     picture.setMime(file.getContentType());

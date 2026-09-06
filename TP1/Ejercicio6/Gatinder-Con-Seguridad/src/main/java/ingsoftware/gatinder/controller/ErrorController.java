@@ -5,14 +5,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.RequestDispatcher;
 
 @Controller
 public class ErrorController {
     @RequestMapping(value = "/error", method = RequestMethod.GET)
     public ModelAndView renderErrorPage(HttpServletRequest httpRequest) {
         ModelAndView errorPage = new ModelAndView("error");
-        String errorMsg = "";
         int httpErrorCode = getErrorCode(httpRequest);
+        String errorMsg = "Http Error Code: " + httpErrorCode;
         switch (httpErrorCode) {
             case 400: {
                 errorMsg = "Http Error Code: 400. Bad Request";
@@ -36,6 +37,7 @@ public class ErrorController {
     }
 
     private int getErrorCode(HttpServletRequest httpRequest) {
-        return (Integer) httpRequest.getAttribute("javax.servlet.error.status_code");
+        Object statusCode = httpRequest.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
+        return statusCode instanceof Integer ? (Integer) statusCode : 500;
     }
 }

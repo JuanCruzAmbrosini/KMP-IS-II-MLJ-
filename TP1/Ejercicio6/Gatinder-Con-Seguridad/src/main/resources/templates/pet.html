@@ -61,6 +61,7 @@
         <div class="col-lg-6 order-lg-1">
           <div class="p-5">
             <form th:action="@{/pets/update}" method="post" enctype="multipart/form-data">
+              <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                 
                <p th:if="${error != null}" th:text="${error}" style="color:red;"></p> 
                

@@ -9,6 +9,7 @@ import jakarta.persistence.NoResultException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.multipart.MultipartFile;
 
 import ingsoftware.gatinder.entity.Zone;
@@ -27,6 +28,7 @@ public class UserService {
     @Autowired private UserRepository userRepository;
     @Autowired private ZoneService zoneService;
     @Autowired private PictureService pictureService;
+    @Autowired private PasswordEncoder passwordEncoder;
 
     @Transactional public UserDto register(RegisterDto request) throws ErrorService {
         create(null, request.getFirstName(), request.getLastName(), request.getEmail(),
@@ -101,7 +103,7 @@ public class UserService {
             user.setFirstName(firstName);
             user.setLastName(lastName);
             user.setEmail(email);
-            user.setPassword(password);
+            user.setPassword(passwordEncoder.encode(password));
             user.setZone(zone);
             if (file != null && !file.isEmpty()) {
                 Picture picture = pictureService.create(file);
@@ -124,7 +126,7 @@ public class UserService {
             user.setFirstName(firstName);
             user.setLastName(lastName);
             user.setEmail(email);
-            user.setPassword(password);
+            user.setPassword(passwordEncoder.encode(password));
             user.setZone(zone);
             if (file != null) {
                 Picture picture = pictureService.update(user.getPicture().getId(), file);
@@ -173,8 +175,8 @@ public class UserService {
             if (password == null || password.isEmpty()) {
                 throw new ErrorService("La contraseña no puede ser nula o vacía");
             }
-            User user = userRepository.findByEmailAndPassword(email, password);
-            if (user == null) {
+            User user = userRepository.findByEmail(email);
+            if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
                 throw new ErrorService("Correo electrónico o contraseña incorrectos");
             }
             if (user.isDeleted()) {

@@ -48,6 +48,7 @@
          <h2 class="masthead-subheading mb-0" th:if="${session.loggedUser != null}" th:text="${session.loggedUser.firstName + ' ' + session.loggedUser.lastName}"></h2>
         <a th:href="@{/users/profile/edit}" class="btn btn-primary btn-xl rounded-pill mt-5">¡Configura tu Perfil!</a>
         <a th:href="@{/pets/list}" class="btn btn-primary btn-xl rounded-pill mt-5">¡Mis Mascotas!</a>
+        <a th:href="@{/pets/audits}" class="btn btn-primary btn-xl rounded-pill mt-5">Auditoría de mascotas</a>
         <a th:href="@{/reports/votes}" class="btn btn-primary btn-xl rounded-pill mt-5">Descargar votos</a>
       </div>
     </div>

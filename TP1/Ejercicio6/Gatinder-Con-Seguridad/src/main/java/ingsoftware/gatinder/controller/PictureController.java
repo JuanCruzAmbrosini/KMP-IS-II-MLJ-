@@ -15,6 +15,8 @@ import ingsoftware.gatinder.entity.User;
 import ingsoftware.gatinder.entity.Pet;
 import ingsoftware.gatinder.service.ErrorService;
 import ingsoftware.gatinder.service.PetService;
+import jakarta.servlet.http.HttpSession;
+import ingsoftware.gatinder.dto.UserDto;
 
 
 
@@ -39,9 +41,13 @@ public class PictureController {
         }
     }
 
-    @GetMapping("/pet/{id}") public ResponseEntity<byte[]> petPicture(@PathVariable String id) {
+    @GetMapping("/pet/{id}") public ResponseEntity<byte[]> petPicture(@PathVariable String id, HttpSession session) {
         try {
-            Pet pet = petService.findById(id);
+            UserDto loggedUser = (UserDto) session.getAttribute("loggedUser");
+            if (loggedUser == null) {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            }
+            Pet pet = petService.findByIdForUser(id, loggedUser.getId());
             if (pet.getPicture() == null) {
                 throw new ErrorService("La mascota no posee foto asignada");
             }

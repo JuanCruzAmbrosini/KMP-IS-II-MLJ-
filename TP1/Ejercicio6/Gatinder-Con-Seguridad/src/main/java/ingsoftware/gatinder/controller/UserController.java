@@ -10,7 +10,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.ui.ModelMap;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import jakarta.servlet.http.HttpSession;
 
 import ingsoftware.gatinder.config.RememberMeInterceptor;
@@ -50,11 +55,17 @@ public class UserController {
         return "/success";
     }
 
-    @PostMapping("/login") public String login(ModelMap model, HttpSession session,
-            @ModelAttribute LoginDto request, HttpServletResponse response) {
+        @PostMapping("/login") public String login(ModelMap model, HttpSession session,
+            @ModelAttribute LoginDto request, HttpServletRequest httpRequest,
+            HttpServletResponse response) {
         try {
             AuthenticatedUserDto authenticatedUser = userService.authenticate(request);
             session.setAttribute("loggedUser", authenticatedUser.getUser());
+            SecurityContextHolder.getContext().setAuthentication(
+                    new UsernamePasswordAuthenticationToken(authenticatedUser.getUser().getEmail(), null,
+                        java.util.List.of(new SimpleGrantedAuthority("ROLE_USER"))));
+            new HttpSessionSecurityContextRepository().saveContext(
+                    SecurityContextHolder.getContext(), httpRequest, response);
             RememberMeInterceptor.addCookie(response, authenticatedUser.getRememberToken());
             return "redirect:/home";
         } catch (Exception e) {
@@ -69,6 +80,7 @@ public class UserController {
             @CookieValue(value = RememberMeInterceptor.COOKIE_NAME, required = false) String token,
             HttpServletResponse response) {
         userService.clearRememberToken(token);
+        SecurityContextHolder.clearContext();
         session.invalidate();
         RememberMeInterceptor.deleteCookie(response);
         return "redirect:/login";
