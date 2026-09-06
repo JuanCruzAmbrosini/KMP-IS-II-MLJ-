@@ -1,6 +1,7 @@
 package com.biblioteca.model;
 
 import jakarta.persistence.*;
+import org.hibernate.envers.Audited;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
  * Imagen de tapa de un libro. Relacion uno a uno con Libro (1..1 <-> 1..1).
  */
 @Entity
+@Audited
 @Table(name = "imagen")
 @Data
 @NoArgsConstructor
