@@ -17,4 +17,7 @@ public interface PetRepository extends JpaRepository<Pet, String> {
 
     @Query("SELECT p FROM Pet p WHERE p.user.id = :id AND p.name LIKE %:name% AND p.deleted = false")
     public List<Pet> findPetByName(@Param("id")String id,@Param("name")String name);
+
+    @Query("SELECT p FROM Pet p WHERE p.user.id = :id AND p.deleted = true")
+    public List<Pet> findDeletedPetsByUser(@Param("id")String id);
 }

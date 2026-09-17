@@ -45,7 +45,7 @@
   </nav>
 
   <header>
-      <h1 style="margin-top:80px; text-align: center;"><span th:text="${accion}"></span>Mascota</h1>
+      <h1 style="margin-top:80px; text-align: center;"><span th:text="${action == 'create' ? 'Crear ' : 'Actualizar '}"></span>Mascota</h1>
   </header>
 
   <section>
@@ -60,7 +60,7 @@
         </div>
         <div class="col-lg-6 order-lg-1">
           <div class="p-5">
-            <form th:action="@{/pets/pets/update}" method="post" enctype="multipart/form-data">
+            <form th:action="@{/pets/update}" method="post" enctype="multipart/form-data">
                 
                <p th:if="${error != null}" th:text="${error}" style="color:red;"></p> 
                
@@ -71,21 +71,21 @@
               <input type="text" class="form-control" name="name" th:value="${pet.name}" required/>
               
               <label>Tipo</label>
-              <select class="form-control" name="tipo" th:disabled="${accion == 'Eliminar' OR accion == 'Alta'}"> 
-                 <option th:each="animal : ${animals}" th:value="${animal}" th:text="${animal}" th:selected="${pet.animal == animal}"></option>
+              <select class="form-control" name="animal"> 
+                 <option th:each="a : ${animals}" th:value="${a}" th:text="${a}" th:selected="${pet.animal == a}"></option>
               </select>
               
               <label>Sexo</label>
-              <select class="form-control" name="sexo" th:disabled="${accion == 'Eliminar' OR accion == 'Alta'}"> 
-                 <option th:each="gender : ${genders}" th:value="${gender}" th:text="${gender}" th:selected="${pet.gender == gender}"></option>
+              <select class="form-control" name="gender"> 
+                 <option th:each="g : ${genders}" th:value="${g}" th:text="${g}" th:selected="${pet.gender == g}"></option>
               </select>
 
-              <label th:if="${accion != 'Eliminar'}">Foto</label>
-              <input type="file" class="form-control" name="archivo" th:if="${accion != 'Eliminar' OR accion == 'Alta'}"/>
+              <label>Foto (Opcional)</label>
+              <input type="file" class="form-control" name="file"/>
               
               <br/>
               
-                 <a th:href="@{/pets/pets/list}" class="btn btn-dark">Volver</a>
+                 <a th:href="@{/pets/list}" class="btn btn-dark">Volver</a>
                  <button type="submit" class="btn btn-primary" th:text="${action == 'create' ? 'Crear Mascota' : 'Actualizar Mascota'}">Guardar Mascota</button>
             </form>
           </div>
