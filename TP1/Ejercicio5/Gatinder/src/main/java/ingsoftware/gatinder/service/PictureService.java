@@ -15,18 +15,15 @@ public class PictureService {
     @Autowired private PictureRepository pictureRepository;
 
     @Transactional public Picture create(MultipartFile file) throws ErrorService {
+        if (file == null || file.isEmpty()) {
+            return null;
+        }
         try {
-            if (file == null) {
-                throw new ErrorService("El archivo de imagen es nulo");
-            }
-
             Picture picture = new Picture();
             picture.setId(UUID.randomUUID().toString());
             picture.setMime(file.getContentType());
             picture.setData(file.getBytes());
             return pictureRepository.save(picture);
-        } catch (ErrorService e) {
-            throw e;
         } catch (Exception e) {
             e.printStackTrace();
             throw new ErrorService("Error al guardar la imagen");
@@ -34,22 +31,22 @@ public class PictureService {
     }
 
     @Transactional public Picture update(String pictureId, MultipartFile file) throws ErrorService {
+        if (file == null || file.isEmpty()) {
+            return null;
+        }
         try {
-            if (file != null) {
-                Optional<Picture> response = pictureRepository.findById(Long.valueOf(pictureId));
+            Picture picture = new Picture();
+            if (pictureId != null) {
+                Optional<Picture> response = pictureRepository.findById(pictureId);
                 if (response.isPresent()) {
-                    Picture picture = response.get();
-                    picture.setMime(file.getContentType());
-                    picture.setData(file.getBytes());
-                    return pictureRepository.save(picture);
-                } else {
-                    throw new ErrorService("No se encontró la imagen con el ID proporcionado");
+                    picture = response.get();
                 }
             } else {
-                throw new ErrorService("El archivo de imagen es nulo");
+                picture.setId(UUID.randomUUID().toString());
             }
-        } catch (ErrorService e) {
-            throw e;
+            picture.setMime(file.getContentType());
+            picture.setData(file.getBytes());
+            return pictureRepository.save(picture);
         } catch (Exception e) {
             e.printStackTrace();
             throw new ErrorService("Error al actualizar la imagen");

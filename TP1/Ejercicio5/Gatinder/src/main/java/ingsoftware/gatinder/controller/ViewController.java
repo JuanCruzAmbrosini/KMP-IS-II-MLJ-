@@ -29,7 +29,7 @@ public class ViewController {
             return "register";
         } catch (Exception e) {
             model.put("error", e.getMessage());
-            return "";
+            return "register";
         }
     }
 

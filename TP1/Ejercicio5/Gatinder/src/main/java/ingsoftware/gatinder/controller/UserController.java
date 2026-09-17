@@ -44,10 +44,10 @@ public class UserController {
             model.put("email", request.getEmail());
             model.put("password", request.getPassword());
             model.put("repeatPassword", request.getRepeatPassword());
-            return "/register";
+            return "register";
         }
         model.put("success", "Usuario registrado correctamente");
-        return "/success";
+        return "success";
     }
 
     @PostMapping("/login") public String login(ModelMap model, HttpSession session,
@@ -61,7 +61,7 @@ public class UserController {
             model.put("error", e.getMessage());
             model.put("email", request.getEmail());
             model.put("password", request.getPassword());
-            return "/login";
+            return "login";
         }
     }
 

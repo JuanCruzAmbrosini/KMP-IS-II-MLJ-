@@ -33,8 +33,10 @@ public class PetService {
             pet.setAnimal(animal);
             pet.setUser(user);
             pet.setCreatedAt(Instant.now());
-            Picture picture = pictureService.create(file);
-            pet.setPicture(picture);
+            if (file != null && !file.isEmpty()) {
+                Picture picture = pictureService.create(file);
+                pet.setPicture(picture);
+            }
             petRepository.save(pet);
         } catch (ErrorService e) {
             throw e;
@@ -54,12 +56,11 @@ public class PetService {
                     pet.setName(name);
                     pet.setGender(gender);
                     pet.setAnimal(animal);
-                    String pictureId = null;
-                    if (pet.getPicture() != null) {
-                        pictureId = pet.getPicture().getId().toString();
+                    if (file != null && !file.isEmpty()) {
+                        String pictureId = pet.getPicture() != null ? pet.getPicture().getId() : null;
+                        Picture picture = pictureService.update(pictureId, file);
+                        pet.setPicture(picture);
                     }
-                    Picture picture = pictureService.update(pictureId, file);
-                    pet.setPicture(picture);
                     petRepository.save(pet);
                 }
             }
@@ -78,6 +79,7 @@ public class PetService {
                 Pet pet = response.get();
                 if (pet.getUser().getId().equals(userId)) {
                     pet.setDeleted(true);
+                    pet.setDeletedAt(Instant.now());
                     petRepository.save(pet);
                 } else {
                     throw new ErrorService("No tiene permiso para eliminar esta mascota");
@@ -130,6 +132,16 @@ public class PetService {
     public List<PetDto> findDtosByUserId(String userId) throws ErrorService {
         List<PetDto> pets = new java.util.ArrayList<>();
         for (Pet pet : findByUserId(userId)) {
+            String pictureUrl = pet.getPicture() == null ? null : "/pictures/pet/" + pet.getId();
+            pets.add(new PetDto(pet.getId(), pet.getName(), pet.getGender(), pet.getAnimal(),
+                    pet.getUser().getId(), pictureUrl));
+        }
+        return pets;
+    }
+
+    public List<PetDto> findDeletedDtosByUserId(String userId) throws ErrorService {
+        List<PetDto> pets = new java.util.ArrayList<>();
+        for (Pet pet : petRepository.findDeletedPetsByUser(userId)) {
             String pictureUrl = pet.getPicture() == null ? null : "/pictures/pet/" + pet.getId();
             pets.add(new PetDto(pet.getId(), pet.getName(), pet.getGender(), pet.getAnimal(),
                     pet.getUser().getId(), pictureUrl));
