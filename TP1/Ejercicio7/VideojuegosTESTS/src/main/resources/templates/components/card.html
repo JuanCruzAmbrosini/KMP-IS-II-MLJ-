@@ -1,0 +1,14 @@
+<div th:fragment="_card" class="card h-100">
+    <img th:src="@{'/imagenes/'} + ${videojuego.imagen}" class="card-img-top" alt="portada del videojuego">
+    <div class="card-body p-4">
+        <div class="text-center">
+            <h5 class="fw-bolder" th:text="${videojuego.titulo}">Titulo</h5>
+            <div>$<span th:text="${videojuego.precio}">0</span></div>
+        </div>
+    </div>
+    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+        <div class="text-center">
+            <a th:href="@{detalle/{id}(id=${videojuego.id})}" class="btn btn-outline-dark mt-auto">Ver detalle</a>
+        </div>
+    </div>
+</div>
