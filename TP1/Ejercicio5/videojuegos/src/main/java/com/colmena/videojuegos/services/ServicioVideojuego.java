@@ -30,7 +30,7 @@ public class ServicioVideojuego implements ServicioBase<Videojuego>{
     public Videojuego findById(long id) throws Exception {
         try {
             Optional<Videojuego> opt = this.repositorio.findById(id);
-            return opt.get();
+            return opt.orElse(null);
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
@@ -52,9 +52,13 @@ public class ServicioVideojuego implements ServicioBase<Videojuego>{
     public Videojuego updateOne(Videojuego entity, long id) throws Exception {
         try {
             Optional<Videojuego> opt = this.repositorio.findById(id);
-            Videojuego videojuego = opt.get();
-            videojuego = this.repositorio.save(entity);
-            return videojuego;
+            if (opt.isPresent()) {
+                entity.setId(id);
+                Videojuego videojuego = this.repositorio.save(entity);
+                return videojuego;
+            } else {
+                throw new Exception("No existe el videojuego con id " + id);
+            }
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
@@ -65,7 +69,7 @@ public class ServicioVideojuego implements ServicioBase<Videojuego>{
     public boolean deleteById(long id) throws Exception {
         try {
             Optional<Videojuego> opt = this.repositorio.findById(id);
-            if (!opt.isEmpty()) {
+            if (opt.isPresent()) {
                 Videojuego videojuego = opt.get();
                 videojuego.setActivo(!videojuego.isActivo());
                 this.repositorio.save(videojuego);
@@ -94,7 +98,7 @@ public class ServicioVideojuego implements ServicioBase<Videojuego>{
     public Videojuego findByIdAndActivo(long id) throws Exception {
         try {
             Optional<Videojuego> opt = this.repositorio.findByIdAndActivo(id);
-            return opt.get();
+            return opt.orElse(null);
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
@@ -105,7 +109,7 @@ public class ServicioVideojuego implements ServicioBase<Videojuego>{
         try{
             List<Videojuego> entities = this.repositorio.findByTitle(q);
             return entities;
-        } catch (Exception e) {
+        }catch (Exception e){
             throw new Exception(e.getMessage());
         }
     }

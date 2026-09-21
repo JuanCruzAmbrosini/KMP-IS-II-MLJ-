@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ServicioEstudio implements ServicioBase<Estudio> {
+public class ServicioEstudio implements ServicioBase<Estudio>{
     @Autowired
     private RepositorioEstudio repositorio;
 
@@ -18,8 +18,8 @@ public class ServicioEstudio implements ServicioBase<Estudio> {
     @Transactional
     public List<Estudio> findAll() throws Exception {
         try {
-            List<Estudio> estudios = this.repositorio.findAll();
-            return estudios;
+            List<Estudio> entities = this.repositorio.findAll();
+            return entities;
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
@@ -30,7 +30,7 @@ public class ServicioEstudio implements ServicioBase<Estudio> {
     public Estudio findById(long id) throws Exception {
         try {
             Optional<Estudio> opt = this.repositorio.findById(id);
-            return opt.get();
+            return opt.orElse(null);
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
@@ -40,8 +40,8 @@ public class ServicioEstudio implements ServicioBase<Estudio> {
     @Transactional
     public Estudio saveOne(Estudio entity) throws Exception {
         try {
-            Estudio estudio = this.repositorio.save(entity);
-            return estudio;
+            Estudio entitySaved = this.repositorio.save(entity);
+            return entitySaved;
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
@@ -52,9 +52,13 @@ public class ServicioEstudio implements ServicioBase<Estudio> {
     public Estudio updateOne(Estudio entity, long id) throws Exception {
         try {
             Optional<Estudio> opt = this.repositorio.findById(id);
-            Estudio estudio = opt.get();
-            estudio = this.repositorio.save(entity);
-            return estudio;
+            if (opt.isPresent()) {
+                entity.setId(id);
+                Estudio entitySaved = this.repositorio.save(entity);
+                return entitySaved;
+            } else {
+                throw new Exception("No existe el estudio con id " + id);
+            }
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
@@ -65,11 +69,10 @@ public class ServicioEstudio implements ServicioBase<Estudio> {
     public boolean deleteById(long id) throws Exception {
         try {
             Optional<Estudio> opt = this.repositorio.findById(id);
-
-            if (!opt.isEmpty()) {
-                Estudio estudio = opt.get();
-                estudio.setActivo(!estudio.isActivo());
-                this.repositorio.save(estudio);
+            if (opt.isPresent()) {
+                Estudio entity = opt.get();
+                entity.setActivo(!entity.isActivo());
+                this.repositorio.save(entity);
             } else {
                 throw new Exception();
             }

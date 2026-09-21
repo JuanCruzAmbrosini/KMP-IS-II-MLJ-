@@ -30,7 +30,7 @@ public class ServicioCategoria implements ServicioBase<Categoria> {
     public Categoria findById(long id) throws Exception {
         try {
             Optional<Categoria> opt = this.repositorio.findById(id);
-            return opt.get();
+            return opt.orElse(null);
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
@@ -52,9 +52,13 @@ public class ServicioCategoria implements ServicioBase<Categoria> {
     public Categoria updateOne(Categoria entity, long id) throws Exception {
         try {
             Optional<Categoria> opt = this.repositorio.findById(id);
-            Categoria categoria = opt.get();
-            categoria = this.repositorio.save(entity);
-            return categoria;
+            if (opt.isPresent()) {
+                entity.setId(id);
+                Categoria categoria = this.repositorio.save(entity);
+                return categoria;
+            } else {
+                throw new Exception("No existe la categoria con id " + id);
+            }
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
@@ -65,7 +69,7 @@ public class ServicioCategoria implements ServicioBase<Categoria> {
     public boolean deleteById(long id) throws Exception {
         try {
             Optional<Categoria> opt = this.repositorio.findById(id);
-            if (!opt.isEmpty()) {
+            if (opt.isPresent()) {
                 Categoria categoria = opt.get();
                 categoria.setActivo(!categoria.isActivo());
                 this.repositorio.save(categoria);

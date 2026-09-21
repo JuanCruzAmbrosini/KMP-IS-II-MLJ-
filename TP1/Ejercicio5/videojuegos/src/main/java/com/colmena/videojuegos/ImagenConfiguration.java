@@ -10,7 +10,10 @@ public class ImagenConfiguration implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry){
         WebMvcConfigurer.super.addResourceHandlers(registry);
-        registry.addResourceHandler("/imagenes/**").addResourceLocations("file:/C:/Videojuegos/imagenes/");
+        String uploadDir = System.getProperty("os.name").toLowerCase().contains("win")
+                ? "file:///C:/Videojuegos/imagenes/"
+                : "file://" + System.getProperty("user.home") + "/Videojuegos/imagenes/";
+        registry.addResourceHandler("/imagenes/**").addResourceLocations(uploadDir);
     }
 
 }
