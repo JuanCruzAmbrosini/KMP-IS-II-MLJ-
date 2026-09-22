@@ -60,7 +60,8 @@ public class UserServiceTest {
         when(pictureService.create(any())).thenReturn(new Picture());
         when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
 
-        userService.create(null, dto.getFirstName(), dto.getLastName(), dto.getEmail(), dto.getPassword(), dto.getRepeatPassword(), dto.getZoneId());
+        userService.create(null, dto.getFirstName(), dto.getLastName(), dto.getEmail(), dto.getPassword(),
+                dto.getRepeatPassword(), dto.getZoneId());
 
         verify(zoneService, times(1)).findById("1");
         verify(userRepository, times(1)).save(any(User.class));

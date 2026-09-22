@@ -1,8 +1,6 @@
 package com.colmena.videojuegos.services;
 
 import com.colmena.videojuegos.entities.AuditoriaVideojuego;
-import com.colmena.videojuegos.entities.Categoria;
-import com.colmena.videojuegos.entities.Estudio;
 import com.colmena.videojuegos.entities.Videojuego;
 import com.colmena.videojuegos.repositories.RepositorioAuditoriaVideojuego;
 import com.colmena.videojuegos.repositories.RepositorioVideojuego;
@@ -65,7 +63,7 @@ public class ServicioVideojuegoTest {
     public void testSaveOne() throws Exception {
         Videojuego videojuego = new Videojuego();
         videojuego.setTitulo("Test");
-        
+
         when(repositorio.save(any(Videojuego.class))).thenReturn(videojuego);
 
         Videojuego result = servicioVideojuego.saveOne(videojuego);

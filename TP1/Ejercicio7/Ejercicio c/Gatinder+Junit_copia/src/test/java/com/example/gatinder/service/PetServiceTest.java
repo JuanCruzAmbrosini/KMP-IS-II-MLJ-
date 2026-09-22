@@ -1,6 +1,5 @@
 package com.example.gatinder.service;
 
-import ingsoftware.gatinder.dto.PetDto;
 import ingsoftware.gatinder.entity.Pet;
 import ingsoftware.gatinder.entity.User;
 import ingsoftware.gatinder.enums.Gender;
@@ -21,7 +20,6 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 public class PetServiceTest {
@@ -41,6 +39,7 @@ public class PetServiceTest {
     @Mock
     private PetAuditRepository petAuditRepository;
 
+    // esta anotacion de junit significa que el metodo se ejecuta antes de cada test
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -60,6 +59,8 @@ public class PetServiceTest {
         verify(petRepository, times(1)).save(any(Pet.class));
     }
 
+    // tmb se testea el caso de fracaso de los metodos, es decir se testea
+    // que tiren excepciones bajo las condiciones impuestas
     @Test
     public void testAgregarMascotaExcepcion() throws Exception {
         when(userService.findById("123")).thenThrow(new ErrorService("Usuario no encontrado"));
