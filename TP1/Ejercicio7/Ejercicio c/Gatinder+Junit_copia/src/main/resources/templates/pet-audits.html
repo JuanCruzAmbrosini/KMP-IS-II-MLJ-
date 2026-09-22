@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Auditoría de mascotas</title>
+  <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/css/one-page-wonder.min.css" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="/">Tinder de Mascota</a>
+      <div class="navbar-nav ml-auto">
+        <a class="nav-link" th:href="@{/home}">Inicio</a>
+        <a class="nav-link" th:href="@{/pets/list}">Mis mascotas</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container" style="margin-top: 100px;">
+    <h1>Auditoría de mascotas</h1>
+    <p th:if="${#lists.isEmpty(audits)}">Todavía no hay operaciones registradas.</p>
+    <table th:unless="${#lists.isEmpty(audits)}" class="table table-light table-hover">
+      <thead>
+        <tr class="bg-black text-white">
+          <th>Fecha</th>
+          <th>Operación</th>
+          <th>Mascota</th>
+          <th>Detalle</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="audit : ${audits}">
+          <td th:text="${audit.occurredAt}"></td>
+          <td th:text="${audit.action}"></td>
+          <td th:text="${audit.petId}"></td>
+          <td th:text="${audit.details}"></td>
+        </tr>
+      </tbody>
+    </table>
+  </main>
+</body>
+</html>
