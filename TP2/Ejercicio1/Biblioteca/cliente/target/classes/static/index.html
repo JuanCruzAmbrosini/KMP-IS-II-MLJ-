@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestión de Biblioteca</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo">
+            <span class="icon">📚</span>
+            <h1>Biblioteca <span>REST</span></h1>
+        </div>
+        <div class="status-badge" id="backendStatus">
+            <span class="indicator"></span>
+            <span class="status-text">Conectando...</span>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Navegación por pestañas -->
+        <nav class="tabs">
+            <button class="tab-btn active" data-tab="personas">👤 Personas</button>
+            <button class="tab-btn" data-tab="libros">📖 Libros</button>
+            <button class="tab-btn" data-tab="autores">✍️ Autores</button>
+            <button class="tab-btn" data-tab="localidades">🏙️ Localidades</button>
+            <button class="tab-btn" data-tab="domicilios">🏠 Domicilios</button>
+        </nav>
+
+        <div id="alertBox" class="alert-box hidden"></div>
+
+        <!-- TAB PERSONAS -->
+        <section id="tab-personas" class="tab-content active">
+            <div class="section-header">
+                <div>
+                    <h2>Gestión de Personas</h2>
+                    <p class="subtitle">Relación 1 a 1 con Domicilio y 1 a * (Composición) con Libros</p>
+                </div>
+                <button class="btn btn-primary" onclick="openPersonaModal()">+ Nueva Persona</button>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre Completo</th>
+                            <th>DNI</th>
+                            <th>Domicilio / Localidad</th>
+                            <th>Libros Asignados</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="personasTableBody">
+                        <tr><td colspan="6" class="loading">Cargando personas...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- TAB LIBROS -->
+        <section id="tab-libros" class="tab-content">
+            <div class="section-header">
+                <div>
+                    <h2>Catálogo de Libros</h2>
+                    <p class="subtitle">Relación * a * con Autores y datos bibliográficos</p>
+                </div>
+                <button class="btn btn-primary" onclick="openLibroModal()">+ Nuevo Libro</button>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Título</th>
+                            <th>Año</th>
+                            <th>Género</th>
+                            <th>Páginas</th>
+                            <th>Autor Texto</th>
+                            <th>Autores (* a *)</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="librosTableBody">
+                        <tr><td colspan="8" class="loading">Cargando libros...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- TAB AUTORES -->
+        <section id="tab-autores" class="tab-content">
+            <div class="section-header">
+                <div>
+                    <h2>Directorio de Autores</h2>
+                    <p class="subtitle">Registro de autores y biografías</p>
+                </div>
+                <button class="btn btn-primary" onclick="openAutorModal()">+ Nuevo Autor</button>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Biografía</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="autoresTableBody">
+                        <tr><td colspan="5" class="loading">Cargando autores...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- TAB LOCALIDADES -->
+        <section id="tab-localidades" class="tab-content">
+            <div class="section-header">
+                <div>
+                    <h2>Localidades</h2>
+                    <p class="subtitle">División territorial para domicilios</p>
+                </div>
+                <button class="btn btn-primary" onclick="openLocalidadModal()">+ Nueva Localidad</button>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Denominación</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="localidadesTableBody">
+                        <tr><td colspan="3" class="loading">Cargando localidades...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- TAB DOMICILIOS -->
+        <section id="tab-domicilios" class="tab-content">
+            <div class="section-header">
+                <div>
+                    <h2>Domicilios</h2>
+                    <p class="subtitle">Relación * a 1 hacia Localidad</p>
+                </div>
+                <button class="btn btn-primary" onclick="openDomicilioModal()">+ Nuevo Domicilio</button>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Calle</th>
+                            <th>Número</th>
+                            <th>Localidad</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="domiciliosTableBody">
+                        <tr><td colspan="5" class="loading">Cargando domicilios...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <!-- MODAL PERSONA -->
+    <div id="personaModal" class="modal-overlay hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="personaModalTitle">Nueva Persona</h3>
+                <button class="btn-close" onclick="closeModal('personaModal')">&times;</button>
+            </div>
+            <form id="personaForm" onsubmit="savePersona(event)">
+                <input type="hidden" id="personaId">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="personaNombre">Nombre *</label>
+                        <input type="text" id="personaNombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="personaApellido">Apellido *</label>
+                        <input type="text" id="personaApellido" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="personaDni">DNI *</label>
+                    <input type="number" id="personaDni" required>
+                </div>
+                <div class="form-group">
+                    <label for="personaDomicilio">Domicilio Asignado (1 a 1)</label>
+                    <select id="personaDomicilio">
+                        <option value="">-- Sin domicilio --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Libros que posee (1 a * - Composición)</label>
+                    <div id="personaLibrosList" class="checklist-container"></div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('personaModal')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL LIBRO -->
+    <div id="libroModal" class="modal-overlay hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="libroModalTitle">Nuevo Libro</h3>
+                <button class="btn-close" onclick="closeModal('libroModal')">&times;</button>
+            </div>
+            <form id="libroForm" onsubmit="saveLibro(event)">
+                <input type="hidden" id="libroId">
+                <div class="form-group">
+                    <label for="libroTitulo">Título *</label>
+                    <input type="text" id="libroTitulo" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="libroFecha">Año (fecha) *</label>
+                        <input type="number" id="libroFecha" required value="2024">
+                    </div>
+                    <div class="form-group">
+                        <label for="libroGenero">Género *</label>
+                        <input type="text" id="libroGenero" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="libroPaginas">Páginas *</label>
+                        <input type="number" id="libroPaginas" required min="1">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="libroAutorTexto">Autor (campo texto)</label>
+                    <input type="text" id="libroAutorTexto" placeholder="Nombre descriptivo del autor">
+                </div>
+                <div class="form-group">
+                    <label>Autores Vinculados (* a *)</label>
+                    <div id="libroAutoresList" class="checklist-container"></div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('libroModal')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL AUTOR -->
+    <div id="autorModal" class="modal-overlay hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="autorModalTitle">Nuevo Autor</h3>
+                <button class="btn-close" onclick="closeModal('autorModal')">&times;</button>
+            </div>
+            <form id="autorForm" onsubmit="saveAutor(event)">
+                <input type="hidden" id="autorId">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="autorNombre">Nombre *</label>
+                        <input type="text" id="autorNombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="autorApellido">Apellido *</label>
+                        <input type="text" id="autorApellido" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="autorBiografia">Biografía</label>
+                    <textarea id="autorBiografia" rows="3"></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('autorModal')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL LOCALIDAD -->
+    <div id="localidadModal" class="modal-overlay hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="localidadModalTitle">Nueva Localidad</h3>
+                <button class="btn-close" onclick="closeModal('localidadModal')">&times;</button>
+            </div>
+            <form id="localidadForm" onsubmit="saveLocalidad(event)">
+                <input type="hidden" id="localidadId">
+                <div class="form-group">
+                    <label for="localidadDenominacion">Denominación *</label>
+                    <input type="text" id="localidadDenominacion" required placeholder="Ej. Godoy Cruz">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('localidadModal')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL DOMICILIO -->
+    <div id="domicilioModal" class="modal-overlay hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="domicilioModalTitle">Nuevo Domicilio</h3>
+                <button class="btn-close" onclick="closeModal('domicilioModal')">&times;</button>
+            </div>
+            <form id="domicilioForm" onsubmit="saveDomicilio(event)">
+                <input type="hidden" id="domicilioId">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="domicilioCalle">Calle *</label>
+                        <input type="text" id="domicilioCalle" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="domicilioNumero">Número *</label>
+                        <input type="number" id="domicilioNumero" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="domicilioLocalidad">Localidad (1 a *)</label>
+                    <select id="domicilioLocalidad">
+                        <option value="">-- Seleccione Localidad --</option>
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('domicilioModal')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
+
