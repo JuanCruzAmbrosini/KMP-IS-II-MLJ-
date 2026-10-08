@@ -1,0 +1,83 @@
+classDiagram
+    class Paciente {
+        -int idPaciente
+        -String dni
+        -String nombre
+        -String apellido
+        -String email
+        -String telefono
+        +registrarse()
+        +solicitarTurno(Medico, LocalDateTime) Turno
+        +cancelarTurno(Turno)
+        +consultarTurnos() List~Turno~
+    }
+
+    class Medico {
+        -int idMedico
+        -String matricula
+        -String nombre
+        -String apellido
+        +consultarAgenda(LocalDate) List~Turno~
+        +definirHorario(HorarioAtencion)
+        +estaDisponible(LocalDateTime) boolean
+    }
+
+    class Especialidad {
+        -int idEspecialidad
+        -String nombre
+        +listarMedicos() List~Medico~
+    }
+
+    class Consultorio {
+        -int idConsultorio
+        -String numero
+        -String ubicacion
+        +estaLibre(LocalDateTime) boolean
+    }
+
+    class HorarioAtencion {
+        -int idHorario
+        -DayOfWeek dia
+        -LocalTime horaInicio
+        -LocalTime horaFin
+        -int duracionTurnoMin
+        +generarFranjas() List~LocalTime~
+    }
+
+    class Turno {
+        -int idTurno
+        -LocalDateTime fechaHora
+        -EstadoTurno estado
+        +confirmar()
+        +cancelar()
+        +reprogramar(LocalDateTime)
+        +estaPagado() boolean
+    }
+
+    class CoSeguro {
+        -int idCoSeguro
+        -double monto
+        -LocalDate fechaPago
+        -String medioPago
+        -EstadoPago estado
+        +registrarPago()
+        +emitirComprobante() String
+    }
+
+    class EstadoTurno {
+        <<enumeration>>
+        PENDIENTE_PAGO
+        CONFIRMADO
+        CANCELADO
+        ATENDIDO
+        AUSENTE
+    }
+
+    Paciente "1" --> "0..*" Turno : solicita
+    Medico "1" --> "0..*" Turno : atiende
+    Consultorio "1" --> "0..*" Turno : se realiza en
+    Turno "1" --> "1" CoSeguro : requiere
+    Medico "0..*" --> "1" Especialidad : pertenece a
+    Medico "1" --> "1..*" HorarioAtencion : define
+    Medico "0..*" --> "0..*" Consultorio : atiende en
+    Turno ..> EstadoTurno
