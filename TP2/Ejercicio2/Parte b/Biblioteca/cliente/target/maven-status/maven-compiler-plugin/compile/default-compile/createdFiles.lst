@@ -1,0 +1,14 @@
+com/biblioteca/cliente/config/RestTemplateConfig.class
+com/biblioteca/cliente/ClienteApplication.class
+com/biblioteca/cliente/service/BibliotecaClienteService$5.class
+com/biblioteca/cliente/dto/PersonaDTO.class
+com/biblioteca/cliente/service/BibliotecaClienteService$1.class
+com/biblioteca/cliente/dto/DomicilioDTO.class
+com/biblioteca/cliente/service/BibliotecaClienteService.class
+com/biblioteca/cliente/dto/LibroDTO.class
+com/biblioteca/cliente/service/BibliotecaClienteService$3.class
+com/biblioteca/cliente/service/BibliotecaClienteService$2.class
+com/biblioteca/cliente/service/BibliotecaClienteService$4.class
+com/biblioteca/cliente/dto/AutorDTO.class
+com/biblioteca/cliente/controller/ClienteApiController.class
+com/biblioteca/cliente/dto/LocalidadDTO.class
