@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestión de Biblioteca - Reportes PDF & Excel (2.d)</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo">
+            <span class="icon">📚</span>
+            <h1>Biblioteca <span>REST + PDF & Excel (2.d)</span></h1>
+        </div>
+        <div class="status-badge" id="backendStatus">
+            <span class="indicator"></span>
+            <span class="status-text">Conectando...</span>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Navegación por pestañas -->
+        <nav class="tabs">
+            <button class="tab-btn active" data-tab="personas">👤 Personas</button>
+            <button class="tab-btn" data-tab="libros">📖 Libros</button>
+            <button class="tab-btn" data-tab="autores">✍️ Autores</button>
+            <button class="tab-btn" data-tab="localidades">🏙️ Localidades</button>
+            <button class="tab-btn" data-tab="domicilios">🏠 Domicilios</button>
+            <button class="tab-btn" data-tab="notificaciones">📬 Automatización & Correos (2.c)</button>
+            <button class="tab-btn tab-highlight" data-tab="reportes">📊 Reportes PDF & Excel (2.d)</button>
+        </nav>
+
+        <div id="alertBox" class="alert-box hidden"></div>
+
+        <!-- TAB PERSONAS -->
+        <section id="tab-personas" class="tab-content active">
+            <div class="section-header">
+                <div>
+                    <h2>Gestión de Personas</h2>
+                    <p class="subtitle">Datos personales, correo para notificaciones, fecha de nacimiento y libros asignados</p>
+                </div>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <button class="btn btn-pdf" onclick="descargarAlquileresPdf()">📄 Descargar PDF Alquileres</button>
+                    <button class="btn btn-primary" onclick="openPersonaModal()">+ Nueva Persona</button>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre Completo</th>
+                            <th>DNI</th>
+                            <th>Contacto / Cumpleaños</th>
+                            <th>Domicilio / Ubicación (Google Maps)</th>
+                            <th>Libros Asignados</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="personasTableBody">
+                        <tr><td colspan="7" class="loading">Cargando personas...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- TAB LIBROS -->
+        <section id="tab-libros" class="tab-content">
+            <div class="section-header">
+                <div>
+                    <h2>Catálogo de Libros</h2>
+                    <p class="subtitle">Relación * a * con Autores y fechas de vencimiento de devolución de préstamos</p>
+                </div>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <button class="btn btn-excel" onclick="descargarLibrosExcel()">📊 Descargar Excel Disponibles</button>
+                    <button class="btn btn-primary" onclick="openLibroModal()">+ Nuevo Libro</button>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Título</th>
+                            <th>Año</th>
+                            <th>Género</th>
+                            <th>Páginas</th>
+                            <th>Vencimiento Devolución</th>
+                            <th>Autores (* a *)</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="librosTableBody">
+                        <tr><td colspan="8" class="loading">Cargando libros...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- TAB AUTORES -->
+        <section id="tab-autores" class="tab-content">
+            <div class="section-header">
+                <div>
+                    <h2>Directorio de Autores</h2>
+                    <p class="subtitle">Registro de autores y biografías</p>
+                </div>
+                <button class="btn btn-primary" onclick="openAutorModal()">+ Nuevo Autor</button>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Biografía</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="autoresTableBody">
+                        <tr><td colspan="5" class="loading">Cargando autores...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- TAB LOCALIDADES -->
+        <section id="tab-localidades" class="tab-content">
+            <div class="section-header">
+                <div>
+                    <h2>Localidades</h2>
+                    <p class="subtitle">División territorial para domicilios</p>
+                </div>
+                <button class="btn btn-primary" onclick="openLocalidadModal()">+ Nueva Localidad</button>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Denominación</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="localidadesTableBody">
+                        <tr><td colspan="3" class="loading">Cargando localidades...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- TAB DOMICILIOS -->
+        <section id="tab-domicilios" class="tab-content">
+            <div class="section-header">
+                <div>
+                    <h2>Domicilios</h2>
+                    <p class="subtitle">Relación * a 1 hacia Localidad y coordenadas de Google Maps (Ejercicio 2.b)</p>
+                </div>
+                <button class="btn btn-primary" onclick="openDomicilioModal()">+ Nuevo Domicilio</button>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Calle</th>
+                            <th>Número</th>
+                            <th>Localidad</th>
+                            <th>Coordenadas Google Maps</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="domiciliosTableBody">
+                        <tr><td colspan="6" class="loading">Cargando domicilios...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- TAB NOTIFICACIONES & SCHEDULING (EJERCICIO 2.C) -->
+        <section id="tab-notificaciones" class="tab-content">
+            <div class="section-header">
+                <div>
+                    <h2>📬 Automatización de Tareas y Envío de Correos</h2>
+                    <p class="subtitle">Ejercicio 2.c: Scheduling diario automático a las 08:00 AM y panel de prueba manual</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-success" onclick="ejecutarCumpleaniosManual()">🎂 Disparar Salutaciones Hoy</button>
+                    <button class="btn btn-primary" onclick="ejecutarVencimientosManual()">⏰ Disparar Recordatorios (24h)</button>
+                </div>
+            </div>
+
+            <!-- TARJETAS DE ESTADO DEL DÍA -->
+            <div class="dashboard-cards">
+                <div class="card card-birthday">
+                    <div class="card-icon">🎂</div>
+                    <div class="card-content">
+                        <h3>Cumpleaños del Día</h3>
+                        <p class="card-desc">Personas cuya fecha de nacimiento coincide con hoy</p>
+                        <div id="cumpleanerosResumen" class="card-list">Cargando...</div>
+                    </div>
+                </div>
+
+                <div class="card card-due">
+                    <div class="card-icon">⏰</div>
+                    <div class="card-content">
+                        <h3>Préstamos por Vencer Mañana</h3>
+                        <p class="card-desc">Libros que vencen en exactamente 1 día (24 horas antes)</p>
+                        <div id="vencimientosResumen" class="card-list">Cargando...</div>
+                    </div>
+                </div>
+
+                <div class="card card-info">
+                    <div class="card-icon">⚙️</div>
+                    <div class="card-content">
+                        <h3>Motor de Tareas Programadas</h3>
+                        <p class="card-desc">Implementado con <code>@Scheduled</code> y Spring Mail</p>
+                        <ul class="info-bullets">
+                            <li><strong>Cron:</strong> <code>0 0 8 * * ?</code> (Diario a las 08:00)</li>
+                            <li><strong>Cumpleaños:</strong> HTML embebido + botón a la UTN FRM</li>
+                            <li><strong>Modo:</strong> Consola simulada + SMTP configurable</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HISTORIAL DE CORREOS ENVIADOS -->
+            <div class="section-subheading">
+                <h3>📜 Historial de Notificaciones y Correos Emitidos</h3>
+                <button class="btn btn-secondary btn-sm" onclick="loadHistorialNotificaciones()">🔄 Actualizar Historial</button>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tipo de Notificación</th>
+                            <th>Destinatario</th>
+                            <th>Asunto</th>
+                            <th>Fecha y Hora</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="notificacionesTableBody">
+                        <tr><td colspan="7" class="loading">Cargando historial de notificaciones...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- TAB REPORTES (INCISO 2.d: PDF & EXCEL) -->
+        <section id="tab-reportes" class="tab-content">
+            <div class="section-header">
+                <div>
+                    <h2>Generación de Reportes en Archivo (Inciso 2.d)</h2>
+                    <p class="subtitle">Descarga oficial en formato PDF (OpenPDF / iText) y planilla de cálculo Excel (Apache POI)</p>
+                </div>
+                <button class="btn btn-secondary btn-sm" onclick="loadReportes()">🔄 Actualizar Métricas</button>
+            </div>
+
+            <!-- KPI DASHBOARD -->
+            <div class="kpi-row">
+                <div class="kpi-card">
+                    <div class="kpi-label">Total Personas</div>
+                    <div class="kpi-num" id="kpiTotalPersonas">-</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Con Préstamos Activos</div>
+                    <div class="kpi-num" id="kpiPersonasAlquiler" style="color: #ec4899;">-</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Total Libros Catálogo</div>
+                    <div class="kpi-num" id="kpiTotalLibros">-</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Libros Alquilados</div>
+                    <div class="kpi-num" id="kpiLibrosAlquilados" style="color: #f59e0b;">-</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Libros Disponibles</div>
+                    <div class="kpi-num" id="kpiLibrosDisponibles" style="color: #10b981;">-</div>
+                </div>
+            </div>
+
+            <!-- TARJETAS PRINCIPALES DE DESCARGA -->
+            <div class="reportes-grid">
+                <!-- TARJETA 1: REPORTE PDF -->
+                <div class="reporte-card">
+                    <div>
+                        <div class="reporte-header">
+                            <div class="reporte-title-box">
+                                <span class="reporte-icon">📄</span>
+                                <div>
+                                    <h3>Listado de Personas con Préstamo</h3>
+                                    <small style="color: var(--text-secondary);">Generador: OpenPDF (Librería iText)</small>
+                                </div>
+                            </div>
+                            <span class="badge-pdf">FORMATO PDF (.pdf)</span>
+                        </div>
+                        <p class="reporte-desc">
+                            Documento en orientación horizontal A4 con el listado detallado de personas que tienen libros en alquiler, 
+                            incluyendo DNI, datos de contacto, domicilio, detalle de libros prestados y fechas límite de devolución.
+                        </p>
+                        <div class="table-container" style="max-height: 220px; margin-bottom: 1rem; border: 1px solid var(--border); border-radius: 6px;">
+                            <table class="data-table" style="font-size: 0.8rem;">
+                                <thead>
+                                    <tr>
+                                        <th>Persona</th>
+                                        <th>DNI</th>
+                                        <th>Libros en Alquiler</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="previewAlquileresTableBody">
+                                    <tr><td colspan="3" class="loading">Cargando vista previa...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="reporte-actions">
+                        <button class="btn btn-pdf" onclick="descargarAlquileresPdf()">
+                            ⬇️ Descargar Reporte PDF
+                        </button>
+                        <button class="btn btn-secondary" onclick="verAlquileresPdfNuevaVentana()">
+                            👁️ Abrir en Nueva Ventana
+                        </button>
+                    </div>
+                </div>
+
+                <!-- TARJETA 2: REPORTE EXCEL -->
+                <div class="reporte-card">
+                    <div>
+                        <div class="reporte-header">
+                            <div class="reporte-title-box">
+                                <span class="reporte-icon">📊</span>
+                                <div>
+                                    <h3>Listado de Libros Disponibles</h3>
+                                    <small style="color: var(--text-secondary);">Generador: Apache POI (XSSFWorkbook)</small>
+                                </div>
+                            </div>
+                            <span class="badge-excel">FORMATO EXCEL (.xlsx)</span>
+                        </div>
+                        <p class="reporte-desc">
+                            Planilla de cálculo Microsoft Excel con diseño formal, encabezados destacados, auto-ajuste de columnas y 
+                            resumen numérico conteniendo los libros de la biblioteca actualmente disponibles para nuevos préstamos.
+                        </p>
+                        <div class="table-container" style="max-height: 220px; margin-bottom: 1rem; border: 1px solid var(--border); border-radius: 6px;">
+                            <table class="data-table" style="font-size: 0.8rem;">
+                                <thead>
+                                    <tr>
+                                        <th>Título</th>
+                                        <th>Autor(es)</th>
+                                        <th>Género</th>
+                                        <th>Págs</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="previewDisponiblesTableBody">
+                                    <tr><td colspan="4" class="loading">Cargando vista previa...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="reporte-actions">
+                        <button class="btn btn-excel" onclick="descargarLibrosExcel()">
+                            ⬇️ Descargar Reporte Excel (.xlsx)
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- MODAL PERSONA -->
+    <div id="personaModal" class="modal-overlay hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="personaModalTitle">Nueva Persona</h3>
+                <button class="btn-close" onclick="closeModal('personaModal')">&times;</button>
+            </div>
+            <form id="personaForm" onsubmit="savePersona(event)">
+                <input type="hidden" id="personaId">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="personaNombre">Nombre *</label>
+                        <input type="text" id="personaNombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="personaApellido">Apellido *</label>
+                        <input type="text" id="personaApellido" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="personaDni">DNI *</label>
+                        <input type="number" id="personaDni" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="personaEmail">Correo Electrónico (Notificaciones) *</label>
+                        <input type="email" id="personaEmail" placeholder="usuario@alumnos.frm.utn.edu.ar" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="personaFechaNacimiento">Fecha de Nacimiento (para salutación de cumpleaños)</label>
+                    <input type="date" id="personaFechaNacimiento">
+                </div>
+                <div class="form-group">
+                    <label for="personaDomicilio">Domicilio Asignado (1 a 1)</label>
+                    <select id="personaDomicilio">
+                        <option value="">-- Sin domicilio --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Libros que posee en préstamo (1 a * - Composición)</label>
+                    <div id="personaLibrosList" class="checklist-container"></div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('personaModal')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL LIBRO -->
+    <div id="libroModal" class="modal-overlay hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="libroModalTitle">Nuevo Libro</h3>
+                <button class="btn-close" onclick="closeModal('libroModal')">&times;</button>
+            </div>
+            <form id="libroForm" onsubmit="saveLibro(event)">
+                <input type="hidden" id="libroId">
+                <div class="form-group">
+                    <label for="libroTitulo">Título *</label>
+                    <input type="text" id="libroTitulo" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="libroFecha">Año (publicación) *</label>
+                        <input type="number" id="libroFecha" required value="2024">
+                    </div>
+                    <div class="form-group">
+                        <label for="libroGenero">Género *</label>
+                        <input type="text" id="libroGenero" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="libroPaginas">Páginas *</label>
+                        <input type="number" id="libroPaginas" required min="1">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="libroAutorTexto">Autor (campo texto)</label>
+                        <input type="text" id="libroAutorTexto" placeholder="Nombre descriptivo del autor">
+                    </div>
+                    <div class="form-group">
+                        <label for="libroFechaVencimiento">Fecha Vencimiento Devolución (1 día antes activa aviso)</label>
+                        <input type="date" id="libroFechaVencimiento">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Autores Vinculados (* a *)</label>
+                    <div id="libroAutoresList" class="checklist-container"></div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('libroModal')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL AUTOR -->
+    <div id="autorModal" class="modal-overlay hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="autorModalTitle">Nuevo Autor</h3>
+                <button class="btn-close" onclick="closeModal('autorModal')">&times;</button>
+            </div>
+            <form id="autorForm" onsubmit="saveAutor(event)">
+                <input type="hidden" id="autorId">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="autorNombre">Nombre *</label>
+                        <input type="text" id="autorNombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="autorApellido">Apellido *</label>
+                        <input type="text" id="autorApellido" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="autorBiografia">Biografía</label>
+                    <textarea id="autorBiografia" rows="3"></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('autorModal')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL LOCALIDAD -->
+    <div id="localidadModal" class="modal-overlay hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="localidadModalTitle">Nueva Localidad</h3>
+                <button class="btn-close" onclick="closeModal('localidadModal')">&times;</button>
+            </div>
+            <form id="localidadForm" onsubmit="saveLocalidad(event)">
+                <input type="hidden" id="localidadId">
+                <div class="form-group">
+                    <label for="localidadDenominacion">Denominación *</label>
+                    <input type="text" id="localidadDenominacion" required placeholder="Ej. Godoy Cruz">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('localidadModal')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL DOMICILIO -->
+    <div id="domicilioModal" class="modal-overlay hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="domicilioModalTitle">Nuevo Domicilio</h3>
+                <button class="btn-close" onclick="closeModal('domicilioModal')">&times;</button>
+            </div>
+            <form id="domicilioForm" onsubmit="saveDomicilio(event)">
+                <input type="hidden" id="domicilioId">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="domicilioCalle">Calle *</label>
+                        <input type="text" id="domicilioCalle" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="domicilioNumero">Número *</label>
+                        <input type="number" id="domicilioNumero" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="domicilioLocalidad">Localidad (1 a *)</label>
+                    <select id="domicilioLocalidad">
+                        <option value="">-- Seleccione Localidad --</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="domicilioLatitud">Latitud (Google Maps)</label>
+                        <input type="text" id="domicilioLatitud" placeholder="Ej: -32.88970575178735">
+                    </div>
+                    <div class="form-group">
+                        <label for="domicilioLongitud">Longitud (Google Maps)</label>
+                        <input type="text" id="domicilioLongitud" placeholder="Ej: -68.84457510855037">
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('domicilioModal')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL PREVISUALIZAR EMAIL HTML -->
+    <div id="emailPreviewModal" class="modal-overlay hidden">
+        <div class="modal modal-lg">
+            <div class="modal-header">
+                <h3 id="emailPreviewModalTitle">Vista Previa de Correo HTML Embebido</h3>
+                <button class="btn-close" onclick="closeModal('emailPreviewModal')">&times;</button>
+            </div>
+            <div class="email-meta-info" id="emailMetaInfo"></div>
+            <div class="email-preview-container">
+                <iframe id="emailPreviewIframe" sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('emailPreviewModal')">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
