@@ -257,3 +257,4 @@ public class ReporteExcelService {
         estilo.setRightBorderColor(IndexedColors.GREY_40_PERCENT.getIndex());
     }
 }
+

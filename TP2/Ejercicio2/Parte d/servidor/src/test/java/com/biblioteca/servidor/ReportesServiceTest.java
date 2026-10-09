@@ -52,3 +52,4 @@ public class ReportesServiceTest {
         Assertions.assertEquals(0x4B, excelBytes[1] & 0xFF);
     }
 }
+
