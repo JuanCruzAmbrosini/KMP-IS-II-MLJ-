@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="es" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClimaHub | Software de Consumo de APIs Externas con RestTemplate</title>
+    <meta name="description" content="Aplicacion web en Spring Boot y Bootstrap 5 para consumo de APIs meteorologicas externas e investigacion de APIs de WhatsApp y RapidAPI.">
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
+        <div class="container-fluid px-lg-5">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+                <i class="bi bi-cloud-sun-fill brand-icon"></i>
+                <div>
+                    <span class="fw-bold tracking-tight fs-5">ClimaHub</span>
+                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle ms-1" style="font-size: 0.65rem;">API EXTERNA</span>
+                </div>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#seccion-clima"><i class="bi bi-speedometer2 me-1"></i> Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#seccion-pronostico"><i class="bi bi-calendar-week me-1"></i> Pronóstico 7 Días</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#seccion-ciudades"><i class="bi bi-buildings me-1"></i> Ciudades Populares</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#seccion-whatsapp"><i class="bi bi-whatsapp me-1 text-success"></i> WhatsApp API</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#seccion-investigacion"><i class="bi bi-journal-text me-1 text-info"></i> Investigación</a>
+                    </li>
+                </ul>
+
+                <div class="d-flex align-items-center gap-3">
+                    <!-- Status Badge -->
+                    <div id="apiStatusBadge" class="status-pill" title="Verificando disponibilidad de la API externa">
+                        <span class="status-dot"></span>
+                        <span id="apiStatusText">API: Verificando...</span>
+                    </div>
+
+                    <!-- Unit Switcher -->
+                    <div class="btn-group btn-group-sm" role="group">
+                        <button type="button" class="btn btn-outline-light active" id="btnCelsius">°C</button>
+                        <button type="button" class="btn btn-outline-light" id="btnFahrenheit">°F</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTAINER -->
+    <main class="container-fluid px-lg-5 py-4">
+
+        <!-- HEADER / CONSIGN INFO BANNER -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card bg-dark-subtle border-0 shadow-sm p-3 rounded-4">
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+                        <div>
+                            <span class="badge bg-primary text-uppercase px-2 py-1 mb-1">TP2 - Ejercicio 1 (Parte e)</span>
+                            <h1 class="h4 mb-0 fw-bold">Consumo de APIs Externas con RestTemplate en Java Spring Boot</h1>
+                            <small class="text-secondary">Backend cliente consumiendo servicios REST meteorológicos con DTOs + Frontend Bootstrap interactivo + Módulo WhatsApp Cloud API</small>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#modalArquitectura">
+                                <i class="bi bi-diagram-3-fill me-1"></i> Ver Arquitectura
+                            </button>
+                            <a href="#seccion-investigacion" class="btn btn-sm btn-primary">
+                                <i class="bi bi-book-half me-1"></i> Ver Informe Teórico
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEARCH & POPULAR QUICK PILLS -->
+        <div class="row justify-content-center mb-4">
+            <div class="col-lg-8 col-xl-7">
+                <div class="search-card p-3 p-md-4 position-relative">
+                    <form id="formBusqueda" class="position-relative">
+                        <div class="input-group search-input-group">
+                            <span class="input-group-text bg-transparent border-end-0 text-secondary">
+                                <i class="bi bi-search fs-5"></i>
+                            </span>
+                            <input type="text" id="inputCiudad" class="form-control border-start-0 border-end-0 ps-0"
+                                   placeholder="Buscar cualquier ciudad del mundo (Ej: Buenos Aires, Mendoza, Tokio, Madrid)..."
+                                   autocomplete="off" required>
+                            <button class="btn btn-primary px-4 fw-semibold" type="submit">
+                                <span class="spinner-border spinner-border-sm d-none me-1" id="spinnerBuscar" role="status"></span>
+                                Consultar
+                            </button>
+                        </div>
+                        <!-- Dropdown de autocompletado dinamico -->
+                        <div id="dropdownSugerencias" class="suggestions-dropdown"></div>
+                    </form>
+
+                    <!-- Acceso rapido a ciudades predefinidas -->
+                    <div class="d-flex flex-wrap align-items-center gap-2 mt-3 pt-2 border-top border-secondary-subtle">
+                        <span class="text-secondary small fw-medium"><i class="bi bi-geo-alt-fill me-1"></i>Sugeridas:</span>
+                        <a href="#" class="city-pill active" data-ciudad="Buenos Aires">Buenos Aires</a>
+                        <a href="#" class="city-pill" data-ciudad="Cordoba">Córdoba</a>
+                        <a href="#" class="city-pill" data-ciudad="Mendoza">Mendoza</a>
+                        <a href="#" class="city-pill" data-ciudad="San Carlos de Bariloche">Bariloche</a>
+                        <a href="#" class="city-pill" data-ciudad="Ushuaia">Ushuaia</a>
+                        <a href="#" class="city-pill" data-ciudad="Madrid">Madrid</a>
+                        <a href="#" class="city-pill" data-ciudad="Miami">Miami</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIN WEATHER SECTION -->
+        <section id="seccion-clima" class="mb-5">
+            <div class="row g-4">
+
+                <!-- HERO WEATHER CARD -->
+                <div class="col-lg-7 col-xl-8">
+                    <div class="weather-hero-card p-4 p-md-5 h-100 position-relative">
+                        <!-- Loading Spinner Overlay -->
+                        <div id="loaderClima" class="spinner-backdrop">
+                            <div class="text-center">
+                                <div class="spinner-grow text-primary mb-2" role="status"></div>
+                                <div class="fw-semibold text-light">Consultando API Externa vía RestTemplate...</div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex flex-wrap justify-content-between align-items-start mb-4">
+                            <div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <h2 id="cardCiudad" class="display-6 fw-bold mb-0">Buenos Aires</h2>
+                                    <span id="cardPaisBadge" class="badge bg-secondary-subtle text-light border border-secondary">AR</span>
+                                </div>
+                                <p id="cardRegion" class="text-secondary mb-1">Ciudad Autónoma de Buenos Aires, Argentina</p>
+                                <small class="text-secondary opacity-75">
+                                    <i class="bi bi-clock me-1"></i>Actualizado: <span id="cardFechaHora">--:--:--</span>
+                                </small>
+                            </div>
+                            <div class="text-end">
+                                <span id="cardCondicionBadge" class="badge bg-primary px-3 py-2 fs-6 rounded-pill">
+                                    Despejado
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Temperatura Principal e Icono -->
+                        <div class="row align-items-center my-4 py-2">
+                            <div class="col-md-7 d-flex align-items-baseline">
+                                <span id="cardTemp" class="temp-huge">21.5</span>
+                                <span class="temp-unit" id="cardTempUnit">°C</span>
+                            </div>
+                            <div class="col-md-5 text-md-end text-center mt-3 mt-md-0">
+                                <i id="cardIcono" class="bi bi-sun-fill weather-icon-large text-warning"></i>
+                                <p id="cardCondicionTexto" class="text-secondary fw-semibold mt-2 mb-0 fs-5">Cielo despejado</p>
+                            </div>
+                        </div>
+
+                        <!-- Metricas Meteorologicas Grid -->
+                        <div class="row g-3 pt-3 border-top border-secondary-subtle">
+                            <div class="col-6 col-sm-4 col-md-2">
+                                <div class="metric-card text-center">
+                                    <div class="metric-icon"><i class="bi bi-thermometer-half"></i></div>
+                                    <div class="metric-label">Sensación</div>
+                                    <div class="metric-value"><span id="metricSensacion">20.8</span><span class="unit-text">°C</span></div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-sm-4 col-md-2">
+                                <div class="metric-card text-center">
+                                    <div class="metric-icon"><i class="bi bi-droplet-half"></i></div>
+                                    <div class="metric-label">Humedad</div>
+                                    <div class="metric-value"><span id="metricHumedad">68</span>%</div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-sm-4 col-md-2">
+                                <div class="metric-card text-center">
+                                    <div class="metric-icon"><i class="bi bi-wind"></i></div>
+                                    <div class="metric-label">Viento</div>
+                                    <div class="metric-value"><span id="metricViento">14</span> <small style="font-size:0.65em">km/h</small></div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-sm-4 col-md-2">
+                                <div class="metric-card text-center">
+                                    <div class="metric-icon"><i class="bi bi-speedometer"></i></div>
+                                    <div class="metric-label">Presión</div>
+                                    <div class="metric-value"><span id="metricPresion">1013</span> <small style="font-size:0.6em">hPa</small></div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-sm-4 col-md-2">
+                                <div class="metric-card text-center">
+                                    <div class="metric-icon"><i class="bi bi-compass"></i></div>
+                                    <div class="metric-label">Dir. Viento</div>
+                                    <div class="metric-value"><span id="metricDirViento">175</span>°</div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-sm-4 col-md-2">
+                                <div class="metric-card text-center">
+                                    <div class="metric-icon"><i class="bi bi-cloud-rain-fill"></i></div>
+                                    <div class="metric-label">Lluvia Hoy</div>
+                                    <div class="metric-value"><span id="metricProbLluvia">15</span>%</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Banner de trazabilidad del Backend -->
+                        <div class="mt-4 p-2 bg-dark rounded-3 d-flex align-items-center justify-content-between small text-secondary">
+                            <span><i class="bi bi-hdd-network me-1 text-primary"></i> <strong id="cardFuente">Open-Meteo Meteorological Service API v1 (via RestTemplate)</strong></span>
+                            <span class="badge bg-success-subtle text-success">HTTP 200 OK</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SIDEBAR: CIUDADES POPULARES COMPARATIVAS -->
+                <div class="col-lg-5 col-xl-4">
+                    <div class="card bg-dark border-secondary-subtle h-100 shadow-sm p-4 rounded-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h3 class="h5 fw-bold mb-0"><i class="bi bi-globe-americas me-2 text-info"></i>Monitoreo Multiciudad</h3>
+                            <button id="btnRecargarPopulares" class="btn btn-sm btn-outline-secondary" title="Recargar ciudades">
+                                <i class="bi bi-arrow-clockwise"></i>
+                            </button>
+                        </div>
+                        <p class="text-secondary small mb-3">Peticiones concurrentes procesadas por el Backend consumiendo la API externa:</p>
+
+                        <div id="listaPopulares" class="d-flex flex-column gap-2 overflow-auto" style="max-height: 440px;">
+                            <!-- Items inyectados dinamicamente por JS -->
+                            <div class="text-center py-4 text-secondary">
+                                <div class="spinner-border spinner-border-sm me-2"></div> Cargando ciudades...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- EXTENDED 7-DAY FORECAST SECTION -->
+        <section id="seccion-pronostico" class="mb-5">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <h3 class="h4 fw-bold mb-0">
+                    <i class="bi bi-calendar7 me-2 text-primary"></i>Pronóstico Extendido (7 Días)
+                </h3>
+                <span class="text-secondary small">Predicción basada en modelos numéricos ECMWF / GFS de la API Externa</span>
+            </div>
+
+            <div class="row g-3" id="contenedorPronosticoDias">
+                <!-- Se llena con JavaScript con 7 tarjetas diarias -->
+                <div class="col-12 text-center py-4 text-secondary">
+                    <div class="spinner-border text-primary me-2"></div> Obteniendo predicciones meteorológicas...
+                </div>
+            </div>
+        </section>
+
+        <!-- WHATSAPP CLOUD API INTERACTIVE DEMONSTRATOR -->
+        <section id="seccion-whatsapp" class="mb-5">
+            <div class="whatsapp-card p-4 p-md-5">
+                <div class="row g-4 align-items-center">
+                    <div class="col-lg-5">
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="whatsapp-icon-badge">
+                                <i class="bi bi-whatsapp"></i>
+                            </div>
+                            <div>
+                                <h3 class="h4 fw-bold mb-0 text-white">Módulo WhatsApp Cloud API (Meta)</h3>
+                                <span class="badge bg-success-subtle text-success">Integración Backend con RestTemplate</span>
+                            </div>
+                        </div>
+                        <p class="text-light-emphasis small mb-3">
+                            Demostración de cómo la aplicación conecta con la API oficial de Meta (Graph API v19.0)
+                            utilizando un bean <code>RestTemplate</code> de Java para disparar notificaciones transaccionales o plantillas de alerta meteorológica.
+                        </p>
+
+                        <div class="card bg-black bg-opacity-50 border-0 p-3 rounded-3 mb-3">
+                            <h6 class="text-success small fw-bold text-uppercase mb-2"><i class="bi bi-send-fill me-1"></i>Probar Envío de Alerta</h6>
+                            <form id="formWhatsApp">
+                                <div class="mb-2">
+                                    <label class="form-label text-secondary small mb-1">Número Destinatario (E.164 con código de país):</label>
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text bg-dark border-secondary text-secondary">+</span>
+                                        <input type="tel" id="inputWaTelefono" class="form-control bg-dark border-secondary text-light" value="5491144445555" required>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label text-secondary small mb-1">Ciudad del Reporte:</label>
+                                    <input type="text" id="inputWaCiudad" class="form-control form-control-sm bg-dark border-secondary text-light" value="Buenos Aires" readonly>
+                                </div>
+                                <button type="submit" class="btn btn-success btn-sm w-100 fw-semibold">
+                                    <span class="spinner-border spinner-border-sm d-none me-1" id="spinnerWa"></span>
+                                    <i class="bi bi-lightning-charge me-1"></i> Simular Petición POST a Meta Cloud API
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Live Payload & RestTemplate Viewer -->
+                    <div class="col-lg-7">
+                        <ul class="nav nav-tabs border-secondary mb-3" id="waTabs" role="tablist">
+                            <li class="nav-item">
+                                <button class="nav-link active small py-2 px-3" data-bs-toggle="tab" data-bs-target="#tab-payload">
+                                    <i class="bi bi-filetype-json me-1"></i> Payload JSON (Meta Graph API)
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link small py-2 px-3" data-bs-toggle="tab" data-bs-target="#tab-codigo-java">
+                                    <i class="bi bi-filetype-java me-1 text-danger"></i> Código Java RestTemplate
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link small py-2 px-3" data-bs-toggle="tab" data-bs-target="#tab-respuesta-meta">
+                                    <i class="bi bi-check2-circle me-1 text-success"></i> Respuesta Recibida
+                                </button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content">
+                            <!-- Tab JSON Payload -->
+                            <div class="tab-pane fade show active" id="tab-payload">
+                                <pre class="code-terminal mb-0"><code id="codeWaPayload">{
+  "messaging_product": "whatsapp",
+  "recipient_type": "individual",
+  "to": "5491144445555",
+  "type": "template",
+  "template": {
+    "name": "alerta_meteorologica_diaria",
+    "language": { "code": "es_AR" },
+    "components": [
+      {
+        "type": "body",
+        "parameters": [
+          { "type": "text", "text": "Buenos Aires" },
+          { "type": "text", "text": "21.5°C" },
+          { "type": "text", "text": "Cielo despejado" }
+        ]
+      }
+    ]
+  }
+}</code></pre>
+                            </div>
+
+                            <!-- Tab Java Code -->
+                            <div class="tab-pane fade" id="tab-codigo-java">
+                                <pre class="code-terminal mb-0"><code>// Implementación en WhatsAppMockService.java con RestTemplate
+HttpHeaders headers = new HttpHeaders();
+headers.setContentType(MediaType.APPLICATION_JSON);
+headers.setBearerAuth(systemUserAccessToken);
+
+HttpEntity&lt;String&gt; request = new HttpEntity&lt;&gt;(jsonPayload, headers);
+String url = "https://graph.facebook.com/v19.0/" + phoneNumberId + "/messages";
+
+ResponseEntity&lt;String&gt; response = restTemplate.exchange(
+    url,
+    HttpMethod.POST,
+    request,
+    String.class
+);</code></pre>
+                            </div>
+
+                            <!-- Tab Respuesta Meta -->
+                            <div class="tab-pane fade" id="tab-respuesta-meta">
+                                <div id="waRespuestaContainer">
+                                    <div class="alert alert-dark border-secondary small mb-0">
+                                        <i class="bi bi-info-circle me-1"></i> Presiona el botón <strong>"Simular Petición POST a Meta Cloud API"</strong> para ejecutar la petición desde el backend y visualizar la respuesta oficial de Meta.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- THEORETICAL INVESTIGATION SECTION -->
+        <section id="seccion-investigacion" class="mb-5">
+            <div class="card bg-dark border-secondary-subtle p-4 p-md-5 rounded-4 shadow-sm">
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="bi bi-mortarboard-fill text-primary fs-3"></i>
+                    <div>
+                        <h3 class="h4 fw-bold mb-0">Informe Teórico: Investigación de APIs Externas y WhatsApp</h3>
+                        <small class="text-secondary">Resolución analítica de la consigna e) Ejercicio 1</small>
+                    </div>
+                </div>
+
+                <ul class="nav nav-pills gap-2 mb-4" id="investigacionPills" role="tablist">
+                    <li class="nav-item">
+                        <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#pill-apis">
+                            <i class="bi bi-cloud-arrow-down-fill me-1"></i> APIs Externas & RapidAPI
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pill-meteo">
+                            <i class="bi bi-cloud-sun me-1"></i> OpenWeatherMap & Open-Meteo
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pill-magic">
+                            <i class="bi bi-magic me-1"></i> Magic Loops & Automatización
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pill-whatsapp">
+                            <i class="bi bi-whatsapp me-1 text-success"></i> WhatsApp API & Proyecto Futuro
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pill-resttemplate">
+                            <i class="bi bi-code-slash me-1 text-warning"></i> RestTemplate en Java
+                        </button>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="investigacionContent">
+                    <!-- TAB 1: APIs Externas y RapidAPI -->
+                    <div class="tab-pane fade show active" id="pill-apis">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <h5 class="fw-bold text-primary"><i class="bi bi-globe me-1"></i> ¿Qué es una API Externa?</h5>
+                                <p class="text-light-emphasis small">
+                                    Una <strong>API Externa (Application Programming Interface)</strong> es un conjunto de protocolos y definiciones que permite a una aplicación consumir datos, funcionalidades y servicios provistos por un tercero a través de la red (generalmente HTTP/HTTPS).
+                                </p>
+                                <p class="text-light-emphasis small">
+                                    En arquitecturas de backend desacopladas, consumir una API externa permite delegar responsabilidades complejas (información climática global, procesamiento de pagos, geocodificación, mensajería, inteligencia artificial) sin tener que almacenar ni procesar dichos datos localmente.
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <h5 class="fw-bold text-info"><i class="bi bi-layers me-1"></i> RapidAPI (https://rapidapi.com/)</h5>
+                                <p class="text-light-emphasis small">
+                                    <strong>RapidAPI</strong> es el marketplace de APIs más grande del mundo, con decenas de miles de APIs catalogadas. Sus características clave incluyen:
+                                </p>
+                                <ul class="text-light-emphasis small">
+                                    <li><strong>Clave API Única (Single API Key):</strong> Permite consumir cientos de proveedores distintos utilizando una única cuenta y cabecera de autenticación (<code>X-RapidAPI-Key</code>).</li>
+                                    <li><strong>Dashboard de Métricas & Facturación Centralizada:</strong> Monitoreo de latencia, cuotas, errores 4xx/5xx y costos unificados.</li>
+                                    <li><strong>Consola Interactiva:</strong> Pruebas en vivo en el navegador antes de escribir código.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 2: OpenWeatherMap y Open-Meteo -->
+                    <div class="tab-pane fade" id="pill-meteo">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <h5 class="fw-bold text-warning"><i class="bi bi-sun me-1"></i> OpenWeatherMap (https://openweathermap.org/api)</h5>
+                                <p class="text-light-emphasis small">
+                                    Es uno de los proveedores meteorológicos más populares a nivel global.
+                                </p>
+                                <ul class="text-light-emphasis small">
+                                    <li><strong>Mecanismo de Autenticación:</strong> Requiere registrarse y enviar un token <code>appid</code> en los query params de cada petición HTTP.</li>
+                                    <li><strong>Endpoints Principales:</strong> <em>Current Weather Data</em> (clima actual), <em>5 Day / 3 Hour Forecast</em> (pronóstico trihorario), <em>Geocoding API</em> y <em>One Call API 3.0</em>.</li>
+                                    <li><strong>Limitaciones Free Tier:</strong> Plan gratuito limitado a 60 llamadas por minuto o 1,000 llamadas por día en One Call 3.0, requiriendo tarjeta de crédito para llamadas adicionales.</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h5 class="fw-bold text-info"><i class="bi bi-cloud-check me-1"></i> Open-Meteo (Nuestra API Implementada)</h5>
+                                <p class="text-light-emphasis small">
+                                    Servicio meteorológico de código abierto alimentado por centros de investigación globales (DWD, NOAA, ECMWF).
+                                </p>
+                                <ul class="text-light-emphasis small">
+                                    <li><strong>Sin API Key Obligatoria:</strong> Permite consumo inmediato y sin fricción de credenciales, ideal para docencia y entornos educativos.</li>
+                                    <li><strong>Alta Precisión:</strong> Predicciones horarias y diarias con modelos numéricos de hasta 1 km de resolución.</li>
+                                    <li><strong>Cumplimiento de estándares:</strong> Retorna códigos internacionales WMO (World Meteorological Organization).</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 3: Magic Loops -->
+                    <div class="tab-pane fade" id="pill-magic">
+                        <div class="row g-4">
+                            <div class="col-md-12">
+                                <h5 class="fw-bold text-primary"><i class="bi bi-stars me-1"></i> Magic Loops (https://magicloops.dev/es)</h5>
+                                <p class="text-light-emphasis small">
+                                    <strong>Magic Loops</strong> es una plataforma no-code / low-code impulsada por Inteligencia Artificial que permite crear flujos de trabajo automatizados y exponerlos como APIs REST personalizadas sin escribir infraestructura de servidores.
+                                </p>
+                                <div class="row g-3 mt-1">
+                                    <div class="col-md-4">
+                                        <div class="p-3 bg-dark-subtle rounded-3 h-100">
+                                            <h6 class="fw-bold text-info"><i class="bi bi-clock-history me-1"></i> Triggers Programados</h6>
+                                            <p class="small text-secondary mb-0">Ejecución recurrente estilo Cron Jobs para recolectar datos o ejecutar reportes periódicos.</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="p-3 bg-dark-subtle rounded-3 h-100">
+                                            <h6 class="fw-bold text-info"><i class="bi bi-robot me-1"></i> Nodos de IA (LLMs)</h6>
+                                            <p class="small text-secondary mb-0">Transformación semántica de datos, resumen de textos o toma de decisiones lógica guiada por prompts.</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="p-3 bg-dark-subtle rounded-3 h-100">
+                                            <h6 class="fw-bold text-info"><i class="bi bi-send-check me-1"></i> Webhooks & Salidas</h6>
+                                            <p class="small text-secondary mb-0">Envío automático de correos, llamadas a Discord, Slack o webhooks HTTP a sistemas externos como nuestro Backend.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 4: WhatsApp Cloud API -->
+                    <div class="tab-pane fade" id="pill-whatsapp">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <h5 class="fw-bold text-success"><i class="bi bi-whatsapp me-1"></i> Acceso a la API de WhatsApp (Meta Cloud API)</h5>
+                                <ol class="text-light-emphasis small ps-3">
+                                    <li><strong>Cuenta en Meta for Developers:</strong> Crear una cuenta en <code>developers.facebook.com</code> y dar de alta una App de tipo "Business".</li>
+                                    <li><strong>WhatsApp Business Account (WABA):</strong> Asociar o verificar la empresa en Meta Business Manager.</li>
+                                    <li><strong>Número de Teléfono:</strong> Registrar un número dedicado que no esté asociado a una app convencional de WhatsApp.</li>
+                                    <li><strong>Tokens de Acceso:</strong> Generar tokens de usuario del sistema (System User Access Token) con permiso <code>whatsapp_business_messaging</code>.</li>
+                                    <li><strong>Plantillas de Mensaje (Templates):</strong> Para iniciar conversaciones hacia el usuario fuera de la ventana de 24 horas, Meta exige enviar plantillas pre-aprobadas (categorías: <em>Utility, Authentication, Marketing</em>).</li>
+                                </ol>
+                            </div>
+
+                            <div class="col-md-6">
+                                <h5 class="fw-bold text-info"><i class="bi bi-lightbulb-fill me-1"></i> Utilidad Futura para el Equipo de Desarrollo</h5>
+                                <p class="text-light-emphasis small">
+                                    En un proyecto real (como el sistema de <strong>Gestión de Biblioteca</strong> o un sistema de <strong>Turnos Médicos</strong> de ejercicios previos), la API de WhatsApp aporta un valor diferencial:
+                                </p>
+                                <ul class="text-light-emphasis small">
+                                    <li><strong>Recordatorios de Vencimiento de Libros:</strong> Notificación automática al usuario 24h antes del vencimiento del préstamo para evitar penalidades.</li>
+                                    <li><strong>Envío de Comprobantes PDF / QR:</strong> Envío inmediato del comprobante digital de préstamo o turno al celular del usuario.</li>
+                                    <li><strong>Autenticación en Dos Pasos (2FA / OTP):</strong> Envío seguro del código de validación al iniciar sesión en el portal web.</li>
+                                    <li><strong>Chatbot de Autoconsulta:</strong> Consultar disponibilidad de libros en el catálogo respondiendo directamente por chat con opciones interactivas.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 5: RestTemplate en Java -->
+                    <div class="tab-pane fade" id="pill-resttemplate">
+                        <div class="row g-4">
+                            <div class="col-12">
+                                <h5 class="fw-bold text-warning"><i class="bi bi-cpu-fill me-1"></i> Uso de RestTemplate en Spring Boot</h5>
+                                <p class="text-light-emphasis small">
+                                    <code>RestTemplate</code> es el cliente HTTP sincrónico central de Spring Framework. Ofrece métodos de alto nivel para consumir servicios REST:
+                                </p>
+                                <div class="table-responsive">
+                                    <table class="table table-dark table-striped table-bordered small">
+                                        <thead>
+                                            <tr>
+                                                <th>Método RestTemplate</th>
+                                                <th>Método HTTP</th>
+                                                <th>Descripción en nuestro Proyecto</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><code>getForObject(uri, Class&lt;T&gt;)</code></td>
+                                                <td><span class="badge bg-success">GET</span></td>
+                                                <td>Obtiene directamente el cuerpo de la respuesta deserializado a String o DTO (ej. datos de clima de Open-Meteo).</td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>exchange(url, HttpMethod, HttpEntity, Class&lt;T&gt;)</code></td>
+                                                <td><span class="badge bg-primary">POST / CUALQUIERA</span></td>
+                                                <td>Permite personalizar headers (como <code>Authorization: Bearer</code>) y enviar payloads complejos a WhatsApp Cloud API.</td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>UriComponentsBuilder</code></td>
+                                                <td><span class="badge bg-secondary">UTIL</span></td>
+                                                <td>Construcción segura de URLs y codificación de parámetros query (latitud, longitud, ciudad).</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-top border-secondary-subtle py-4 mt-5 bg-dark text-secondary">
+        <div class="container-fluid px-lg-5 d-flex flex-wrap justify-content-between align-items-center gap-2">
+            <div>
+                <p class="mb-0 small fw-semibold text-light">TP2 - Ejercicio 1 (Parte e) • Ingeniería de Software II</p>
+                <small class="opacity-75">Desarrollado con Java 21, Spring Boot 3.3.2, RestTemplate y Bootstrap 5.3</small>
+            </div>
+            <div class="d-flex align-items-center gap-3 small">
+                <span><i class="bi bi-check-circle-fill text-success me-1"></i>APIs Externas Integradas</span>
+                <span><i class="bi bi-shield-check text-info me-1"></i>Resiliencia & Cache Activa</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODAL ARQUITECTURA -->
+    <div class="modal fade" id="modalArquitectura" tabindex="-1" aria-labelledby="modalArquitecturaLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content bg-dark border-secondary">
+                <div class="modal-header border-secondary">
+                    <h5 class="modal-title fw-bold" id="modalArquitecturaLabel"><i class="bi bi-diagram-3-fill text-primary me-2"></i>Arquitectura de la Solución</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="small text-secondary mb-3">Flujo de datos end-to-end entre el FrontEnd, el Backend Spring Boot y las APIs Externas:</p>
+                    <div class="p-3 bg-black rounded-3 font-monospace small text-info mb-3">
+                        [FrontEnd Bootstrap 5 / JS]<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;▲<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;│ (1)&nbsp;│ (6) JSON con DTOs unificados<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;▼&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+                        [Spring Boot ClimaController]<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;▲<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;│ (2)&nbsp;│ (5) ClimaActualDTO / PronosticoCompletoDTO<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;▼&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+                        [Spring Boot ClimaServiceImpl]<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;▲<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;│ (3)&nbsp;│ (4) Inyección del Bean RestTemplate (Timeouts + SSL)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;▼&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+                        ┌─────────────────────────────────────────────────────────────┐<br>
+                        │                   APIS EXTERNAS (INTERNET)                  │<br>
+                        │  - Open-Meteo Geocoding & Weather Forecast API (Gratuita)    │<br>
+                        │  - Meta WhatsApp Business Cloud API (Simulador Graph API)   │<br>
+                        │  - OpenWeatherMap API (Opcional vía API Key)                │<br>
+                        └─────────────────────────────────────────────────────────────┘
+                    </div>
+                    <ul class="small text-light-emphasis mb-0">
+                        <li><strong>RestTemplate Bean:</strong> Configurado en <code>RestTemplateConfig.java</code> con timeout de conexión y lectura para evitar bloqueos del servidor.</li>
+                        <li><strong>Mapeo DTO:</strong> La respuesta cruda externa es filtrada y mapeada en el Backend antes de ser expuesta al navegador.</li>
+                        <li><strong>Resiliencia:</strong> En caso de falla externa, el servicio conmuta automáticamente a un modo seguro con datos de respaldo.</li>
+                    </ul>
+                </div>
+                <div class="modal-footer border-secondary">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5.3 Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom Application JS -->
+    <script src="/js/app.js"></script>
+</body>
+</html>
