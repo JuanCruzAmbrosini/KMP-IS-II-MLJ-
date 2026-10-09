@@ -1,0 +1,352 @@
+@startuml Gatinder_Auto
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+left to right direction
+
+package "gatinder" {
+  class GatinderApp {
+    + main(args): static void
+}
+  class SecurityConfig {
+
+}
+}
+
+package "config" {
+  class RememberMeInterceptor {
+    + COOKIE_NAME: static final String
+    + COOKIE_MAX_AGE: static final int
+    + SESSION_USER: static final String
+    + preHandle(request, response, handler): boolean
+    - findCookie(cookies): Cookie
+    + addCookie(response, token): static void
+    + deleteCookie(response): static void
+}
+  class WebConfig {
+    + addInterceptors(registry): void
+}
+  class RestTemplateConfig {
+    + restTemplate(): RestTemplate
+}
+}
+
+package "controller" {
+  class ErrorController {
+    + renderErrorPage(httpRequest): ModelAndView
+    - getErrorCode(httpRequest): int
+}
+  class PetController {
+
+}
+  class PictureController {
+
+}
+  class ReportController {
+    + downloadVotes(session): ResponseEntity<byte[]>
+}
+  class UserController {
+
+}
+  class ViewController {
+
+}
+}
+
+package "rest" {
+  class GlobalRestExceptionHandler {
+    + handleErrorService(ex, request): ResponseEntity<ErrorResponseDto>
+    + handleIllegalArgument(ex, request): ResponseEntity<ErrorResponseDto>
+    + handleGeneralException(ex, request): ResponseEntity<ErrorResponseDto>
+}
+  class UserRestController {
+    - userService: UserService
+    + register(request): ResponseEntity<UserDto>
+    + login(request): ResponseEntity<AuthenticatedUserDto>
+    + listUsers(): ResponseEntity<List<UserDto>>
+    + getUser(id): ResponseEntity<UserDto>
+    + deactivate(id): ResponseEntity<Void>
+    + activate(id): ResponseEntity<Void>
+}
+  class PetRestController {
+    - petService: PetService
+    + getAllPets(): ResponseEntity<List<PetDto>>
+    + getPetById(id): ResponseEntity<PetDto>
+    + getPetsByUserId(userId): ResponseEntity<List<PetDto>>
+    + createPet(petDto): ResponseEntity<PetDto>
+}
+  class ZoneRestController {
+    - zoneService: ZoneService
+    + getAllZones(): ResponseEntity<List<ZoneDto>>
+    + getZoneById(id): ResponseEntity<ZoneDto>
+    + createZone(zoneDto): ResponseEntity<ZoneDto>
+    + deleteZone(id): ResponseEntity<Void>
+}
+  class VoteRestController {
+    - voteService: VoteService
+    + getAllVotes(): ResponseEntity<List<VoteDto>>
+    + getVoteById(id): ResponseEntity<VoteDto>
+    + getVoteReport(): ResponseEntity<List<VoteReportDto>>
+}
+  class PictureRestController {
+    - userService: UserService
+    - petService: PetService
+    - pictureService: PictureService
+    + getUserPicture(id): ResponseEntity<byte[]>
+    + getPetPicture(id): ResponseEntity<byte[]>
+    + uploadPicture(@RequestParam("file"): ResponseEntity<String>
+}
+  class ReportRestController {
+    - voteService: VoteService
+    + getVotesReportJson(): ResponseEntity<List<VoteReportDto>>
+    + downloadVotesReportFile(): ResponseEntity<byte[]>
+}
+  class GatinderClientRestController {
+    - restClient: GatinderRestClient
+    + getExternalFact(): ResponseEntity<ExternalFactDto>
+    + checkHealth(): ResponseEntity<String>
+}
+}
+
+package "dto" {
+  class AuthenticatedUserDto {
+    - user: final UserDto
+    - rememberToken: final String
+    + getUser(): UserDto
+    + getRememberToken(): String
+}
+  class LoginDto {
+    - email: String
+    - password: String
+    + getEmail(): String
+    + setEmail(email): void
+    + getPassword(): String
+    + setPassword(password): void
+}
+  class PetDto {
+    - id: String
+    - name: String
+    - gender: Gender
+    - animal: Animal
+    - userId: String
+    - pictureUrl: String
+    + getPicture(): String
+}
+  class RegisterDto {
+    - firstName: String
+    - lastName: String
+    - email: String
+    - password: String
+    - repeatPassword: String
+    - zoneId: String
+    + getFirstName(): String
+    + setFirstName(firstName): void
+    + getLastName(): String
+    + setLastName(lastName): void
+    + getEmail(): String
+    + setEmail(email): void
+    + getPassword(): String
+    + setPassword(password): void
+    + getRepeatPassword(): String
+    + setRepeatPassword(repeatPassword): void
+    + getZoneId(): String
+    + setZoneId(zoneId): void
+}
+  class UserDto {
+    - id: String
+    - firstName: String
+    - lastName: String
+    - email: String
+    - zoneId: String
+    - pictureUrl: String
+    - deleted: boolean
+}
+  class VoteReportDto {
+    - firstName: final String
+    - lastName: final String
+    - petName: final String
+    - voteCount: final long
+    + getFirstName(): String
+    + getLastName(): String
+    + getPetName(): String
+    + getVoteCount(): long
+}
+  class ZoneDto {
+    - id: String
+    - name: String
+    - deleted: boolean
+}
+  class VoteDto {
+    - id: String
+    - date: Instant
+    - responseDate: Instant
+    - senderPetId: String
+    - senderPetName: String
+    - receiverPetId: String
+    - receiverPetName: String
+}
+  class VoteRequestDto {
+    - senderPetId: String
+    - receiverPetId: String
+}
+  class ErrorResponseDto {
+    - timestamp: Instant
+    - status: int
+    - error: String
+    - message: String
+    - path: String
+}
+  class ExternalFactDto {
+    - fact: String
+    - length: int
+}
+}
+
+package "entity" {
+  class Pet {
+    - name: String
+    - createdAt: Instant
+    - deletedAt: Instant
+    - deleted: boolean
+}
+  class Picture {
+    - mime: String
+    - deleted: boolean
+}
+  class User {
+    - firstName: String
+    - lastName: String
+    - email: String
+    - password: String
+    - createdAt: Instant
+    - deletedAt: Instant
+    - deleted: boolean
+    - rememberToken: String
+    - rememberTokenExpiresAt: Instant
+}
+  class Vote {
+    - date: Instant
+    - responseDate: Instant
+}
+  class Zone {
+    - name: String
+    - deleted: boolean
+}
+}
+
+package "enums" {
+  enum Animal {
+DOG
+CAT
+BUNNY
+BIRD
+REPTILE
+THERIAN
+}
+  enum Gender {
+MALE
+FEMALE
+OTHER
+}
+}
+
+package "repository" {
+  interface PetRepository {
+    + findByDeletedFalse(): List<Pet>
+    + findPetsByUser(@Param("id"): List<Pet>
+    + findPetByName(@Param("id"): List<Pet>
+}
+  interface PictureRepository {
+
+}
+  interface UserRepository {
+    + findByZoneId(@Param("id"): List<User>
+}
+  interface VoteRepository {
+    + findSelfVotes(@Param("id"): List<Vote>
+    + findReceivedVotes(@Param("id"): List<Vote>
+}
+  interface ZoneRepository {
+    + findByDeletedFalse(): List<Zone>
+    + findByName(name): Zone
+}
+}
+
+package "service" {
+  class ErrorService {
+
+}
+  class PetService {
+    + findAll(): List<Pet>
+    + findById(petId): Pet
+    + findByUserId(userId): List<Pet>
+    + toDto(pet): PetDto
+    + findAllDtos(): List<PetDto>
+    + findDtoById(petId): PetDto
+    + findDtosByUserId(userId): List<PetDto>
+    + validate(name, gender): void
+}
+  class PictureService {
+
+}
+  class UserService {
+    + findByRememberToken(token): UserDto
+    + toDto(user): UserDto
+    + findAllDtos(): List<UserDto>
+    + findDtoById(userId): UserDto
+    + findAll(): List<User>
+    + findById(userId): User
+    + validate(firstName, lastName, email, password, repeatedPassword, zoneId): void
+}
+  class VoteService {
+    + findAll(): List<Vote>
+    + findById(voteId): Vote
+    + buildVoteReport(): List<VoteReportDto>
+}
+  class ZoneService {
+    + findById(zoneId): Zone
+    + findAll(): List<Zone>
+    + validate(name): void
+}
+}
+
+package "mapper" {
+  interface UserMapper {
+
+}
+  interface PetMapper {
+
+}
+  interface ZoneMapper {
+
+}
+  interface VoteMapper {
+
+}
+}
+
+package "client" {
+  class GatinderRestClient {
+    - restTemplate: RestTemplate
+    + getRestTemplate(): RestTemplate
+    + getUsers(baseUrl): List<UserDto>
+    + getUserById(baseUrl, id): UserDto
+    + registerUser(baseUrl, dto): UserDto
+    + login(baseUrl, dto): AuthenticatedUserDto
+    + getPets(baseUrl): List<PetDto>
+    + getPetById(baseUrl, id): PetDto
+    + getPetsByUser(baseUrl, userId): List<PetDto>
+    + createPet(baseUrl, petDto): PetDto
+    + updatePet(baseUrl, id, petDto): PetDto
+    + deletePet(baseUrl, id, userId): void
+    + getZones(baseUrl): List<ZoneDto>
+    + getZoneById(baseUrl, id): ZoneDto
+    + createZone(baseUrl, zoneDto): ZoneDto
+    + getVotes(baseUrl): List<VoteDto>
+    + submitVote(baseUrl, userId, request): VoteDto
+    + respondVote(baseUrl, userId, voteId): VoteDto
+    + getVoteReport(baseUrl): List<VoteReportDto>
+    + getRandomPetFact(): ExternalFactDto
+}
+}
+
+@enduml
