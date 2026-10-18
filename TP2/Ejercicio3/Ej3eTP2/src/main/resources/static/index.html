@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito de Compras - Checkout</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        body { background-color: #f8f9fa; }
+        .card-custom { border-radius: 12px; border: none; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .summary-card { position: sticky; top: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="container py-5">
+    <h2 class="mb-4 fw-bold"><i class="bi bi-cart3 me-2"></i>Carrito de Compras</h2>
+    
+    <div class="row g-4">
+        <!-- Listado de Productos -->
+        <div class="col-lg-8">
+            <div class="card card-custom p-4">
+                <table class="table align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Producto</th>
+                            <th style="width: 120px;">Precio</th>
+                            <th style="width: 130px;">Cantidad</th>
+                            <th style="width: 120px;">Subtotal</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="cartTableBody">
+                        <!-- Renderizado dinámico -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Resumen de Orden -->
+        <div class="col-lg-4">
+            <div class="card card-custom p-4 summary-card">
+                <h4 class="fw-bold mb-3">Resumen del Pedido</h4>
+                
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Tipo de Envío</label>
+                    <select id="shippingTypeSelect" class="form-select" onchange="runCheckoutPreview()">
+                        <option value="standard" selected>Estándar ($5.00)</option>
+                        <option value="express">Express Prioritario ($15.00 + $1.50/u)</option>
+                    </select>
+                </div>
+
+                <hr>
+
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-muted">Subtotal Productos</span>
+                    <span id="txtSubtotal" class="fw-bold">$0.00</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-muted">Costo de Envío</span>
+                    <span id="txtShipping" class="fw-bold">$0.00</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-muted">Impuestos (IVA 21%)</span>
+                    <span id="txtTax" class="fw-bold">$0.00</span>
+                </div>
+                <hr>
+                <div class="d-flex justify-content-between mb-4">
+                    <span class="fs-5 fw-bold">Total</span>
+                    <span id="txtTotal" class="fs-5 fw-bold text-primary">$0.00</span>
+                </div>
+
+                <button class="btn btn-primary btn-lg w-100 fw-bold" onclick="finalizeOrder()">
+                    Confirmar Compra
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let cart = [
+        { id: 1, name: "Teclado Mecánico RGB", price: 75.00, quantity: 1 },
+        { id: 2, name: "Mouse Inalámbrico", price: 35.50, quantity: 2 }
+    ];
+
+    function renderCart() {
+        const tbody = document.getElementById("cartTableBody");
+        tbody.innerHTML = "";
+
+        cart.forEach((item, index) => {
+            const subtotal = (item.price * item.quantity).toFixed(2);
+            tbody.innerHTML += `
+                <tr>
+                    <td class="fw-semibold">${item.name}</td>
+                    <td>$${item.price.toFixed(2)}</td>
+                    <td>
+                        <input type="number" min="1" class="form-control form-control-sm" 
+                               value="${item.quantity}" onchange="updateQty(${index}, this.value)">
+                    </td>
+                    <td>$${subtotal}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-danger" onclick="removeItem(${index})">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `;
+        });
+        runCheckoutPreview();
+    }
+
+    function updateQty(index, qty) {
+        cart[index].quantity = Math.max(1, parseInt(qty) || 1);
+        renderCart();
+    }
+
+    function removeItem(index) {
+        cart.splice(index, 1);
+        renderCart();
+    }
+
+    async function runCheckoutPreview() {
+        if (cart.length === 0) {
+            document.getElementById("txtSubtotal").innerText = "$0.00";
+            document.getElementById("txtShipping").innerText = "$0.00";
+            document.getElementById("txtTax").innerText = "$0.00";
+            document.getElementById("txtTotal").innerText = "$0.00";
+            return;
+        }
+
+        const shippingType = document.getElementById("shippingTypeSelect").value;
+
+        try {
+            const res = await fetch(`http://localhost:8080/api/cart/checkout?shippingType=${shippingType}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(cart)
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                document.getElementById("txtSubtotal").innerText = `$${data.subtotal.toFixed(2)}`;
+                document.getElementById("txtShipping").innerText = `$${data.shippingCost.toFixed(2)}`;
+                document.getElementById("txtTax").innerText = `$${data.taxAmount.toFixed(2)}`;
+                document.getElementById("txtTotal").innerText = `$${data.total.toFixed(2)}`;
+            }
+        } catch (err) {
+            console.warn("API offline, calculando vista local simulada");
+            const subtotal = cart.reduce((acc, i) => acc + (i.price * i.quantity), 0);
+            const shipping = shippingType === "express" ? 15.00 + (1.50 * cart.length) : 5.00;
+            const tax = subtotal * 0.21;
+            const total = subtotal + shipping + tax;
+
+            document.getElementById("txtSubtotal").innerText = `$${subtotal.toFixed(2)}`;
+            document.getElementById("txtShipping").innerText = `$${shipping.toFixed(2)}`;
+            document.getElementById("txtTax").innerText = `$${tax.toFixed(2)}`;
+            document.getElementById("txtTotal").innerText = `$${total.toFixed(2)}`;
+        }
+    }
+
+    function finalizeOrder() {
+        if(cart.length === 0) {
+            alert("El carrito está vacío");
+            return;
+        }
+        alert("¡Compra confirmada mediante Template Method!");
+    }
+
+    renderCart();
+</script>
+
+</body>
+</html>
