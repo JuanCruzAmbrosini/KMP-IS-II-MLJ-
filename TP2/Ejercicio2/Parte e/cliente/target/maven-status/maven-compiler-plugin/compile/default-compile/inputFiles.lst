@@ -1,0 +1,10 @@
+/home/laika/Documents/IS II/TP2/Ejercicio2/Parte e/cliente/src/main/java/com/biblioteca/cliente/ClienteApplication.java
+/home/laika/Documents/IS II/TP2/Ejercicio2/Parte e/cliente/src/main/java/com/biblioteca/cliente/config/RestTemplateConfig.java
+/home/laika/Documents/IS II/TP2/Ejercicio2/Parte e/cliente/src/main/java/com/biblioteca/cliente/controller/ClienteApiController.java
+/home/laika/Documents/IS II/TP2/Ejercicio2/Parte e/cliente/src/main/java/com/biblioteca/cliente/dto/AutorDTO.java
+/home/laika/Documents/IS II/TP2/Ejercicio2/Parte e/cliente/src/main/java/com/biblioteca/cliente/dto/DomicilioDTO.java
+/home/laika/Documents/IS II/TP2/Ejercicio2/Parte e/cliente/src/main/java/com/biblioteca/cliente/dto/EmailLogDTO.java
+/home/laika/Documents/IS II/TP2/Ejercicio2/Parte e/cliente/src/main/java/com/biblioteca/cliente/dto/LibroDTO.java
+/home/laika/Documents/IS II/TP2/Ejercicio2/Parte e/cliente/src/main/java/com/biblioteca/cliente/dto/LocalidadDTO.java
+/home/laika/Documents/IS II/TP2/Ejercicio2/Parte e/cliente/src/main/java/com/biblioteca/cliente/dto/PersonaDTO.java
+/home/laika/Documents/IS II/TP2/Ejercicio2/Parte e/cliente/src/main/java/com/biblioteca/cliente/service/BibliotecaClienteService.java
