@@ -1,0 +1,10 @@
+/home/mateoperalta/KMP-IS-II-MLJ-/TP2/Ejercicio3/parte 3/cliente/src/main/java/com/biblioteca/cliente/ClienteApplication.java
+/home/mateoperalta/KMP-IS-II-MLJ-/TP2/Ejercicio3/parte 3/cliente/src/main/java/com/biblioteca/cliente/config/RestTemplateConfig.java
+/home/mateoperalta/KMP-IS-II-MLJ-/TP2/Ejercicio3/parte 3/cliente/src/main/java/com/biblioteca/cliente/controller/ClienteApiController.java
+/home/mateoperalta/KMP-IS-II-MLJ-/TP2/Ejercicio3/parte 3/cliente/src/main/java/com/biblioteca/cliente/dto/AutorDTO.java
+/home/mateoperalta/KMP-IS-II-MLJ-/TP2/Ejercicio3/parte 3/cliente/src/main/java/com/biblioteca/cliente/dto/DomicilioDTO.java
+/home/mateoperalta/KMP-IS-II-MLJ-/TP2/Ejercicio3/parte 3/cliente/src/main/java/com/biblioteca/cliente/dto/EmailLogDTO.java
+/home/mateoperalta/KMP-IS-II-MLJ-/TP2/Ejercicio3/parte 3/cliente/src/main/java/com/biblioteca/cliente/dto/LibroDTO.java
+/home/mateoperalta/KMP-IS-II-MLJ-/TP2/Ejercicio3/parte 3/cliente/src/main/java/com/biblioteca/cliente/dto/LocalidadDTO.java
+/home/mateoperalta/KMP-IS-II-MLJ-/TP2/Ejercicio3/parte 3/cliente/src/main/java/com/biblioteca/cliente/dto/PersonaDTO.java
+/home/mateoperalta/KMP-IS-II-MLJ-/TP2/Ejercicio3/parte 3/cliente/src/main/java/com/biblioteca/cliente/service/BibliotecaClienteService.java
