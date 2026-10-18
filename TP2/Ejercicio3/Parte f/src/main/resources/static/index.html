@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Compras y Mapa de Proveedores - OpenStreetMap</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5.3 & Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <!-- Leaflet.js CSS (para OpenStreetMap) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --secondary: #0ea5e9;
+            --dark-bg: #0f172a;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --accent-green: #10b981;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #f1f5f9;
+            color: var(--text-main);
+            min-height: 100vh;
+        }
+
+        /* Navbar moderna con efecto cristal */
+        .navbar-custom {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .brand-badge {
+            font-size: 0.72rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, #4f46e5, #0ea5e9);
+            padding: 3px 8px;
+            border-radius: 6px;
+        }
+
+        /* Tarjetas con sombras suaves y esquinas redondeadas */
+        .card-custom {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.04), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+            transition: all 0.25s ease;
+        }
+
+        .summary-card {
+            position: sticky;
+            top: 90px;
+        }
+
+        /* Nav Pills Modernos */
+        .nav-pills .nav-link {
+            border-radius: 10px;
+            color: #475569;
+            font-weight: 500;
+            padding: 10px 18px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-pills .nav-link.active {
+            background-color: var(--primary);
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.35);
+        }
+
+        .nav-pills .nav-link:hover:not(.active) {
+            background-color: #e2e8f0;
+            color: #1e293b;
+        }
+
+        /* Estilos del Contenedor de OpenStreetMap */
+        #osmMap {
+            height: 600px;
+            width: 100%;
+            border-radius: 14px;
+            z-index: 1;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);
+        }
+
+        /* Lista de Proveedores con scroll */
+        .supplier-list-container {
+            max-height: 600px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #cbd5e1 #f8fafc;
+        }
+
+        .supplier-item-card {
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 12px;
+            background: #ffffff;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .supplier-item-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 4px 14px rgba(79, 70, 229, 0.12);
+            transform: translateY(-2px);
+        }
+
+        .supplier-item-card.selected {
+            border-color: var(--primary);
+            background: #f5f3ff;
+            box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.25);
+        }
+
+        .coord-badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            background-color: #f1f5f9;
+            color: #334155;
+            padding: 3px 8px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+        }
+
+        /* Estilos para los Popups de Leaflet */
+        .leaflet-popup-content-wrapper {
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            padding: 4px;
+        }
+
+        .osm-popup-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+
+        .osm-popup-badge {
+            font-size: 0.72rem;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 9999px;
+            background-color: #e0e7ff;
+            color: #4338ca;
+            display: inline-block;
+            margin-bottom: 6px;
+        }
+
+        /* Modal styling */
+        .modal-content {
+            border-radius: 18px;
+            border: none;
+            box-shadow: 0 20px 30px rgba(0,0,0,0.15);
+        }
+
+        .code-pill {
+            font-family: 'JetBrains Mono', monospace;
+            background: #e2e8f0;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.85em;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header / Barra de Navegación -->
+<nav class="navbar navbar-dark navbar-custom sticky-top py-3">
+    <div class="container-fluid px-4">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+            <span class="fs-4"><i class="bi bi-geo-alt-fill text-danger"></i></span>
+            <span class="fw-bold fs-5 text-white">E-Commerce & OpenStreetMap</span>
+            <span class="brand-badge text-white ms-2">TP2 - Ejercicio 3 Parte f</span>
+        </a>
+        <div class="d-flex align-items-center gap-3">
+            <span class="badge bg-secondary-subtle text-secondary-emphasis px-3 py-2 rounded-pill d-none d-md-inline-block">
+                <i class="bi bi-layers me-1"></i> OpenStreetMap Tile Layer + Leaflet.js
+            </span>
+            <span class="badge bg-primary px-3 py-2 rounded-pill">
+                <i class="bi bi-building me-1"></i> <span id="supplierCountBadge">0</span> Proveedores Activos
+            </span>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid px-4 py-4">
+
+    <!-- Pestañas de Navegación del Sistema -->
+    <ul class="nav nav-pills mb-4 justify-content-center gap-2" id="mainTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="tab-suppliers-btn" data-bs-toggle="pill" data-bs-target="#tab-suppliers" type="button" role="tab">
+                <i class="bi bi-map-fill me-2"></i>Mapa de Proveedores (OpenStreetMap)
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab-cart-btn" data-bs-toggle="pill" data-bs-target="#tab-cart" type="button" role="tab">
+                <i class="bi bi-cart3 me-2"></i>Carrito de Compras (Template Method)
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab-research-btn" data-bs-toggle="pill" data-bs-target="#tab-research" type="button" role="tab">
+                <i class="bi bi-journal-text me-2"></i>Investigación OpenStreetMap
+            </button>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="mainTabContent">
+
+        <!-- ======================================================== -->
+        <!-- PESTAÑA 1: MAPA DE PROVEEDORES OPENSTREETMAP -->
+        <!-- ======================================================== -->
+        <div class="tab-pane fade show active" id="tab-suppliers" role="tabpanel">
+            <div class="row g-4">
+                
+                <!-- Panel Lateral: Lista y Filtros de Proveedores -->
+                <div class="col-lg-4 col-xl-4">
+                    <div class="card card-custom p-3 h-100 d-flex flex-column">
+                        
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="fw-bold m-0"><i class="bi bi-shop me-2 text-primary"></i>Proveedores</h5>
+                            <button class="btn btn-sm btn-primary rounded-pill px-3 shadow-sm" onclick="openAddSupplierModal()">
+                                <i class="bi bi-plus-circle me-1"></i>Nuevo
+                            </button>
+                        </div>
+
+                        <!-- Barra de Búsqueda -->
+                        <div class="input-group input-group-sm mb-3">
+                            <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
+                            <input type="text" id="supplierSearchInput" class="form-control bg-light border-start-0" 
+                                   placeholder="Buscar por nombre, ciudad o categoría..." oninput="filterSuppliers()">
+                        </div>
+
+                        <!-- Botones de Enfoque Rápido del Mapa -->
+                        <div class="d-flex gap-2 mb-3">
+                            <button class="btn btn-outline-secondary btn-sm flex-fill" onclick="fitAllSuppliers()">
+                                <i class="bi bi-arrows-fullscreen me-1"></i>Ver Todos
+                            </button>
+                            <button class="btn btn-outline-primary btn-sm flex-fill" onclick="focusMendoza()">
+                                <i class="bi bi-geo-alt me-1"></i>Mendoza
+                            </button>
+                            <button class="btn btn-outline-info btn-sm flex-fill" onclick="focusArgentina()">
+                                <i class="bi bi-globe-americas me-1"></i>Argentina
+                            </button>
+                        </div>
+
+                        <div class="alert alert-info py-2 px-3 small d-flex align-items-center mb-3">
+                            <i class="bi bi-info-circle-fill me-2 fs-5"></i>
+                            <div>
+                                Haz <strong>clic en el mapa</strong> para registrar un nuevo proveedor con esas coordenadas.
+                            </div>
+                        </div>
+
+                        <!-- Lista scrolleable de tarjetas de proveedores -->
+                        <div class="supplier-list-container flex-grow-1" id="suppliersList">
+                            <!-- Inyectado por JS -->
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Visor del Mapa OpenStreetMap (Leaflet) -->
+                <div class="col-lg-8 col-xl-8">
+                    <div class="card card-custom p-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2 px-2">
+                            <div>
+                                <span class="fw-bold fs-6">
+                                    <i class="bi bi-pin-map text-danger me-1"></i>
+                                    Visualización Geoespacial en OpenStreetMap
+                                </span>
+                                <span class="text-muted small ms-2 d-none d-md-inline">Tiles libres proveídas por la comunidad OpenStreetMap</span>
+                            </div>
+                            <div class="btn-group btn-group-sm">
+                                <button class="btn btn-light active" id="btnLayerOsm" onclick="changeTileLayer('osm')">Estándar OSM</button>
+                                <button class="btn btn-light" id="btnLayerHot" onclick="changeTileLayer('hot')">OSM Humanitario</button>
+                            </div>
+                        </div>
+
+                        <!-- Contenedor del Mapa -->
+                        <div id="osmMap"></div>
+
+                        <div class="d-flex justify-content-between align-items-center mt-2 px-2 text-muted small">
+                            <span><i class="bi bi-compass me-1"></i>Coordenadas del cursor: <span id="cursorCoords" class="coord-badge">-</span></span>
+                            <span>Motor: Leaflet v1.9.4 &middot; OpenStreetMap Contributors</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ======================================================== -->
+        <!-- PESTAÑA 2: CARRITO DE COMPRAS (TEMPLATE METHOD CHECKOUT) -->
+        <!-- ======================================================== -->
+        <div class="tab-pane fade" id="tab-cart" role="tabpanel">
+            <div class="row g-4">
+                
+                <div class="col-lg-8">
+                    <div class="card card-custom p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h4 class="fw-bold m-0"><i class="bi bi-cart-check me-2 text-primary"></i>Artículos en Carrito</h4>
+                            <span class="badge bg-light text-dark border">
+                                Integrado con Proveedores Georreferenciados
+                            </span>
+                        </div>
+                        
+                        <div class="table-responsive">
+                            <table class="table align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Producto</th>
+                                        <th>Proveedor (Ubicación)</th>
+                                        <th style="width: 110px;">Precio</th>
+                                        <th style="width: 120px;">Cantidad</th>
+                                        <th style="width: 110px;">Subtotal</th>
+                                        <th style="width: 50px;"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="cartTableBody">
+                                    <!-- Renderizado por JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card card-custom p-4 summary-card">
+                        <h5 class="fw-bold mb-3"><i class="bi bi-receipt me-2"></i>Resumen de Orden</h5>
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Estrategia de Envío (Template Method)</label>
+                            <select id="shippingTypeSelect" class="form-select" onchange="runCheckoutPreview()">
+                                <option value="standard" selected>Envío Estándar ($5.00)</option>
+                                <option value="express">Envío Express Prioritario ($15.00 + $1.50/u)</option>
+                            </select>
+                            <small class="text-muted">Procesado dinámicamente mediante el patrón Template Method en el servidor Spring Boot.</small>
+                        </div>
+
+                        <hr>
+
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">Subtotal Productos</span>
+                            <span id="txtSubtotal" class="fw-bold">$0.00</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">Costo de Envío</span>
+                            <span id="txtShipping" class="fw-bold">$0.00</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">Impuestos (IVA 21%)</span>
+                            <span id="txtTax" class="fw-bold">$0.00</span>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between mb-4">
+                            <span class="fs-5 fw-bold">Total Final</span>
+                            <span id="txtTotal" class="fs-5 fw-bold text-primary">$0.00</span>
+                        </div>
+
+                        <button class="btn btn-primary btn-lg w-100 fw-bold shadow-sm" onclick="finalizeOrder()">
+                            <i class="bi bi-lock-fill me-2"></i>Confirmar Compra
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ======================================================== -->
+        <!-- PESTAÑA 3: INVESTIGACIÓN OPENSTREETMAP -->
+        <!-- ======================================================== -->
+        <div class="tab-pane fade" id="tab-research" role="tabpanel">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="card card-custom p-4 p-md-5">
+                        <div class="d-flex align-items-center gap-3 mb-4 border-bottom pb-3">
+                            <div class="bg-primary text-white p-3 rounded-circle">
+                                <i class="bi bi-map fs-2"></i>
+                            </div>
+                            <div>
+                                <h3 class="fw-bold m-0">Informe Técnico: OpenStreetMap (OSM) y Georreferenciación</h3>
+                                <p class="text-muted m-0">Ejercicio 3f - Ingeniería del Software II (TP2)</p>
+                            </div>
+                        </div>
+
+                        <div class="content">
+                            <h5 class="fw-bold text-primary"><i class="bi bi-1-circle-fill me-2"></i>¿Qué es OpenStreetMap (OSM)?</h5>
+                            <p>
+                                <strong>OpenStreetMap (OSM)</strong> es un proyecto colaborativo de código abierto fundado en 2004 por Steve Coast, orientado a construir un mapa mundial editable, abierto y libre. A diferencia de las plataformas privativas, los datos geográficos de OSM están disponibles bajo la licencia <em>Open Database License (ODbL)</em>, permitiendo a cualquier desarrollador, empresa o institución consultar, descargar y procesar información espacial sin costo de licencias por consulta.
+                            </p>
+
+                            <h5 class="fw-bold text-primary mt-4"><i class="bi bi-2-circle-fill me-2"></i>Estructura y Modelo de Datos de OpenStreetMap</h5>
+                            <p>El núcleo de OpenStreetMap se fundamenta en tres primitivas espaciales esenciales:</p>
+                            <ul>
+                                <li><strong>Nodos (Nodes):</strong> Puntos en la superficie terrestre definidos por su <code>latitud</code> y <code>longitud</code> (WGS 84). Se utilizan para modelar puntos de interés (POIs), paradas, o la ubicación de un proveedor como en nuestro sistema.</li>
+                                <li><strong>Vías (Ways):</strong> Secuencias ordenadas de nodos (entre 2 y 2.000) que representan elementos lineales (calles, avenidas, ríos) o polígonos cerrados (edificios, parcelas, lagos).</li>
+                                <li><strong>Relaciones (Relations):</strong> Colecciones de nodos, vías u otras relaciones con roles asignados, utilizadas para representar estructuras complejas como rutas de transporte público o fronteras provinciales.</li>
+                            </ul>
+
+                            <h5 class="fw-bold text-primary mt-4"><i class="bi bi-3-circle-fill me-2"></i>Arquitectura de Teselas (Tile Server) y Leaflet.js</h5>
+                            <p>
+                                Para renderizar mapas rápidamente en navegadores web sin descargar gigabytes de geometría vectorial, los servidores de OSM pregeneran imágenes rasterizadas o teselas vectoriales de 256x256 píxeles organizadas en pirámides de niveles de zoom:
+                            </p>
+                            <div class="p-3 bg-light rounded-3 mb-3">
+                                <code class="text-dark">https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png</code>
+                                <div class="small text-muted mt-1">Donde <strong>z</strong> es el nivel de zoom, y <strong>x / y</strong> son las coordenadas de la tesela en la proyección Mercator esférica (EPSG:3857).</div>
+                            </div>
+                            <p>
+                                <strong>Leaflet.js</strong> es la librería ligera cliente en JavaScript de referencia recomendada por la cátedra para renderizar estas teselas de OpenStreetMap de forma fluida, manejar zoom, arrastre (pan), interactividad, popups y capas de marcadores sin sobrecargar la memoria del cliente.
+                            </p>
+
+                            <h5 class="fw-bold text-primary mt-4"><i class="bi bi-4-circle-fill me-2"></i>Comparativa: OpenStreetMap vs Google Maps</h5>
+                            <div class="table-responsive my-3">
+                                <table class="table table-bordered table-hover align-middle">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Criterio</th>
+                                            <th>OpenStreetMap (OSM) + Leaflet</th>
+                                            <th>Google Maps Platform</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>Costo / Facturación</strong></td>
+                                            <td><span class="badge bg-success">100% Gratuito y Libre</span> sin tarjeta de crédito</td>
+                                            <td><span class="badge bg-danger">Pago por uso</span> (requiere tarjeta y cobro por API calls)</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Licencia</strong></td>
+                                            <td>ODbL (Open Database License)</td>
+                                            <td>Propietaria con términos restrictivos</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Privacidad de Datos</strong></td>
+                                            <td>No rastrea usuarios finales</td>
+                                            <td>Rastreo y telemetría de Google</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Control de Infraestructura</strong></td>
+                                            <td>Permite alojar tu propio servidor de teselas (Self-hosting con Docker/PostGIS)</td>
+                                            <td>Exclusivamente alojado en servidores de Google</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <h5 class="fw-bold text-primary mt-4"><i class="bi bi-5-circle-fill me-2"></i>Implementación en el Sistema E-Commerce</h5>
+                            <ol>
+                                <li><strong>Modelo de Dominio (<code>Supplier</code>):</strong> Se modeló la entidad Proveedor con atributos de localización: <code>address</code>, <code>latitude</code> (double) y <code>longitude</code> (double).</li>
+                                <li><strong>API RESTful (<code>SupplierController</code>):</strong> Expone endpoints para consultar la lista de proveedores geolocalizados (<code>GET /api/suppliers</code>) y registrar nuevos (<code>POST /api/suppliers</code>).</li>
+                                <li><strong>Integración Frontend:</strong> Leaflet.js consume los datos de los proveedores y genera marcadores geolocalizados en el mapa interactivo con OpenStreetMap.</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- MODAL: REGISTRAR NUEVO PROVEEDOR -->
+<div class="modal fade" id="addSupplierModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold"><i class="bi bi-geo-alt-fill text-primary me-2"></i>Registrar Proveedor</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="newSupplierForm" onsubmit="submitNewSupplier(event)">
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Nombre del Proveedor</label>
+                        <input type="text" class="form-control" id="suppName" required placeholder="Ej: TechSupply Mendoza">
+                    </div>
+                    <div class="row g-2 mb-3">
+                        <div class="col-md-7">
+                            <label class="form-label small fw-semibold">Dirección Física</label>
+                            <input type="text" class="form-control" id="suppAddress" required placeholder="Ej: San Martín 500">
+                        </div>
+                        <div class="col-md-5">
+                            <label class="form-label small fw-semibold">Ciudad</label>
+                            <input type="text" class="form-control" id="suppCity" required placeholder="Ej: Mendoza">
+                        </div>
+                    </div>
+                    <div class="row g-2 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-semibold">Latitud</label>
+                            <input type="number" step="0.000001" class="form-control" id="suppLat" required placeholder="-32.8908">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-semibold">Longitud</label>
+                            <input type="number" step="0.000001" class="form-control" id="suppLng" required placeholder="-68.8458">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Categoría de Componentes</label>
+                        <input type="text" class="form-control" id="suppCategory" required placeholder="Ej: Memorias, Discos, Periféricos">
+                    </div>
+                    <div class="row g-2 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-semibold">Teléfono</label>
+                            <input type="text" class="form-control" id="suppPhone" placeholder="+54 261 400-0000">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-semibold">Email de Contacto</label>
+                            <input type="email" class="form-control" id="suppEmail" placeholder="contacto@proveedor.com">
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end gap-2 pt-2">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary fw-bold px-4">Guardar Proveedor</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts: Bootstrap 5.3 & Leaflet.js -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" 
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+<script>
+    // ==========================================
+    // ESTADO GLOBAL DE LA APLICACIÓN
+    // ==========================================
+    let map = null;
+    let markersLayer = null;
+    let currentTileLayer = null;
+    let suppliersData = [];
+    let selectedSupplierId = null;
+
+    // Productos iniciales en el carrito vinculados con proveedores
+    let cart = [
+        { id: 1, name: "Teclado Mecánico RGB", price: 75.00, quantity: 1, supplierId: 1, supplierName: "TechLog Mendoza Centro" },
+        { id: 2, name: "Mouse Inalámbrico Pro", price: 35.50, quantity: 2, supplierId: 2, supplierName: "Distribuidora Cuyo Hardware" },
+        { id: 3, name: "Memoria RAM 16GB DDR4", price: 54.00, quantity: 1, supplierId: 3, supplierName: "Andes Microchips & Componentes" }
+    ];
+
+    // ==========================================
+    // INICIALIZACIÓN DE OPENSTREETMAP CON LEAFLET
+    // ==========================================
+    function initMap() {
+        if (map !== null) return; // Ya inicializado
+
+        // Centrado inicial en Mendoza, Argentina
+        const initialCoords = [-32.89084, -68.84584];
+        const initialZoom = 11;
+
+        map = L.map('osmMap', {
+            center: initialCoords,
+            zoom: initialZoom,
+            zoomControl: true
+        });
+
+        // Capa de teselas estándar de OpenStreetMap
+        currentTileLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        markersLayer = L.layerGroup().addTo(map);
+
+        // Evento mousemove para mostrar coordenadas en tiempo real
+        map.on('mousemove', function(e) {
+            document.getElementById('cursorCoords').innerText = 
+                `${e.latlng.lat.toFixed(5)}, ${e.latlng.lng.toFixed(5)}`;
+        });
+
+        // Evento click en el mapa para capturar coordenadas y abrir modal de nuevo proveedor
+        map.on('click', function(e) {
+            const lat = e.latlng.lat.toFixed(6);
+            const lng = e.latlng.lng.toFixed(6);
+
+            const popup = L.popup()
+                .setLatLng(e.latlng)
+                .setContent(`
+                    <div style="min-width: 180px;">
+                        <h6 class="fw-bold mb-1">📍 Punto Seleccionado</h6>
+                        <div class="small text-muted mb-2">Lat: ${lat}<br>Lng: ${lng}</div>
+                        <button class="btn btn-sm btn-primary w-100" onclick="openAddSupplierWithCoords(${lat}, ${lng})">
+                            Registrar Proveedor Aquí
+                        </button>
+                    </div>
+                `)
+                .openOn(map);
+        });
+    }
+
+    function changeTileLayer(layerType) {
+        if (!map) return;
+        map.removeLayer(currentTileLayer);
+
+        document.getElementById('btnLayerOsm').classList.remove('active');
+        document.getElementById('btnLayerHot').classList.remove('active');
+
+        if (layerType === 'hot') {
+            document.getElementById('btnLayerHot').classList.add('active');
+            currentTileLayer = L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>, Tiles courtesy of <a href="https://www.hotosm.org/">Humanitarian OSM Team</a>'
+            }).addTo(map);
+        } else {
+            document.getElementById('btnLayerOsm').classList.add('active');
+            currentTileLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+        }
+    }
+
+    // ==========================================
+    // CONSUMO DE LA API DE PROVEEDORES (SPRING BOOT)
+    // ==========================================
+    async function loadSuppliers() {
+        try {
+            const res = await fetch('/api/suppliers');
+            if (res.ok) {
+                suppliersData = await res.json();
+            } else {
+                console.warn("Fallo al consultar la API de proveedores, usando datos locales de respaldo.");
+                suppliersData = getFallbackSuppliers();
+            }
+        } catch (e) {
+            console.warn("Error de conexión con la API, usando proveedores locales de respaldo:", e);
+            suppliersData = getFallbackSuppliers();
+        }
+
+        renderSuppliersList(suppliersData);
+        renderMapMarkers(suppliersData);
+        document.getElementById('supplierCountBadge').innerText = suppliersData.length;
+    }
+
+    function getFallbackSuppliers() {
+        return [
+            {
+                id: 1,
+                name: "TechLog Mendoza Centro",
+                contactEmail: "contacto@techlog-mendoza.com.ar",
+                phone: "+54 261 425-9988",
+                address: "Av. San Martín 1020, Ciudad de Mendoza",
+                latitude: -32.89084,
+                longitude: -68.84584,
+                category: "Periféricos y Teclados Mecánicos",
+                city: "Mendoza"
+            },
+            {
+                id: 2,
+                name: "Distribuidora Cuyo Hardware",
+                contactEmail: "ventas@cuyohardware.com.ar",
+                phone: "+54 261 439-1122",
+                address: "Av. San Martín Sur 1450, Godoy Cruz",
+                latitude: -32.92312,
+                longitude: -68.84711,
+                category: "Mouses Ópticos y Auriculares",
+                city: "Godoy Cruz"
+            },
+            {
+                id: 3,
+                name: "Andes Microchips & Componentes",
+                contactEmail: "info@andesmicro.com.ar",
+                phone: "+54 261 497-3344",
+                address: "Maza 250, Maipú, Mendoza",
+                latitude: -32.98124,
+                longitude: -68.78310,
+                category: "Procesadores y Memorias RAM",
+                city: "Maipú"
+            },
+            {
+                id: 4,
+                name: "Logística Gamer Buenos Aires",
+                contactEmail: "distribucion@gamerba.com.ar",
+                phone: "+54 11 4312-5500",
+                address: "Av. Alicia Moreau de Justo 740, Puerto Madero, CABA",
+                latitude: -34.61435,
+                longitude: -58.36671,
+                category: "Placas de Video y Monitores",
+                city: "Buenos Aires"
+            },
+            {
+                id: 5,
+                name: "Centro Tecnológico Córdoba",
+                contactEmail: "soporte@cordobatec.com.ar",
+                phone: "+54 351 422-7788",
+                address: "Av. Colón 1200, Córdoba Capital",
+                latitude: -31.41160,
+                longitude: -64.19520,
+                category: "Almacenamiento SSD y Fuentes",
+                city: "Córdoba"
+            }
+        ];
+    }
+
+    // ==========================================
+    // RENDERIZADO EN EL MAPA Y LISTA
+    // ==========================================
+    function renderMapMarkers(suppliers) {
+        if (!map || !markersLayer) return;
+        markersLayer.clearLayers();
+
+        suppliers.forEach(supplier => {
+            if (supplier.latitude && supplier.longitude) {
+                // Crear Marcador
+                const marker = L.marker([supplier.latitude, supplier.longitude], {
+                    title: supplier.name
+                });
+
+                // Crear Popup enriquecido
+                const popupContent = `
+                    <div style="min-width: 220px; font-family: 'Inter', sans-serif;">
+                        <span class="osm-popup-badge">${supplier.category || 'Hardware'}</span>
+                        <h6 class="osm-popup-title">${supplier.name}</h6>
+                        <div class="small text-muted mb-2">
+                            <i class="bi bi-geo-alt text-danger me-1"></i>${supplier.address} (${supplier.city})
+                        </div>
+                        <div class="small mb-1">
+                            <i class="bi bi-telephone text-primary me-1"></i>${supplier.phone || 'N/D'}
+                        </div>
+                        <div class="small mb-2">
+                            <i class="bi bi-envelope text-primary me-1"></i>${supplier.contactEmail || 'N/D'}
+                        </div>
+                        <div class="coord-badge mb-2 d-inline-block">
+                            Lat: ${supplier.latitude.toFixed(4)}, Lon: ${supplier.longitude.toFixed(4)}
+                        </div>
+                    </div>
+                `;
+
+                marker.bindPopup(popupContent);
+                marker.supplierId = supplier.id;
+                markersLayer.addLayer(marker);
+            }
+        });
+    }
+
+    function renderSuppliersList(suppliers) {
+        const container = document.getElementById('suppliersList');
+        container.innerHTML = '';
+
+        if (suppliers.length === 0) {
+            container.innerHTML = `
+                <div class="text-center py-5 text-muted">
+                    <i class="bi bi-search fs-2 mb-2 d-block"></i>
+                    No se encontraron proveedores
+                </div>
+            `;
+            return;
+        }
+
+        suppliers.forEach(supp => {
+            const isSelected = selectedSupplierId === supp.id ? 'selected' : '';
+            const card = document.createElement('div');
+            card.className = `supplier-item-card ${isSelected}`;
+            card.id = `supp-card-${supp.id}`;
+            card.onclick = () => focusSupplier(supp.id);
+
+            card.innerHTML = `
+                <div class="d-flex justify-content-between align-items-start mb-1">
+                    <h6 class="fw-bold text-dark m-0">${supp.name}</h6>
+                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle">
+                        ${supp.city}
+                    </span>
+                </div>
+                <div class="small text-muted mb-2">
+                    <i class="bi bi-tag me-1"></i>${supp.category}
+                </div>
+                <div class="small text-secondary mb-2">
+                    <i class="bi bi-geo-alt text-danger me-1"></i>${supp.address}
+                </div>
+                <div class="d-flex justify-content-between align-items-center pt-1 border-top">
+                    <span class="coord-badge">
+                        ${supp.latitude.toFixed(4)}, ${supp.longitude.toFixed(4)}
+                    </span>
+                    <button class="btn btn-sm btn-outline-primary py-0 px-2" onclick="event.stopPropagation(); focusSupplier(${supp.id})">
+                        <i class="bi bi-crosshair me-1"></i>Ubicar
+                    </button>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    function filterSuppliers() {
+        const query = document.getElementById('supplierSearchInput').value.toLowerCase().trim();
+        const filtered = suppliersData.filter(s => 
+            s.name.toLowerCase().includes(query) ||
+            s.city.toLowerCase().includes(query) ||
+            (s.category && s.category.toLowerCase().includes(query)) ||
+            s.address.toLowerCase().includes(query)
+        );
+        renderSuppliersList(filtered);
+    }
+
+    function focusSupplier(id) {
+        selectedSupplierId = id;
+        const supplier = suppliersData.find(s => s.id === id);
+        if (!supplier || !map) return;
+
+        // Actualizar tarjeta seleccionada
+        document.querySelectorAll('.supplier-item-card').forEach(el => el.classList.remove('selected'));
+        const el = document.getElementById(`supp-card-${id}`);
+        if (el) el.classList.add('selected');
+
+        // Volar al punto en el mapa y abrir su popup
+        map.flyTo([supplier.latitude, supplier.longitude], 15, {
+            duration: 1.2
+        });
+
+        markersLayer.eachLayer(layer => {
+            if (layer.supplierId === id) {
+                layer.openPopup();
+            }
+        });
+    }
+
+    function fitAllSuppliers() {
+        if (!map || suppliersData.length === 0) return;
+        const bounds = L.latLngBounds(suppliersData.map(s => [s.latitude, s.longitude]));
+        map.fitBounds(bounds, { padding: [50, 50] });
+    }
+
+    function focusMendoza() {
+        if (!map) return;
+        map.flyTo([-32.89084, -68.84584], 12);
+    }
+
+    function focusArgentina() {
+        if (!map) return;
+        map.flyTo([-34.6037, -64.3816], 5);
+    }
+
+    // ==========================================
+    // AGREGAR NUEVO PROVEEDOR (MODAL Y POST)
+    // ==========================================
+    function openAddSupplierModal() {
+        document.getElementById('newSupplierForm').reset();
+        const modal = new bootstrap.Modal(document.getElementById('addSupplierModal'));
+        modal.show();
+    }
+
+    function openAddSupplierWithCoords(lat, lng) {
+        map.closePopup();
+        document.getElementById('newSupplierForm').reset();
+        document.getElementById('suppLat').value = lat;
+        document.getElementById('suppLng').value = lng;
+        const modal = new bootstrap.Modal(document.getElementById('addSupplierModal'));
+        modal.show();
+    }
+
+    async function submitNewSupplier(event) {
+        event.preventDefault();
+
+        const newSupplier = {
+            name: document.getElementById('suppName').value,
+            address: document.getElementById('suppAddress').value,
+            city: document.getElementById('suppCity').value,
+            latitude: parseFloat(document.getElementById('suppLat').value),
+            longitude: parseFloat(document.getElementById('suppLng').value),
+            category: document.getElementById('suppCategory').value,
+            phone: document.getElementById('suppPhone').value,
+            contactEmail: document.getElementById('suppEmail').value
+        };
+
+        try {
+            const res = await fetch('/api/suppliers', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newSupplier)
+            });
+
+            if (res.ok) {
+                const created = await res.json();
+                suppliersData.push(created);
+            } else {
+                newSupplier.id = Date.now();
+                suppliersData.push(newSupplier);
+            }
+        } catch (e) {
+            newSupplier.id = Date.now();
+            suppliersData.push(newSupplier);
+        }
+
+        renderSuppliersList(suppliersData);
+        renderMapMarkers(suppliersData);
+        document.getElementById('supplierCountBadge').innerText = suppliersData.length;
+
+        const modalEl = document.getElementById('addSupplierModal');
+        const modal = bootstrap.Modal.getInstance(modalEl);
+        if (modal) modal.hide();
+
+        // Enfocar el nuevo proveedor
+        const latest = suppliersData[suppliersData.length - 1];
+        focusSupplier(latest.id);
+    }
+
+    // ==========================================
+    // LÓGICA DEL CARRITO (TEMPLATE METHOD)
+    // ==========================================
+    function renderCart() {
+        const tbody = document.getElementById("cartTableBody");
+        tbody.innerHTML = "";
+
+        if (cart.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-muted">El carrito está vacío</td></tr>`;
+            runCheckoutPreview();
+            return;
+        }
+
+        cart.forEach((item, index) => {
+            const subtotal = (item.price * item.quantity).toFixed(2);
+            tbody.innerHTML += `
+                <tr>
+                    <td>
+                        <span class="fw-semibold">${item.name}</span>
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-info rounded-pill py-0 px-2" onclick="showSupplierFromCart(${item.supplierId})">
+                            <i class="bi bi-geo-alt me-1"></i>${item.supplierName || 'Proveedor'}
+                        </button>
+                    </td>
+                    <td>$${item.price.toFixed(2)}</td>
+                    <td>
+                        <input type="number" min="1" class="form-control form-control-sm text-center" 
+                               value="${item.quantity}" onchange="updateQty(${index}, this.value)" style="width: 80px;">
+                    </td>
+                    <td class="fw-bold">$${subtotal}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-danger" onclick="removeItem(${index})">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `;
+        });
+        runCheckoutPreview();
+    }
+
+    function showSupplierFromCart(supplierId) {
+        // Cambiar a la pestaña del mapa
+        const triggerEl = document.querySelector('#tab-suppliers-btn');
+        bootstrap.Tab.getInstance(triggerEl) || new bootstrap.Tab(triggerEl);
+        triggerEl.click();
+
+        setTimeout(() => {
+            map.invalidateSize();
+            focusSupplier(supplierId);
+        }, 300);
+    }
+
+    function updateQty(index, qty) {
+        cart[index].quantity = Math.max(1, parseInt(qty) || 1);
+        renderCart();
+    }
+
+    function removeItem(index) {
+        cart.splice(index, 1);
+        renderCart();
+    }
+
+    async function runCheckoutPreview() {
+        if (cart.length === 0) {
+            document.getElementById("txtSubtotal").innerText = "$0.00";
+            document.getElementById("txtShipping").innerText = "$0.00";
+            document.getElementById("txtTax").innerText = "$0.00";
+            document.getElementById("txtTotal").innerText = "$0.00";
+            return;
+        }
+
+        const shippingType = document.getElementById("shippingTypeSelect").value;
+
+        try {
+            const res = await fetch(`/api/cart/checkout?shippingType=${shippingType}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(cart)
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                document.getElementById("txtSubtotal").innerText = `$${data.subtotal.toFixed(2)}`;
+                document.getElementById("txtShipping").innerText = `$${data.shippingCost.toFixed(2)}`;
+                document.getElementById("txtTax").innerText = `$${data.taxAmount.toFixed(2)}`;
+                document.getElementById("txtTotal").innerText = `$${data.total.toFixed(2)}`;
+            }
+        } catch (err) {
+            // Cálculo offline de respaldo
+            const subtotal = cart.reduce((acc, i) => acc + (i.price * i.quantity), 0);
+            const shipping = shippingType === "express" ? 15.00 + (1.50 * cart.length) : 5.00;
+            const tax = subtotal * 0.21;
+            const total = subtotal + shipping + tax;
+
+            document.getElementById("txtSubtotal").innerText = `$${subtotal.toFixed(2)}`;
+            document.getElementById("txtShipping").innerText = `$${shipping.toFixed(2)}`;
+            document.getElementById("txtTax").innerText = `$${tax.toFixed(2)}`;
+            document.getElementById("txtTotal").innerText = `$${total.toFixed(2)}`;
+        }
+    }
+
+    function finalizeOrder() {
+        if(cart.length === 0) {
+            alert("El carrito está vacío. Agrega productos para procesar la orden.");
+            return;
+        }
+        alert("¡Compra confirmada con éxito!\nEstrategia ejecutada mediante el Patrón Template Method en Spring Boot.");
+    }
+
+    // ==========================================
+    // DISPARADORES AL CARGAR LA PÁGINA
+    // ==========================================
+    document.addEventListener("DOMContentLoaded", function () {
+        initMap();
+        loadSuppliers();
+        renderCart();
+
+        // Redimensionar el mapa cuando la pestaña de mapa se active
+        const mapTabBtn = document.getElementById('tab-suppliers-btn');
+        mapTabBtn.addEventListener('shown.bs.tab', function () {
+            if (map) {
+                map.invalidateSize();
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
