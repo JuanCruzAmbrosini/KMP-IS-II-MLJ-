@@ -1,0 +1,668 @@
+2026-10-18T21:42:00.481-03:00  INFO 180771 --- [zeroshop] [restartedMain] ingsoftware.zeroshop.ZeroShopApp         : Starting ZeroShopApp using Java 26.0.2.1 with PID 180771 (/home/laika/Documents/IS II/TP2/Ejercicio4/Ej4eTP2/target/classes started by laika in /home/laika/Documents/IS II/TP2/Ejercicio4/Ej4eTP2)
+2026-10-18T21:42:00.485-03:00  INFO 180771 --- [zeroshop] [restartedMain] ingsoftware.zeroshop.ZeroShopApp         : No active profile set, falling back to 1 default profile: "default"
+2026-10-18T21:42:00.541-03:00  INFO 180771 --- [zeroshop] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-10-18T21:42:00.541-03:00  INFO 180771 --- [zeroshop] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-10-18T21:42:02.429-03:00  INFO 180771 --- [zeroshop] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-10-18T21:42:02.629-03:00  INFO 180771 --- [zeroshop] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 84 ms. Found 29 JPA repository interfaces.
+2026-10-18T21:42:03.619-03:00  INFO 180771 --- [zeroshop] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
+2026-10-18T21:42:03.740-03:00  INFO 180771 --- [zeroshop] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-10-18T21:42:03.740-03:00  INFO 180771 --- [zeroshop] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.24]
+2026-10-18T21:42:03.778-03:00  INFO 180771 --- [zeroshop] [restartedMain] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 3237 ms
+2026-10-18T21:42:03.964-03:00  INFO 180771 --- [zeroshop] [restartedMain] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-10-18T21:42:04.015-03:00  INFO 180771 --- [zeroshop] [restartedMain] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.4.5.Final
+2026-10-18T21:42:04.568-03:00  INFO 180771 --- [zeroshop] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-10-18T21:42:04.609-03:00  INFO 180771 --- [zeroshop] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-10-18T21:42:05.399-03:00  INFO 180771 --- [zeroshop] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@283bcd91
+2026-10-18T21:42:05.403-03:00  INFO 180771 --- [zeroshop] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-10-18T21:42:05.818-03:00  WARN 180771 --- [zeroshop] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-10-18T21:42:06.109-03:00  INFO 180771 --- [zeroshop] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:5432/zero-shop?currentSchema=public]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 18.6
+	Default catalog/schema: zero-shop/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-10-18T21:42:08.561-03:00  INFO 180771 --- [zeroshop] [restartedMain] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-10-18T21:42:10.483-03:00  INFO 180771 --- [zeroshop] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-10-18T21:42:10.580-03:00  INFO 180771 --- [zeroshop] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-10-18T21:42:11.981-03:00  WARN 180771 --- [zeroshop] [restartedMain] ingsoftware.zeroshop.config.MailConfig   : JavaMailSender iniciado sin credenciales SMTP completas. Los envíos operarán en modo simulador.
+2026-10-18T21:42:12.142-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.z.service.storage.FileStorageService   : Directorio de almacenamiento de archivos inicializado en: /home/laika/Documents/IS II/TP2/Ejercicio4/Ej4eTP2/uploads/products
+2026-10-18T21:42:12.336-03:00  INFO 180771 --- [zeroshop] [restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2026-10-18T21:42:13.086-03:00  INFO 180771 --- [zeroshop] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2026-10-18T21:42:13.138-03:00  INFO 180771 --- [zeroshop] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8080 (http) with context path '/'
+2026-10-18T21:42:13.144-03:00  INFO 180771 --- [zeroshop] [restartedMain] ingsoftware.zeroshop.ZeroShopApp         : Started ZeroShopApp in 13.101 seconds (process running for 13.894)
+2026-10-18T21:42:13.424-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Iniciando carga integral de datos desde archivos JSON (data/*.json)...
+2026-10-18T21:42:13.424-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Vaciando tablas existentes...
+2026-10-18T21:42:14.413-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Se truncaron 38 tablas correctamente.
+2026-10-18T21:42:14.826-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Restricción única de office_employees eliminada exitosamente.
+2026-10-18T21:42:14.826-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Cargando ubicaciones desde data/locations.json...
+2026-10-18T21:42:19.760-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Ubicaciones cargadas con éxito (153 ciudades indexadas).
+2026-10-18T21:42:19.760-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Cargando categorías y subcategorías desde data/categories.json...
+2026-10-18T21:42:20.383-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Categorías y subcategorías cargadas con éxito (20 subcategorías indexadas).
+2026-10-18T21:42:20.383-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Cargando sucursales desde data/offices.json...
+2026-10-18T21:42:20.658-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Sucursales cargadas con éxito (3 sucursales).
+2026-10-18T21:42:20.658-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Cargando proveedores desde data/suppliers.json...
+2026-10-18T21:42:20.793-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Proveedores cargados con éxito (3 proveedores).
+2026-10-18T21:42:20.794-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Cargando productos, precios y stock desde data/products.json...
+2026-10-18T21:42:23.015-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Productos y stock cargados con éxito (12 productos).
+2026-10-18T21:42:23.015-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Cargando usuarios desde data/users.json...
+2026-10-18T21:42:24.197-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Usuarios cargados con éxito (4 empleados, 3 clientes).
+2026-10-18T21:42:24.198-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Cargando órdenes de compra desde data/purchase_orders.json...
+2026-10-18T21:42:24.204-03:00 ERROR 180771 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Error al cargar purchase_orders.json: class ingsoftware.zeroshop.entity.actor.Person$HibernateProxy cannot be cast to class ingsoftware.zeroshop.entity.actor.Employee (ingsoftware.zeroshop.entity.actor.Person$HibernateProxy and ingsoftware.zeroshop.entity.actor.Employee are in unnamed module of loader org.springframework.boot.devtools.restart.classloader.RestartClassLoader @249f4115)
+
+java.lang.ClassCastException: class ingsoftware.zeroshop.entity.actor.Person$HibernateProxy cannot be cast to class ingsoftware.zeroshop.entity.actor.Employee (ingsoftware.zeroshop.entity.actor.Person$HibernateProxy and ingsoftware.zeroshop.entity.actor.Employee are in unnamed module of loader org.springframework.boot.devtools.restart.classloader.RestartClassLoader @249f4115)
+	at ingsoftware.zeroshop.config.DataInitializer.lambda$seedPurchaseOrders$0(DataInitializer.java:615) ~[classes/:na]
+	at java.base/java.util.Optional.map(Optional.java:264) ~[na:na]
+	at ingsoftware.zeroshop.config.DataInitializer.seedPurchaseOrders(DataInitializer.java:615) ~[classes/:na]
+	at ingsoftware.zeroshop.config.DataInitializer.run(DataInitializer.java:150) ~[classes/:na]
+	at org.springframework.boot.SpringApplication.lambda$callRunner$0(SpringApplication.java:788) ~[spring-boot-4.1.1.jar:4.1.1]
+	at org.springframework.util.function.ThrowingConsumer$1.acceptWithException(ThrowingConsumer.java:82) ~[spring-core-7.0.9.jar:7.0.9]
+	at org.springframework.util.function.ThrowingConsumer.accept(ThrowingConsumer.java:60) ~[spring-core-7.0.9.jar:7.0.9]
+	at org.springframework.util.function.ThrowingConsumer$1.accept(ThrowingConsumer.java:86) ~[spring-core-7.0.9.jar:7.0.9]
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:800) ~[spring-boot-4.1.1.jar:4.1.1]
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:788) ~[spring-boot-4.1.1.jar:4.1.1]
+	at org.springframework.boot.SpringApplication.lambda$callRunners$0(SpringApplication.java:776) ~[spring-boot-4.1.1.jar:4.1.1]
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:186) ~[na:na]
+	at java.base/java.util.stream.SortedOps$SizedRefSortingSink.end(SortedOps.java:357) ~[na:na]
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:571) ~[na:na]
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:560) ~[na:na]
+	at java.base/java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:153) ~[na:na]
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:176) ~[na:na]
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:265) ~[na:na]
+	at java.base/java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:632) ~[na:na]
+	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:776) ~[spring-boot-4.1.1.jar:4.1.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:328) ~[spring-boot-4.1.1.jar:4.1.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1365) ~[spring-boot-4.1.1.jar:4.1.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1354) ~[spring-boot-4.1.1.jar:4.1.1]
+	at ingsoftware.zeroshop.ZeroShopApp.main(ZeroShopApp.java:76) ~[classes/:na]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565) ~[na:na]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:52) ~[spring-boot-devtools-4.1.1.jar:4.1.1]
+
+2026-10-18T21:42:24.206-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Cargando órdenes de venta desde data/sale_orders.json...
+2026-10-18T21:42:24.212-03:00 ERROR 180771 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Error al cargar sale_orders.json: class ingsoftware.zeroshop.entity.actor.Person$HibernateProxy cannot be cast to class ingsoftware.zeroshop.entity.actor.Client (ingsoftware.zeroshop.entity.actor.Person$HibernateProxy and ingsoftware.zeroshop.entity.actor.Client are in unnamed module of loader org.springframework.boot.devtools.restart.classloader.RestartClassLoader @249f4115)
+
+java.lang.ClassCastException: class ingsoftware.zeroshop.entity.actor.Person$HibernateProxy cannot be cast to class ingsoftware.zeroshop.entity.actor.Client (ingsoftware.zeroshop.entity.actor.Person$HibernateProxy and ingsoftware.zeroshop.entity.actor.Client are in unnamed module of loader org.springframework.boot.devtools.restart.classloader.RestartClassLoader @249f4115)
+	at ingsoftware.zeroshop.config.DataInitializer.lambda$seedSaleOrders$0(DataInitializer.java:664) ~[classes/:na]
+	at java.base/java.util.Optional.map(Optional.java:264) ~[na:na]
+	at ingsoftware.zeroshop.config.DataInitializer.seedSaleOrders(DataInitializer.java:664) ~[classes/:na]
+	at ingsoftware.zeroshop.config.DataInitializer.run(DataInitializer.java:153) ~[classes/:na]
+	at org.springframework.boot.SpringApplication.lambda$callRunner$0(SpringApplication.java:788) ~[spring-boot-4.1.1.jar:4.1.1]
+	at org.springframework.util.function.ThrowingConsumer$1.acceptWithException(ThrowingConsumer.java:82) ~[spring-core-7.0.9.jar:7.0.9]
+	at org.springframework.util.function.ThrowingConsumer.accept(ThrowingConsumer.java:60) ~[spring-core-7.0.9.jar:7.0.9]
+	at org.springframework.util.function.ThrowingConsumer$1.accept(ThrowingConsumer.java:86) ~[spring-core-7.0.9.jar:7.0.9]
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:800) ~[spring-boot-4.1.1.jar:4.1.1]
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:788) ~[spring-boot-4.1.1.jar:4.1.1]
+	at org.springframework.boot.SpringApplication.lambda$callRunners$0(SpringApplication.java:776) ~[spring-boot-4.1.1.jar:4.1.1]
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:186) ~[na:na]
+	at java.base/java.util.stream.SortedOps$SizedRefSortingSink.end(SortedOps.java:357) ~[na:na]
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:571) ~[na:na]
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:560) ~[na:na]
+	at java.base/java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:153) ~[na:na]
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:176) ~[na:na]
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:265) ~[na:na]
+	at java.base/java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:632) ~[na:na]
+	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:776) ~[spring-boot-4.1.1.jar:4.1.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:328) ~[spring-boot-4.1.1.jar:4.1.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1365) ~[spring-boot-4.1.1.jar:4.1.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1354) ~[spring-boot-4.1.1.jar:4.1.1]
+	at ingsoftware.zeroshop.ZeroShopApp.main(ZeroShopApp.java:76) ~[classes/:na]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565) ~[na:na]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:52) ~[spring-boot-devtools-4.1.1.jar:4.1.1]
+
+2026-10-18T21:42:24.213-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Base de datos poblada exitosamente a partir de los datos en data/*.json.
+2026-10-18T21:42:24.217-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.z.config.DatabaseMigrationRunner       : Restricción orders_status_check verificada y eliminada para permitir nuevos estados de pedido.
+2026-10-18T21:42:24.313-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.z.config.DatabaseMigrationRunner       : Columna orders.payment_method verificada y sincronizada.
+2026-10-18T21:42:24.330-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.z.config.DatabaseMigrationRunner       : Columna sale_orders.office_id verificada para permitir null en estado ON_CART.
+2026-10-18T21:42:24.350-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.z.config.DatabaseMigrationRunner       : Restricción única de users.person_id eliminada para permitir múltiples usuarios por persona.
+2026-10-18T21:42:24.383-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.z.config.DatabaseMigrationRunner       : Restricción sale_orders.client_id actualizada para referenciar persons(id).
+2026-10-18T21:42:24.384-03:00  WARN 180771 --- [zeroshop] [restartedMain] i.z.config.DatabaseMigrationRunner       : No se pudo alterar defaults de person_addresses: StatementCallback; bad SQL grammar [ALTER TABLE person_addresses ALTER COLUMN id SET DEFAULT gen_random_uuid()]
+2026-10-18T21:42:24.385-03:00  WARN 180771 --- [zeroshop] [restartedMain] i.z.config.DatabaseMigrationRunner       : No se pudo alterar defaults de person_contacts: StatementCallback; bad SQL grammar [ALTER TABLE person_contacts ALTER COLUMN id SET DEFAULT gen_random_uuid()]
+2026-10-18T21:42:24.386-03:00  WARN 180771 --- [zeroshop] [restartedMain] i.z.config.DatabaseMigrationRunner       : No se pudo alterar defaults de supplier_addresses: StatementCallback; bad SQL grammar [ALTER TABLE supplier_addresses ALTER COLUMN id SET DEFAULT gen_random_uuid()]
+2026-10-18T21:42:24.387-03:00  WARN 180771 --- [zeroshop] [restartedMain] i.z.config.DatabaseMigrationRunner       : No se pudo alterar defaults de supplier_contacts: StatementCallback; bad SQL grammar [ALTER TABLE supplier_contacts ALTER COLUMN id SET DEFAULT gen_random_uuid()]
+2026-10-18T21:42:24.389-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.z.config.DatabaseMigrationRunner       : Tabla pending_registrations verificada o creada con éxito.
+2026-10-18T21:43:12.672-03:00  INFO 180771 --- [zeroshop] [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-10-18T21:43:12.672-03:00  INFO 180771 --- [zeroshop] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-10-18T21:43:12.674-03:00  INFO 180771 --- [zeroshop] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2026-10-18T21:43:13.224-03:00  INFO 180771 --- [zeroshop] [scheduling-1] i.z.s.notification.NewsletterService     : Iniciando despacho periódico de newsletter de ofertas a clientes...
+2026-10-18T21:43:13.237-03:00  INFO 180771 --- [zeroshop] [scheduling-1] i.z.s.notification.NewsletterService     : Newsletter de ofertas despachada exitosamente a 3 clientes.
+2026-10-18T21:43:13.238-03:00  WARN 180771 --- [zeroshop] [task-1] i.z.service.notification.EmailService    : [MODO SIMULADOR] Correo HTML NO enviado a la red porque no hay credenciales SMTP configuradas en .env (MAIL_USERNAME / MAIL_PASSWORD).
+Para: client@gmail.com | Asunto: 🔥 ¡Ofertas Exclusivas de la Semana en Zero Shop Mendoza! | Longitud HTML: 6096 caracteres
+2026-10-18T21:43:13.238-03:00  WARN 180771 --- [zeroshop] [task-2] i.z.service.notification.EmailService    : [MODO SIMULADOR] Correo HTML NO enviado a la red porque no hay credenciales SMTP configuradas en .env (MAIL_USERNAME / MAIL_PASSWORD).
+Para: maria.gonzalez@gmail.com | Asunto: 🔥 ¡Ofertas Exclusivas de la Semana en Zero Shop Mendoza! | Longitud HTML: 6096 caracteres
+2026-10-18T21:43:13.238-03:00  WARN 180771 --- [zeroshop] [task-3] i.z.service.notification.EmailService    : [MODO SIMULADOR] Correo HTML NO enviado a la red porque no hay credenciales SMTP configuradas en .env (MAIL_USERNAME / MAIL_PASSWORD).
+Para: agustin.rodriguez@gmail.com | Asunto: 🔥 ¡Ofertas Exclusivas de la Semana en Zero Shop Mendoza! | Longitud HTML: 6096 caracteres
+2026-10-18T21:44:11.480-03:00  WARN 180771 --- [zeroshop] [task-4] i.z.service.notification.EmailService    : [MODO SIMULADOR] Correo HTML NO enviado a la red porque no hay credenciales SMTP configuradas en .env (MAIL_USERNAME / MAIL_PASSWORD).
+Para: admin@gmail.com | Asunto: Confirmación de Compra - Zero Shop #5D2F5C66 | Longitud HTML: 2239 caracteres
+2026-10-18T21:44:30.817-03:00  INFO 180771 --- [zeroshop] [http-nio-8080-exec-7] i.z.service.transaction.PaymentService   : Factura FC-0001-00000001 generada exitosamente para la orden ID: 5d2f5c66-7d70-4450-8e70-837c29970045
+2026-10-18T21:44:30.822-03:00  WARN 180771 --- [zeroshop] [task-5] i.z.service.notification.EmailService    : [MODO SIMULADOR] Correo HTML NO enviado a la red porque no hay credenciales SMTP configuradas en .env (MAIL_USERNAME / MAIL_PASSWORD).
+Para: admin@gmail.com | Asunto: Confirmación de Compra - Zero Shop #5D2F5C66 | Longitud HTML: 2236 caracteres
+2026-10-18T21:47:24.455-03:00  INFO 180771 --- [zeroshop] [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2026-10-18T21:47:24.458-03:00  INFO 180771 --- [zeroshop] [Thread-5] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-10-18T21:47:24.459-03:00  INFO 180771 --- [zeroshop] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-10-18T21:47:24.464-03:00  INFO 180771 --- [zeroshop] [Thread-5] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-10-18T21:47:24.467-03:00  INFO 180771 --- [zeroshop] [Thread-5] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-10-18T21:47:24.469-03:00  INFO 180771 --- [zeroshop] [Thread-5] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-10-18T21:47:24.584-03:00  INFO 180771 --- [zeroshop] [restartedMain] ingsoftware.zeroshop.ZeroShopApp         : Starting ZeroShopApp using Java 26.0.2.1 with PID 180771 (/home/laika/Documents/IS II/TP2/Ejercicio4/Ej4eTP2/target/classes started by laika in /home/laika/Documents/IS II/TP2/Ejercicio4/Ej4eTP2)
+2026-10-18T21:47:24.584-03:00  INFO 180771 --- [zeroshop] [restartedMain] ingsoftware.zeroshop.ZeroShopApp         : No active profile set, falling back to 1 default profile: "default"
+2026-10-18T21:47:24.888-03:00  INFO 180771 --- [zeroshop] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-10-18T21:47:24.924-03:00  INFO 180771 --- [zeroshop] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 34 ms. Found 29 JPA repository interfaces.
+2026-10-18T21:47:25.134-03:00  INFO 180771 --- [zeroshop] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
+2026-10-18T21:47:25.135-03:00  INFO 180771 --- [zeroshop] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-10-18T21:47:25.136-03:00  INFO 180771 --- [zeroshop] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.24]
+2026-10-18T21:47:25.148-03:00  INFO 180771 --- [zeroshop] [restartedMain] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 563 ms
+2026-10-18T21:47:25.220-03:00  INFO 180771 --- [zeroshop] [restartedMain] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-10-18T21:47:25.240-03:00  INFO 180771 --- [zeroshop] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-10-18T21:47:25.241-03:00  INFO 180771 --- [zeroshop] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Starting...
+2026-10-18T21:47:25.244-03:00  INFO 180771 --- [zeroshop] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-2 - Added connection org.postgresql.jdbc.PgConnection@55013bf
+2026-10-18T21:47:25.244-03:00  INFO 180771 --- [zeroshop] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Start completed.
+2026-10-18T21:47:25.246-03:00  WARN 180771 --- [zeroshop] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-10-18T21:47:25.248-03:00  INFO 180771 --- [zeroshop] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:5432/zero-shop?currentSchema=public]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 18.6
+	Default catalog/schema: zero-shop/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-10-18T21:47:25.533-03:00  INFO 180771 --- [zeroshop] [restartedMain] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-10-18T21:47:25.559-03:00  INFO 180771 --- [zeroshop] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-10-18T21:47:25.961-03:00  WARN 180771 --- [zeroshop] [restartedMain] ingsoftware.zeroshop.config.MailConfig   : JavaMailSender iniciado sin credenciales SMTP completas. Los envíos operarán en modo simulador.
+2026-10-18T21:47:26.043-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.z.service.storage.FileStorageService   : Directorio de almacenamiento de archivos inicializado en: /home/laika/Documents/IS II/TP2/Ejercicio4/Ej4eTP2/uploads/products
+2026-10-18T21:47:26.147-03:00  INFO 180771 --- [zeroshop] [restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2026-10-18T21:47:26.416-03:00  INFO 180771 --- [zeroshop] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2026-10-18T21:47:26.434-03:00  INFO 180771 --- [zeroshop] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8080 (http) with context path '/'
+2026-10-18T21:47:26.436-03:00  INFO 180771 --- [zeroshop] [restartedMain] ingsoftware.zeroshop.ZeroShopApp         : Started ZeroShopApp in 1.886 seconds (process running for 327.187)
+2026-10-18T21:47:26.440-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.z.config.DatabaseMigrationRunner       : Restricción orders_status_check verificada y eliminada para permitir nuevos estados de pedido.
+2026-10-18T21:47:26.443-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.z.config.DatabaseMigrationRunner       : Columna orders.payment_method verificada y sincronizada.
+2026-10-18T21:47:26.444-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.z.config.DatabaseMigrationRunner       : Columna sale_orders.office_id verificada para permitir null en estado ON_CART.
+2026-10-18T21:47:26.447-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.z.config.DatabaseMigrationRunner       : Restricción única de users.person_id eliminada para permitir múltiples usuarios por persona.
+2026-10-18T21:47:26.452-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.z.config.DatabaseMigrationRunner       : Restricción sale_orders.client_id actualizada para referenciar persons(id).
+2026-10-18T21:47:26.452-03:00  WARN 180771 --- [zeroshop] [restartedMain] i.z.config.DatabaseMigrationRunner       : No se pudo alterar defaults de person_addresses: StatementCallback; bad SQL grammar [ALTER TABLE person_addresses ALTER COLUMN id SET DEFAULT gen_random_uuid()]
+2026-10-18T21:47:26.452-03:00  WARN 180771 --- [zeroshop] [restartedMain] i.z.config.DatabaseMigrationRunner       : No se pudo alterar defaults de person_contacts: StatementCallback; bad SQL grammar [ALTER TABLE person_contacts ALTER COLUMN id SET DEFAULT gen_random_uuid()]
+2026-10-18T21:47:26.453-03:00  WARN 180771 --- [zeroshop] [restartedMain] i.z.config.DatabaseMigrationRunner       : No se pudo alterar defaults de supplier_addresses: StatementCallback; bad SQL grammar [ALTER TABLE supplier_addresses ALTER COLUMN id SET DEFAULT gen_random_uuid()]
+2026-10-18T21:47:26.453-03:00  WARN 180771 --- [zeroshop] [restartedMain] i.z.config.DatabaseMigrationRunner       : No se pudo alterar defaults de supplier_contacts: StatementCallback; bad SQL grammar [ALTER TABLE supplier_contacts ALTER COLUMN id SET DEFAULT gen_random_uuid()]
+2026-10-18T21:47:26.453-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.z.config.DatabaseMigrationRunner       : Tabla pending_registrations verificada o creada con éxito.
+2026-10-18T21:47:26.476-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Iniciando carga integral de datos desde archivos JSON (data/*.json)...
+2026-10-18T21:47:26.477-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Vaciando tablas existentes...
+2026-10-18T21:47:26.493-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Se truncaron 38 tablas correctamente.
+2026-10-18T21:47:26.503-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Restricción única de office_employees eliminada exitosamente.
+2026-10-18T21:47:26.503-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Cargando ubicaciones desde data/locations.json...
+2026-10-18T21:47:26.782-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Ubicaciones cargadas con éxito (153 ciudades indexadas).
+2026-10-18T21:47:26.782-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Cargando categorías y subcategorías desde data/categories.json...
+2026-10-18T21:47:26.819-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Categorías y subcategorías cargadas con éxito (20 subcategorías indexadas).
+2026-10-18T21:47:26.819-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Cargando sucursales desde data/offices.json...
+2026-10-18T21:47:26.851-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Sucursales cargadas con éxito (3 sucursales).
+2026-10-18T21:47:26.851-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Cargando proveedores desde data/suppliers.json...
+2026-10-18T21:47:26.866-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Proveedores cargados con éxito (3 proveedores).
+2026-10-18T21:47:26.866-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Cargando productos, precios y stock desde data/products.json...
+2026-10-18T21:47:26.969-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Productos y stock cargados con éxito (12 productos).
+2026-10-18T21:47:26.969-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Cargando usuarios desde data/users.json...
+2026-10-18T21:47:27.565-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Usuarios cargados con éxito (4 empleados, 3 clientes).
+2026-10-18T21:47:27.565-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Cargando órdenes de compra desde data/purchase_orders.json...
+2026-10-18T21:47:27.570-03:00 ERROR 180771 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Error al cargar purchase_orders.json: class ingsoftware.zeroshop.entity.actor.Person$HibernateProxy cannot be cast to class ingsoftware.zeroshop.entity.actor.Employee (ingsoftware.zeroshop.entity.actor.Person$HibernateProxy and ingsoftware.zeroshop.entity.actor.Employee are in unnamed module of loader org.springframework.boot.devtools.restart.classloader.RestartClassLoader @26efa528)
+
+java.lang.ClassCastException: class ingsoftware.zeroshop.entity.actor.Person$HibernateProxy cannot be cast to class ingsoftware.zeroshop.entity.actor.Employee (ingsoftware.zeroshop.entity.actor.Person$HibernateProxy and ingsoftware.zeroshop.entity.actor.Employee are in unnamed module of loader org.springframework.boot.devtools.restart.classloader.RestartClassLoader @26efa528)
+	at ingsoftware.zeroshop.config.DataInitializer.lambda$seedPurchaseOrders$0(DataInitializer.java:615) ~[classes/:na]
+	at java.base/java.util.Optional.map(Optional.java:264) ~[na:na]
+	at ingsoftware.zeroshop.config.DataInitializer.seedPurchaseOrders(DataInitializer.java:615) ~[classes/:na]
+	at ingsoftware.zeroshop.config.DataInitializer.run(DataInitializer.java:150) ~[classes/:na]
+	at org.springframework.boot.SpringApplication.lambda$callRunner$0(SpringApplication.java:788) ~[spring-boot-4.1.1.jar:4.1.1]
+	at org.springframework.util.function.ThrowingConsumer$1.acceptWithException(ThrowingConsumer.java:82) ~[spring-core-7.0.9.jar:7.0.9]
+	at org.springframework.util.function.ThrowingConsumer.accept(ThrowingConsumer.java:60) ~[spring-core-7.0.9.jar:7.0.9]
+	at org.springframework.util.function.ThrowingConsumer$1.accept(ThrowingConsumer.java:86) ~[spring-core-7.0.9.jar:7.0.9]
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:800) ~[spring-boot-4.1.1.jar:4.1.1]
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:788) ~[spring-boot-4.1.1.jar:4.1.1]
+	at org.springframework.boot.SpringApplication.lambda$callRunners$0(SpringApplication.java:776) ~[spring-boot-4.1.1.jar:4.1.1]
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:186) ~[na:na]
+	at java.base/java.util.stream.SortedOps$SizedRefSortingSink.end(SortedOps.java:357) ~[na:na]
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:571) ~[na:na]
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:560) ~[na:na]
+	at java.base/java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:153) ~[na:na]
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:176) ~[na:na]
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:265) ~[na:na]
+	at java.base/java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:632) ~[na:na]
+	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:776) ~[spring-boot-4.1.1.jar:4.1.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:328) ~[spring-boot-4.1.1.jar:4.1.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1365) ~[spring-boot-4.1.1.jar:4.1.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1354) ~[spring-boot-4.1.1.jar:4.1.1]
+	at ingsoftware.zeroshop.ZeroShopApp.main(ZeroShopApp.java:76) ~[classes/:na]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565) ~[na:na]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:52) ~[spring-boot-devtools-4.1.1.jar:4.1.1]
+
+2026-10-18T21:47:27.570-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Cargando órdenes de venta desde data/sale_orders.json...
+2026-10-18T21:47:27.575-03:00 ERROR 180771 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Error al cargar sale_orders.json: class ingsoftware.zeroshop.entity.actor.Person$HibernateProxy cannot be cast to class ingsoftware.zeroshop.entity.actor.Client (ingsoftware.zeroshop.entity.actor.Person$HibernateProxy and ingsoftware.zeroshop.entity.actor.Client are in unnamed module of loader org.springframework.boot.devtools.restart.classloader.RestartClassLoader @26efa528)
+
+java.lang.ClassCastException: class ingsoftware.zeroshop.entity.actor.Person$HibernateProxy cannot be cast to class ingsoftware.zeroshop.entity.actor.Client (ingsoftware.zeroshop.entity.actor.Person$HibernateProxy and ingsoftware.zeroshop.entity.actor.Client are in unnamed module of loader org.springframework.boot.devtools.restart.classloader.RestartClassLoader @26efa528)
+	at ingsoftware.zeroshop.config.DataInitializer.lambda$seedSaleOrders$0(DataInitializer.java:664) ~[classes/:na]
+	at java.base/java.util.Optional.map(Optional.java:264) ~[na:na]
+	at ingsoftware.zeroshop.config.DataInitializer.seedSaleOrders(DataInitializer.java:664) ~[classes/:na]
+	at ingsoftware.zeroshop.config.DataInitializer.run(DataInitializer.java:153) ~[classes/:na]
+	at org.springframework.boot.SpringApplication.lambda$callRunner$0(SpringApplication.java:788) ~[spring-boot-4.1.1.jar:4.1.1]
+	at org.springframework.util.function.ThrowingConsumer$1.acceptWithException(ThrowingConsumer.java:82) ~[spring-core-7.0.9.jar:7.0.9]
+	at org.springframework.util.function.ThrowingConsumer.accept(ThrowingConsumer.java:60) ~[spring-core-7.0.9.jar:7.0.9]
+	at org.springframework.util.function.ThrowingConsumer$1.accept(ThrowingConsumer.java:86) ~[spring-core-7.0.9.jar:7.0.9]
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:800) ~[spring-boot-4.1.1.jar:4.1.1]
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:788) ~[spring-boot-4.1.1.jar:4.1.1]
+	at org.springframework.boot.SpringApplication.lambda$callRunners$0(SpringApplication.java:776) ~[spring-boot-4.1.1.jar:4.1.1]
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:186) ~[na:na]
+	at java.base/java.util.stream.SortedOps$SizedRefSortingSink.end(SortedOps.java:357) ~[na:na]
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:571) ~[na:na]
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:560) ~[na:na]
+	at java.base/java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:153) ~[na:na]
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:176) ~[na:na]
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:265) ~[na:na]
+	at java.base/java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:632) ~[na:na]
+	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:776) ~[spring-boot-4.1.1.jar:4.1.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:328) ~[spring-boot-4.1.1.jar:4.1.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1365) ~[spring-boot-4.1.1.jar:4.1.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1354) ~[spring-boot-4.1.1.jar:4.1.1]
+	at ingsoftware.zeroshop.ZeroShopApp.main(ZeroShopApp.java:76) ~[classes/:na]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565) ~[na:na]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:52) ~[spring-boot-devtools-4.1.1.jar:4.1.1]
+
+2026-10-18T21:47:27.576-03:00  INFO 180771 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Base de datos poblada exitosamente a partir de los datos en data/*.json.
+2026-10-18T21:47:27.577-03:00  INFO 180771 --- [zeroshop] [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2026-10-18T21:48:26.436-03:00  INFO 180771 --- [zeroshop] [scheduling-1] i.z.s.notification.NewsletterService     : Iniciando despacho periódico de newsletter de ofertas a clientes...
+2026-10-18T21:48:26.441-03:00  INFO 180771 --- [zeroshop] [scheduling-1] i.z.s.notification.NewsletterService     : Newsletter de ofertas despachada exitosamente a 3 clientes.
+2026-10-18T21:48:26.441-03:00  WARN 180771 --- [zeroshop] [task-1] i.z.service.notification.EmailService    : [MODO SIMULADOR] Correo HTML NO enviado a la red porque no hay credenciales SMTP configuradas en .env (MAIL_USERNAME / MAIL_PASSWORD).
+Para: client@gmail.com | Asunto: 🔥 ¡Ofertas Exclusivas de la Semana en Zero Shop Mendoza! | Longitud HTML: 6096 caracteres
+2026-10-18T21:48:26.441-03:00  WARN 180771 --- [zeroshop] [task-2] i.z.service.notification.EmailService    : [MODO SIMULADOR] Correo HTML NO enviado a la red porque no hay credenciales SMTP configuradas en .env (MAIL_USERNAME / MAIL_PASSWORD).
+Para: maria.gonzalez@gmail.com | Asunto: 🔥 ¡Ofertas Exclusivas de la Semana en Zero Shop Mendoza! | Longitud HTML: 6096 caracteres
+2026-10-18T21:48:26.441-03:00  WARN 180771 --- [zeroshop] [task-3] i.z.service.notification.EmailService    : [MODO SIMULADOR] Correo HTML NO enviado a la red porque no hay credenciales SMTP configuradas en .env (MAIL_USERNAME / MAIL_PASSWORD).
+Para: agustin.rodriguez@gmail.com | Asunto: 🔥 ¡Ofertas Exclusivas de la Semana en Zero Shop Mendoza! | Longitud HTML: 6096 caracteres
+2026-10-18T21:52:54.629-03:00  INFO 180771 --- [zeroshop] [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-10-18T21:52:54.630-03:00  INFO 180771 --- [zeroshop] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-10-18T21:52:54.632-03:00  INFO 180771 --- [zeroshop] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2026-10-18T21:52:54.646-03:00 ERROR 180771 --- [zeroshop] [http-nio-8080-exec-1] o.a.c.c.C.[.[.[/].[dispatcherServlet]    : Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed: java.lang.IllegalArgumentException: Orden no encontrada: 5d2f5c66-7d70-4450-8e70-837c29970045] with root cause
+
+java.lang.IllegalArgumentException: Orden no encontrada: 5d2f5c66-7d70-4450-8e70-837c29970045
+	at ingsoftware.zeroshop.controller.dashboard.OrderController.lambda$getOrderDetail$0(OrderController.java:96) ~[classes/:na]
+	at java.base/java.util.Optional.orElseThrow(Optional.java:407) ~[na:na]
+	at ingsoftware.zeroshop.controller.dashboard.OrderController.getOrderDetail(OrderController.java:96) ~[classes/:na]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565) ~[na:na]
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:359) ~[spring-aop-7.0.9.jar:7.0.9]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:190) ~[spring-aop-7.0.9.jar:7.0.9]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:158) ~[spring-aop-7.0.9.jar:7.0.9]
+	at org.springframework.transaction.interceptor.TransactionInterceptor$1.proceedWithInvocation(TransactionInterceptor.java:133) ~[spring-tx-7.0.9.jar:7.0.9]
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:371) ~[spring-tx-7.0.9.jar:7.0.9]
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:130) ~[spring-tx-7.0.9.jar:7.0.9]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:179) ~[spring-aop-7.0.9.jar:7.0.9]
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:719) ~[spring-aop-7.0.9.jar:7.0.9]
+	at ingsoftware.zeroshop.controller.dashboard.OrderController$$SpringCGLIB$$0.getOrderDetail(<generated>) ~[classes/:na]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565) ~[na:na]
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:252) ~[spring-web-7.0.9.jar:7.0.9]
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:184) ~[spring-web-7.0.9.jar:7.0.9]
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:117) ~[spring-webmvc-7.0.9.jar:7.0.9]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:934) ~[spring-webmvc-7.0.9.jar:7.0.9]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:853) ~[spring-webmvc-7.0.9.jar:7.0.9]
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:86) ~[spring-webmvc-7.0.9.jar:7.0.9]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:963) ~[spring-webmvc-7.0.9.jar:7.0.9]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:866) ~[spring-webmvc-7.0.9.jar:7.0.9]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1000) ~[spring-webmvc-7.0.9.jar:7.0.9]
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:892) ~[spring-webmvc-7.0.9.jar:7.0.9]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:622) ~[tomcat-embed-core-11.0.24.jar:6.1]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:874) ~[spring-webmvc-7.0.9.jar:7.0.9]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:710) ~[tomcat-embed-core-11.0.24.jar:6.1]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:132) ~[tomcat-embed-core-11.0.24.jar:11.0.24]
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:59) ~[tomcat-embed-websocket-11.0.24.jar:11.0.24]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:111) ~[tomcat-embed-core-11.0.24.jar:11.0.24]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108) ~[spring-web-7.0.9.jar:7.0.9]
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$2(FilterChainProxy.java:235) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:376) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:101) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:181) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:245) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:239) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:110) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:96) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.csrf.CsrfFilter.doFilterInternal(CsrfFilter.java:118) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.9.jar:7.0.9]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.9.jar:7.0.9]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.9.jar:7.0.9]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.9.jar:7.0.9]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:237) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:195) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113) ~[spring-web-7.0.9.jar:7.0.9]
+	at org.springframework.web.filter.ServletRequestPathFilter.doFilter(ServletRequestPathFilter.java:52) ~[spring-web-7.0.9.jar:7.0.9]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113) ~[spring-web-7.0.9.jar:7.0.9]
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74) ~[spring-web-7.0.9.jar:7.0.9]
+	at org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebSecurityConfiguration.java:317) ~[spring-security-config-7.1.1.jar:7.1.1]
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:355) ~[spring-web-7.0.9.jar:7.0.9]
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:272) ~[spring-web-7.0.9.jar:7.0.9]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:111) ~[tomcat-embed-core-11.0.24.jar:11.0.24]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) ~[spring-web-7.0.9.jar:7.0.9]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.9.jar:7.0.9]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:111) ~[tomcat-embed-core-11.0.24.jar:11.0.24]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) ~[spring-web-7.0.9.jar:7.0.9]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.9.jar:7.0.9]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:111) ~[tomcat-embed-core-11.0.24.jar:11.0.24]
+	at org.springframework.web.filter.HiddenHttpMethodFilter.doFilterInternal(HiddenHttpMethodFilter.java:91) ~[spring-web-7.0.9.jar:7.0.9]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.9.jar:7.0.9]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:111) ~[tomcat-embed-core-11.0.24.jar:11.0.24]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:199) ~[spring-web-7.0.9.jar:7.0.9]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.9.jar:7.0.9]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:111) ~[tomcat-embed-core-11.0.24.jar:11.0.24]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:165) ~[tomcat-embed-core-11.0.24.jar:11.0.24]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:77) ~[tomcat-embed-core-11.0.24.jar:11.0.24]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:535) ~[tomcat-embed-core-11.0.24.jar:11.0.24]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115) ~[tomcat-embed-core-11.0.24.jar:11.0.24]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:86) ~[tomcat-embed-core-11.0.24.jar:11.0.24]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:71) ~[tomcat-embed-core-11.0.24.jar:11.0.24]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:347) ~[tomcat-embed-core-11.0.24.jar:11.0.24]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:406) ~[tomcat-embed-core-11.0.24.jar:11.0.24]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:71) ~[tomcat-embed-core-11.0.24.jar:11.0.24]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:1307) ~[tomcat-embed-core-11.0.24.jar:11.0.24]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:2036) ~[tomcat-embed-core-11.0.24.jar:11.0.24]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:74) ~[tomcat-embed-core-11.0.24.jar:11.0.24]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:949) ~[tomcat-embed-core-11.0.24.jar:11.0.24]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:483) ~[tomcat-embed-core-11.0.24.jar:11.0.24]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:74) ~[tomcat-embed-core-11.0.24.jar:11.0.24]
+	at java.base/java.lang.Thread.run(Thread.java:1516) ~[na:na]
+
+2026-10-18T21:53:21.732-03:00 ERROR 180771 --- [zeroshop] [http-nio-8080-exec-7] i.z.s.transaction.MercadoPagoService     : Error API Mercado Pago (HTTP 403): {"status":403,"message":"At least one policy returned UNAUTHORIZED.","blocked_by":"PolicyAgent","code":"PA_UNAUTHORIZED_RESULT_FROM_POLICIES"}
+
+2026-10-18T21:53:32.105-03:00  WARN 180771 --- [zeroshop] [task-4] i.z.service.notification.EmailService    : [MODO SIMULADOR] Correo HTML NO enviado a la red porque no hay credenciales SMTP configuradas en .env (MAIL_USERNAME / MAIL_PASSWORD).
+Para: admin@gmail.com | Asunto: Confirmación de Compra - Zero Shop #B632DA1F | Longitud HTML: 2227 caracteres
+2026-10-18T21:54:17.680-03:00  INFO 180771 --- [zeroshop] [http-nio-8080-exec-8] i.z.service.transaction.PaymentService   : Factura FC-0001-00000001 generada exitosamente para la orden ID: b632da1f-716e-4f81-bc06-fccb0e58ab9f
+2026-10-18T21:54:17.684-03:00  WARN 180771 --- [zeroshop] [task-5] i.z.service.notification.EmailService    : [MODO SIMULADOR] Correo HTML NO enviado a la red porque no hay credenciales SMTP configuradas en .env (MAIL_USERNAME / MAIL_PASSWORD).
+Para: admin@gmail.com | Asunto: Confirmación de Compra - Zero Shop #B632DA1F | Longitud HTML: 2224 caracteres
+2026-10-18T21:58:18.993-03:00  INFO 180771 --- [zeroshop] [SpringApplicationShutdownHook] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-10-18T21:58:18.994-03:00  INFO 180771 --- [zeroshop] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-10-18T21:58:18.997-03:00  INFO 180771 --- [zeroshop] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-10-18T21:58:18.998-03:00  INFO 180771 --- [zeroshop] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Shutdown initiated...
+2026-10-18T21:58:18.998-03:00  INFO 180771 --- [zeroshop] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Shutdown completed.
+2026-10-18T21:58:21.880-03:00  INFO 200298 --- [zeroshop] [restartedMain] ingsoftware.zeroshop.ZeroShopApp         : Starting ZeroShopApp using Java 26.0.2.1 with PID 200298 (/home/laika/Documents/IS II/TP2/Ejercicio4/Ej4eTP2/target/classes started by laika in /home/laika/Documents/IS II/TP2/Ejercicio4/Ej4eTP2)
+2026-10-18T21:58:21.882-03:00  INFO 200298 --- [zeroshop] [restartedMain] ingsoftware.zeroshop.ZeroShopApp         : No active profile set, falling back to 1 default profile: "default"
+2026-10-18T21:58:21.920-03:00  INFO 200298 --- [zeroshop] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-10-18T21:58:21.920-03:00  INFO 200298 --- [zeroshop] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-10-18T21:58:22.430-03:00  INFO 200298 --- [zeroshop] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-10-18T21:58:22.504-03:00  INFO 200298 --- [zeroshop] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 67 ms. Found 29 JPA repository interfaces.
+2026-10-18T21:58:22.959-03:00  INFO 200298 --- [zeroshop] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
+2026-10-18T21:58:22.968-03:00  INFO 200298 --- [zeroshop] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-10-18T21:58:22.969-03:00  INFO 200298 --- [zeroshop] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.24]
+2026-10-18T21:58:22.990-03:00  INFO 200298 --- [zeroshop] [restartedMain] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 1070 ms
+2026-10-18T21:58:23.158-03:00  INFO 200298 --- [zeroshop] [restartedMain] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-10-18T21:58:23.206-03:00  INFO 200298 --- [zeroshop] [restartedMain] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.4.5.Final
+2026-10-18T21:58:23.467-03:00  INFO 200298 --- [zeroshop] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-10-18T21:58:23.488-03:00  INFO 200298 --- [zeroshop] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-10-18T21:58:23.538-03:00  INFO 200298 --- [zeroshop] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@45255198
+2026-10-18T21:58:23.539-03:00  INFO 200298 --- [zeroshop] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-10-18T21:58:23.557-03:00  WARN 200298 --- [zeroshop] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-10-18T21:58:23.570-03:00  INFO 200298 --- [zeroshop] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:5432/zero-shop?currentSchema=public]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 18.6
+	Default catalog/schema: zero-shop/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-10-18T21:58:24.602-03:00  INFO 200298 --- [zeroshop] [restartedMain] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-10-18T21:58:24.661-03:00  INFO 200298 --- [zeroshop] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-10-18T21:58:24.750-03:00  INFO 200298 --- [zeroshop] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-10-18T21:58:25.857-03:00  WARN 200298 --- [zeroshop] [restartedMain] ingsoftware.zeroshop.config.MailConfig   : JavaMailSender iniciado sin credenciales SMTP completas. Los envíos operarán en modo simulador.
+2026-10-18T21:58:25.997-03:00  INFO 200298 --- [zeroshop] [restartedMain] i.z.service.storage.FileStorageService   : Directorio de almacenamiento de archivos inicializado en: /home/laika/Documents/IS II/TP2/Ejercicio4/Ej4eTP2/uploads/products
+2026-10-18T21:58:26.171-03:00  INFO 200298 --- [zeroshop] [restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2026-10-18T21:58:26.631-03:00  INFO 200298 --- [zeroshop] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2026-10-18T21:58:26.666-03:00  INFO 200298 --- [zeroshop] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8080 (http) with context path '/'
+2026-10-18T21:58:26.673-03:00  INFO 200298 --- [zeroshop] [restartedMain] ingsoftware.zeroshop.ZeroShopApp         : Started ZeroShopApp in 5.144 seconds (process running for 5.556)
+2026-10-18T21:58:26.795-03:00  INFO 200298 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Iniciando carga integral de datos desde archivos JSON (data/*.json)...
+2026-10-18T21:58:26.795-03:00  INFO 200298 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Vaciando tablas existentes...
+2026-10-18T21:58:26.814-03:00  INFO 200298 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Se truncaron 38 tablas correctamente.
+2026-10-18T21:58:26.830-03:00  INFO 200298 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Restricción única de office_employees eliminada exitosamente.
+2026-10-18T21:58:26.830-03:00  INFO 200298 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Cargando ubicaciones desde data/locations.json...
+2026-10-18T21:58:27.251-03:00  INFO 200298 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Ubicaciones cargadas con éxito (153 ciudades indexadas).
+2026-10-18T21:58:27.251-03:00  INFO 200298 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Cargando categorías y subcategorías desde data/categories.json...
+2026-10-18T21:58:27.290-03:00  INFO 200298 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Categorías y subcategorías cargadas con éxito (20 subcategorías indexadas).
+2026-10-18T21:58:27.290-03:00  INFO 200298 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Cargando sucursales desde data/offices.json...
+2026-10-18T21:58:27.356-03:00  INFO 200298 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Sucursales cargadas con éxito (3 sucursales).
+2026-10-18T21:58:27.356-03:00  INFO 200298 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Cargando proveedores desde data/suppliers.json...
+2026-10-18T21:58:27.374-03:00  INFO 200298 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Proveedores cargados con éxito (3 proveedores).
+2026-10-18T21:58:27.374-03:00  INFO 200298 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Cargando productos, precios y stock desde data/products.json...
+2026-10-18T21:58:27.522-03:00  INFO 200298 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Productos y stock cargados con éxito (12 productos).
+2026-10-18T21:58:27.523-03:00  INFO 200298 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Cargando usuarios desde data/users.json...
+2026-10-18T21:58:28.136-03:00  INFO 200298 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Usuarios cargados con éxito (4 empleados, 3 clientes).
+2026-10-18T21:58:28.137-03:00  INFO 200298 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Cargando órdenes de compra desde data/purchase_orders.json...
+2026-10-18T21:58:28.141-03:00 ERROR 200298 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Error al cargar purchase_orders.json: class ingsoftware.zeroshop.entity.actor.Person$HibernateProxy cannot be cast to class ingsoftware.zeroshop.entity.actor.Employee (ingsoftware.zeroshop.entity.actor.Person$HibernateProxy and ingsoftware.zeroshop.entity.actor.Employee are in unnamed module of loader org.springframework.boot.devtools.restart.classloader.RestartClassLoader @249f4115)
+
+java.lang.ClassCastException: class ingsoftware.zeroshop.entity.actor.Person$HibernateProxy cannot be cast to class ingsoftware.zeroshop.entity.actor.Employee (ingsoftware.zeroshop.entity.actor.Person$HibernateProxy and ingsoftware.zeroshop.entity.actor.Employee are in unnamed module of loader org.springframework.boot.devtools.restart.classloader.RestartClassLoader @249f4115)
+	at ingsoftware.zeroshop.config.DataInitializer.lambda$seedPurchaseOrders$0(DataInitializer.java:615) ~[classes/:na]
+	at java.base/java.util.Optional.map(Optional.java:264) ~[na:na]
+	at ingsoftware.zeroshop.config.DataInitializer.seedPurchaseOrders(DataInitializer.java:615) ~[classes/:na]
+	at ingsoftware.zeroshop.config.DataInitializer.run(DataInitializer.java:150) ~[classes/:na]
+	at org.springframework.boot.SpringApplication.lambda$callRunner$0(SpringApplication.java:788) ~[spring-boot-4.1.1.jar:4.1.1]
+	at org.springframework.util.function.ThrowingConsumer$1.acceptWithException(ThrowingConsumer.java:82) ~[spring-core-7.0.9.jar:7.0.9]
+	at org.springframework.util.function.ThrowingConsumer.accept(ThrowingConsumer.java:60) ~[spring-core-7.0.9.jar:7.0.9]
+	at org.springframework.util.function.ThrowingConsumer$1.accept(ThrowingConsumer.java:86) ~[spring-core-7.0.9.jar:7.0.9]
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:800) ~[spring-boot-4.1.1.jar:4.1.1]
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:788) ~[spring-boot-4.1.1.jar:4.1.1]
+	at org.springframework.boot.SpringApplication.lambda$callRunners$0(SpringApplication.java:776) ~[spring-boot-4.1.1.jar:4.1.1]
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:186) ~[na:na]
+	at java.base/java.util.stream.SortedOps$SizedRefSortingSink.end(SortedOps.java:357) ~[na:na]
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:571) ~[na:na]
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:560) ~[na:na]
+	at java.base/java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:153) ~[na:na]
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:176) ~[na:na]
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:265) ~[na:na]
+	at java.base/java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:632) ~[na:na]
+	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:776) ~[spring-boot-4.1.1.jar:4.1.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:328) ~[spring-boot-4.1.1.jar:4.1.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1365) ~[spring-boot-4.1.1.jar:4.1.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1354) ~[spring-boot-4.1.1.jar:4.1.1]
+	at ingsoftware.zeroshop.ZeroShopApp.main(ZeroShopApp.java:76) ~[classes/:na]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565) ~[na:na]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:52) ~[spring-boot-devtools-4.1.1.jar:4.1.1]
+
+2026-10-18T21:58:28.143-03:00  INFO 200298 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Cargando órdenes de venta desde data/sale_orders.json...
+2026-10-18T21:58:28.148-03:00 ERROR 200298 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Error al cargar sale_orders.json: class ingsoftware.zeroshop.entity.actor.Person$HibernateProxy cannot be cast to class ingsoftware.zeroshop.entity.actor.Client (ingsoftware.zeroshop.entity.actor.Person$HibernateProxy and ingsoftware.zeroshop.entity.actor.Client are in unnamed module of loader org.springframework.boot.devtools.restart.classloader.RestartClassLoader @249f4115)
+
+java.lang.ClassCastException: class ingsoftware.zeroshop.entity.actor.Person$HibernateProxy cannot be cast to class ingsoftware.zeroshop.entity.actor.Client (ingsoftware.zeroshop.entity.actor.Person$HibernateProxy and ingsoftware.zeroshop.entity.actor.Client are in unnamed module of loader org.springframework.boot.devtools.restart.classloader.RestartClassLoader @249f4115)
+	at ingsoftware.zeroshop.config.DataInitializer.lambda$seedSaleOrders$0(DataInitializer.java:664) ~[classes/:na]
+	at java.base/java.util.Optional.map(Optional.java:264) ~[na:na]
+	at ingsoftware.zeroshop.config.DataInitializer.seedSaleOrders(DataInitializer.java:664) ~[classes/:na]
+	at ingsoftware.zeroshop.config.DataInitializer.run(DataInitializer.java:153) ~[classes/:na]
+	at org.springframework.boot.SpringApplication.lambda$callRunner$0(SpringApplication.java:788) ~[spring-boot-4.1.1.jar:4.1.1]
+	at org.springframework.util.function.ThrowingConsumer$1.acceptWithException(ThrowingConsumer.java:82) ~[spring-core-7.0.9.jar:7.0.9]
+	at org.springframework.util.function.ThrowingConsumer.accept(ThrowingConsumer.java:60) ~[spring-core-7.0.9.jar:7.0.9]
+	at org.springframework.util.function.ThrowingConsumer$1.accept(ThrowingConsumer.java:86) ~[spring-core-7.0.9.jar:7.0.9]
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:800) ~[spring-boot-4.1.1.jar:4.1.1]
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:788) ~[spring-boot-4.1.1.jar:4.1.1]
+	at org.springframework.boot.SpringApplication.lambda$callRunners$0(SpringApplication.java:776) ~[spring-boot-4.1.1.jar:4.1.1]
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:186) ~[na:na]
+	at java.base/java.util.stream.SortedOps$SizedRefSortingSink.end(SortedOps.java:357) ~[na:na]
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:571) ~[na:na]
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:560) ~[na:na]
+	at java.base/java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:153) ~[na:na]
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:176) ~[na:na]
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:265) ~[na:na]
+	at java.base/java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:632) ~[na:na]
+	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:776) ~[spring-boot-4.1.1.jar:4.1.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:328) ~[spring-boot-4.1.1.jar:4.1.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1365) ~[spring-boot-4.1.1.jar:4.1.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1354) ~[spring-boot-4.1.1.jar:4.1.1]
+	at ingsoftware.zeroshop.ZeroShopApp.main(ZeroShopApp.java:76) ~[classes/:na]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565) ~[na:na]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:52) ~[spring-boot-devtools-4.1.1.jar:4.1.1]
+
+2026-10-18T21:58:28.148-03:00  INFO 200298 --- [zeroshop] [restartedMain] i.zeroshop.config.DataInitializer        : Base de datos poblada exitosamente a partir de los datos en data/*.json.
+2026-10-18T21:58:28.149-03:00  INFO 200298 --- [zeroshop] [restartedMain] i.z.config.DatabaseMigrationRunner       : Restricción orders_status_check verificada y eliminada para permitir nuevos estados de pedido.
+2026-10-18T21:58:28.151-03:00  INFO 200298 --- [zeroshop] [restartedMain] i.z.config.DatabaseMigrationRunner       : Columna orders.payment_method verificada y sincronizada.
+2026-10-18T21:58:28.152-03:00  INFO 200298 --- [zeroshop] [restartedMain] i.z.config.DatabaseMigrationRunner       : Columna sale_orders.office_id verificada para permitir null en estado ON_CART.
+2026-10-18T21:58:28.154-03:00  INFO 200298 --- [zeroshop] [restartedMain] i.z.config.DatabaseMigrationRunner       : Restricción única de users.person_id eliminada para permitir múltiples usuarios por persona.
+2026-10-18T21:58:28.158-03:00  INFO 200298 --- [zeroshop] [restartedMain] i.z.config.DatabaseMigrationRunner       : Restricción sale_orders.client_id actualizada para referenciar persons(id).
+2026-10-18T21:58:28.159-03:00  WARN 200298 --- [zeroshop] [restartedMain] i.z.config.DatabaseMigrationRunner       : No se pudo alterar defaults de person_addresses: StatementCallback; bad SQL grammar [ALTER TABLE person_addresses ALTER COLUMN id SET DEFAULT gen_random_uuid()]
+2026-10-18T21:58:28.159-03:00  WARN 200298 --- [zeroshop] [restartedMain] i.z.config.DatabaseMigrationRunner       : No se pudo alterar defaults de person_contacts: StatementCallback; bad SQL grammar [ALTER TABLE person_contacts ALTER COLUMN id SET DEFAULT gen_random_uuid()]
+2026-10-18T21:58:28.159-03:00  WARN 200298 --- [zeroshop] [restartedMain] i.z.config.DatabaseMigrationRunner       : No se pudo alterar defaults de supplier_addresses: StatementCallback; bad SQL grammar [ALTER TABLE supplier_addresses ALTER COLUMN id SET DEFAULT gen_random_uuid()]
+2026-10-18T21:58:28.159-03:00  WARN 200298 --- [zeroshop] [restartedMain] i.z.config.DatabaseMigrationRunner       : No se pudo alterar defaults de supplier_contacts: StatementCallback; bad SQL grammar [ALTER TABLE supplier_contacts ALTER COLUMN id SET DEFAULT gen_random_uuid()]
+2026-10-18T21:58:28.160-03:00  INFO 200298 --- [zeroshop] [restartedMain] i.z.config.DatabaseMigrationRunner       : Tabla pending_registrations verificada o creada con éxito.
+2026-10-18T21:58:29.019-03:00  INFO 200298 --- [zeroshop] [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-10-18T21:58:29.019-03:00  INFO 200298 --- [zeroshop] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-10-18T21:58:29.021-03:00  INFO 200298 --- [zeroshop] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2026-10-18T21:58:29.058-03:00 ERROR 200298 --- [zeroshop] [http-nio-8080-exec-1] o.a.c.c.C.[.[.[/].[dispatcherServlet]    : Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed: java.lang.IllegalArgumentException: Orden no encontrada: b632da1f-716e-4f81-bc06-fccb0e58ab9f] with root cause
+
+java.lang.IllegalArgumentException: Orden no encontrada: b632da1f-716e-4f81-bc06-fccb0e58ab9f
+	at ingsoftware.zeroshop.controller.dashboard.OrderController.lambda$getOrderDetail$0(OrderController.java:104) ~[classes/:na]
+	at java.base/java.util.Optional.orElseThrow(Optional.java:407) ~[na:na]
+	at ingsoftware.zeroshop.controller.dashboard.OrderController.getOrderDetail(OrderController.java:104) ~[classes/:na]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565) ~[na:na]
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:359) ~[spring-aop-7.0.9.jar:7.0.9]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:190) ~[spring-aop-7.0.9.jar:7.0.9]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:158) ~[spring-aop-7.0.9.jar:7.0.9]
+	at org.springframework.transaction.interceptor.TransactionInterceptor$1.proceedWithInvocation(TransactionInterceptor.java:133) ~[spring-tx-7.0.9.jar:7.0.9]
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:371) ~[spring-tx-7.0.9.jar:7.0.9]
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:130) ~[spring-tx-7.0.9.jar:7.0.9]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:179) ~[spring-aop-7.0.9.jar:7.0.9]
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:719) ~[spring-aop-7.0.9.jar:7.0.9]
+	at ingsoftware.zeroshop.controller.dashboard.OrderController$$SpringCGLIB$$0.getOrderDetail(<generated>) ~[classes/:na]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565) ~[na:na]
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:252) ~[spring-web-7.0.9.jar:7.0.9]
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:184) ~[spring-web-7.0.9.jar:7.0.9]
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:117) ~[spring-webmvc-7.0.9.jar:7.0.9]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:934) ~[spring-webmvc-7.0.9.jar:7.0.9]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:853) ~[spring-webmvc-7.0.9.jar:7.0.9]
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:86) ~[spring-webmvc-7.0.9.jar:7.0.9]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:963) ~[spring-webmvc-7.0.9.jar:7.0.9]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:866) ~[spring-webmvc-7.0.9.jar:7.0.9]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1000) ~[spring-webmvc-7.0.9.jar:7.0.9]
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:892) ~[spring-webmvc-7.0.9.jar:7.0.9]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:622) ~[tomcat-embed-core-11.0.24.jar:6.1]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:874) ~[spring-webmvc-7.0.9.jar:7.0.9]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:710) ~[tomcat-embed-core-11.0.24.jar:6.1]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:132) ~[tomcat-embed-core-11.0.24.jar:11.0.24]
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:59) ~[tomcat-embed-websocket-11.0.24.jar:11.0.24]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:111) ~[tomcat-embed-core-11.0.24.jar:11.0.24]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108) ~[spring-web-7.0.9.jar:7.0.9]
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$2(FilterChainProxy.java:235) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:376) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:101) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:181) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:245) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:239) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:110) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:96) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.csrf.CsrfFilter.doFilterInternal(CsrfFilter.java:118) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.9.jar:7.0.9]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.9.jar:7.0.9]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.9.jar:7.0.9]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.9.jar:7.0.9]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:237) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:195) ~[spring-security-web-7.1.1.jar:7.1.1]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113) ~[spring-web-7.0.9.jar:7.0.9]
+	at org.springframework.web.filter.ServletRequestPathFilter.doFilter(ServletRequestPathFilter.java:52) ~[spring-web-7.0.9.jar:7.0.9]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113) ~[spring-web-7.0.9.jar:7.0.9]
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74) ~[spring-web-7.0.9.jar:7.0.9]
+	at org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebSecurityConfiguration.java:317) ~[spring-security-config-7.1.1.jar:7.1.1]
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:355) ~[spring-web-7.0.9.jar:7.0.9]
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:272) ~[spring-web-7.0.9.jar:7.0.9]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:111) ~[tomcat-embed-core-11.0.24.jar:11.0.24]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) ~[spring-web-7.0.9.jar:7.0.9]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.9.jar:7.0.9]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:111) ~[tomcat-embed-core-11.0.24.jar:11.0.24]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) ~[spring-web-7.0.9.jar:7.0.9]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.9.jar:7.0.9]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:111) ~[tomcat-embed-core-11.0.24.jar:11.0.24]
+	at org.springframework.web.filter.HiddenHttpMethodFilter.doFilterInternal(HiddenHttpMethodFilter.java:91) ~[spring-web-7.0.9.jar:7.0.9]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.9.jar:7.0.9]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:111) ~[tomcat-embed-core-11.0.24.jar:11.0.24]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:199) ~[spring-web-7.0.9.jar:7.0.9]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.9.jar:7.0.9]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:111) ~[tomcat-embed-core-11.0.24.jar:11.0.24]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:165) ~[tomcat-embed-core-11.0.24.jar:11.0.24]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:77) ~[tomcat-embed-core-11.0.24.jar:11.0.24]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:535) ~[tomcat-embed-core-11.0.24.jar:11.0.24]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115) ~[tomcat-embed-core-11.0.24.jar:11.0.24]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:86) ~[tomcat-embed-core-11.0.24.jar:11.0.24]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:71) ~[tomcat-embed-core-11.0.24.jar:11.0.24]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:347) ~[tomcat-embed-core-11.0.24.jar:11.0.24]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:406) ~[tomcat-embed-core-11.0.24.jar:11.0.24]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:71) ~[tomcat-embed-core-11.0.24.jar:11.0.24]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:1307) ~[tomcat-embed-core-11.0.24.jar:11.0.24]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:2036) ~[tomcat-embed-core-11.0.24.jar:11.0.24]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:74) ~[tomcat-embed-core-11.0.24.jar:11.0.24]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:949) ~[tomcat-embed-core-11.0.24.jar:11.0.24]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:483) ~[tomcat-embed-core-11.0.24.jar:11.0.24]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:74) ~[tomcat-embed-core-11.0.24.jar:11.0.24]
+	at java.base/java.lang.Thread.run(Thread.java:1516) ~[na:na]
+
+2026-10-18T21:59:04.085-03:00  INFO 200298 --- [zeroshop] [http-nio-8080-exec-10] i.z.service.transaction.PaymentService   : Factura FC-0001-00000001 generada exitosamente para la orden ID: c887085f-2f50-4f37-b8a7-4f89f33c031f
+2026-10-18T21:59:04.097-03:00  WARN 200298 --- [zeroshop] [task-1] i.z.service.notification.EmailService    : [MODO SIMULADOR] Correo HTML NO enviado a la red porque no hay credenciales SMTP configuradas en .env (MAIL_USERNAME / MAIL_PASSWORD).
+Para: admin@gmail.com | Asunto: Confirmación de Compra - Zero Shop #C887085F | Longitud HTML: 2224 caracteres
+2026-10-18T21:59:26.679-03:00  INFO 200298 --- [zeroshop] [scheduling-1] i.z.s.notification.NewsletterService     : Iniciando despacho periódico de newsletter de ofertas a clientes...
+2026-10-18T21:59:26.691-03:00  INFO 200298 --- [zeroshop] [scheduling-1] i.z.s.notification.NewsletterService     : Newsletter de ofertas despachada exitosamente a 3 clientes.
+2026-10-18T21:59:26.692-03:00  WARN 200298 --- [zeroshop] [task-2] i.z.service.notification.EmailService    : [MODO SIMULADOR] Correo HTML NO enviado a la red porque no hay credenciales SMTP configuradas en .env (MAIL_USERNAME / MAIL_PASSWORD).
+Para: client@gmail.com | Asunto: 🔥 ¡Ofertas Exclusivas de la Semana en Zero Shop Mendoza! | Longitud HTML: 6096 caracteres
+2026-10-18T21:59:26.692-03:00  WARN 200298 --- [zeroshop] [task-4] i.z.service.notification.EmailService    : [MODO SIMULADOR] Correo HTML NO enviado a la red porque no hay credenciales SMTP configuradas en .env (MAIL_USERNAME / MAIL_PASSWORD).
+Para: agustin.rodriguez@gmail.com | Asunto: 🔥 ¡Ofertas Exclusivas de la Semana en Zero Shop Mendoza! | Longitud HTML: 6096 caracteres
+2026-10-18T21:59:26.692-03:00  WARN 200298 --- [zeroshop] [task-3] i.z.service.notification.EmailService    : [MODO SIMULADOR] Correo HTML NO enviado a la red porque no hay credenciales SMTP configuradas en .env (MAIL_USERNAME / MAIL_PASSWORD).
+Para: maria.gonzalez@gmail.com | Asunto: 🔥 ¡Ofertas Exclusivas de la Semana en Zero Shop Mendoza! | Longitud HTML: 6096 caracteres
+2026-10-18T22:00:01.534-03:00  INFO 200298 --- [zeroshop] [SpringApplicationShutdownHook] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-10-18T22:00:01.539-03:00  INFO 200298 --- [zeroshop] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-10-18T22:00:01.545-03:00  INFO 200298 --- [zeroshop] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-10-18T22:00:01.548-03:00  INFO 200298 --- [zeroshop] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-10-18T22:00:01.551-03:00  INFO 200298 --- [zeroshop] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

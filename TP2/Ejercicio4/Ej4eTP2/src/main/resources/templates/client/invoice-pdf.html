@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:text="'Factura ' + ${invoice.number}">Factura Zero Shop</title>
+    <style>
+        @page { size: A4; margin: 18mm 14mm; }
+        body { font-family: Arial, sans-serif; color: #172033; font-size: 10px; }
+        .header, .customer, .footer { border: 1px solid #cbd5e1; padding: 12px; }
+        .header { display: table; width: 100%; border-bottom: 2px solid #172033; }
+        .seller, .letter, .number { display: table-cell; vertical-align: middle; }
+        .seller { width: 42%; } .letter { width: 16%; text-align: center; }
+        .number { width: 42%; text-align: right; }
+        h1, h2, p { margin: 0 0 5px; } h1 { font-size: 18px; } h2 { font-size: 14px; }
+        .letter-box { border: 2px solid #172033; display: inline-block; font-size: 24px; font-weight: bold; padding: 8px 13px; }
+        .muted { color: #64748b; } .number-value { font-size: 14px; font-weight: bold; color: #1d4ed8; }
+        .customer { margin-top: 12px; line-height: 1.6; }
+        table { width: 100%; border-collapse: collapse; margin-top: 14px; }
+        th, td { border: 1px solid #cbd5e1; padding: 7px; }
+        th { background: #e2e8f0; text-align: left; text-transform: uppercase; font-size: 9px; }
+        .right { text-align: right; } .center { text-align: center; }
+        .total-label { text-align: right; font-weight: bold; } .total { font-size: 15px; color: #1d4ed8; font-weight: bold; }
+        .footer { margin-top: 18px; display: table; width: 100%; }
+        .footer-left, .barcode { display: table-cell; vertical-align: middle; }
+        .barcode { text-align: right; font-family: monospace; letter-spacing: 2px; }
+        .small { font-size: 9px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="seller">
+            <h1>ZERO SHOP S.A.</h1>
+            <p><strong>Indumentaria y Calzado Deportivo Unisex</strong></p>
+            <p>Av. San Martín 1250, Mendoza, Argentina</p>
+            <p>Tel: (0261) 420-9900 | info@zeroshop.com</p>
+            <p><strong>IVA Responsable Inscripto</strong></p>
+        </div>
+        <div class="letter">
+            <div class="letter-box">B</div>
+            <div class="small muted">COD. 006 · ORIGINAL</div>
+        </div>
+        <div class="number">
+            <h2>FACTURA</h2>
+            <div class="number-value" th:text="${invoice.number}">FC-0001-00000001</div>
+            <p class="muted"><strong>Fecha:</strong> <span th:text="${invoice.date != null ? #temporals.format(invoice.date, 'dd/MM/yyyy HH:mm') : '-'}">22/09/2026</span></p>
+            <p class="muted"><strong>CUIT:</strong> 30-71234567-8</p>
+            <p class="muted"><strong>Ingresos Brutos:</strong> 0987654-3</p>
+        </div>
+    </div>
+
+    <div class="customer">
+        <strong>Cliente:</strong>
+        <span th:text="${order.client != null ? (order.client.firstName + ' ' + order.client.lastName) : 'Consumidor Final'}">Consumidor Final</span>
+        <span> | <strong>DNI/CUIT:</strong> </span>
+        <span th:text="${order.client != null && order.client.idNumber != null ? order.client.idNumber : '-'}">-</span>
+        <br/>
+        <strong>Condición de venta:</strong>
+        <span th:text="${order.paymentMethod != null ? order.paymentMethod.displayName : 'Contado / Acreditado'}">Contado</span>
+        <span th:if="${order.shippingAddress != null}"> | <strong>Domicilio:</strong>
+            <span th:text="${order.shippingAddress.street + ' ' + order.shippingAddress.number + (order.shippingAddress.city != null ? ', ' + order.shippingAddress.city.name : '')}">-</span>
+        </span>
+    </div>
+
+    <table>
+        <thead>
+        <tr><th style="width: 16%;">Código</th><th>Descripción</th><th class="center" style="width: 10%;">Cant.</th><th class="right" style="width: 18%;">Precio unit.</th><th class="right" style="width: 18%;">Subtotal</th></tr>
+        </thead>
+        <tbody>
+        <tr th:if="${invoiceDetails != null and !invoiceDetails.empty}" th:each="item : ${invoiceDetails}">
+            <td th:text="${item.product != null ? (item.product.code != null ? item.product.code : #strings.substring(item.product.id.toString(), 0, 8)) : 'SKU'}">SKU</td>
+            <td th:text="${item.product != null ? item.product.name : 'Artículo'}">Artículo</td>
+            <td class="center" th:text="${item.quantity}">1</td>
+            <td class="right" th:text="'$' + ${#numbers.formatDecimal(item.unitPrice != null ? item.unitPrice : 0, 1, 'POINT', 2, 'COMMA')}">$0,00</td>
+            <td class="right" th:text="'$' + ${#numbers.formatDecimal(item.total != null ? item.total : 0, 1, 'POINT', 2, 'COMMA')}">$0,00</td>
+        </tr>
+        <tr th:if="${invoiceDetails == null or invoiceDetails.empty}" th:each="item : ${details}">
+            <td th:text="${item.product != null ? (item.product.code != null ? item.product.code : #strings.substring(item.product.id.toString(), 0, 8)) : 'SKU'}">SKU</td>
+            <td th:text="${item.product != null ? item.product.name : 'Artículo'}">Artículo</td>
+            <td class="center" th:text="${item.quantity}">1</td>
+            <td class="right" th:text="'$' + ${#numbers.formatDecimal(item.unitPrice != null ? item.unitPrice : 0, 1, 'POINT', 2, 'COMMA')}">$0,00</td>
+            <td class="right" th:text="'$' + ${#numbers.formatDecimal(item.total != null ? item.total : 0, 1, 'POINT', 2, 'COMMA')}">$0,00</td>
+        </tr>
+        </tbody>
+        <tfoot><tr><td colspan="4" class="total-label">TOTAL FACTURADO:</td><td class="right total" th:text="'$' + ${#numbers.formatDecimal(invoice.totalAmount != null ? invoice.totalAmount : 0, 1, 'POINT', 2, 'COMMA')}">$0,00</td></tr></tfoot>
+    </table>
+
+    <div class="footer">
+        <div class="footer-left">
+            <p><strong>CAE Nº:</strong> 74382910492817</p>
+            <p><strong>Vencimiento CAE:</strong> <span th:text="${invoice.date != null ? #temporals.format(invoice.date.plusDays(10), 'dd/MM/yyyy') : '-'}">02/10/2026</span></p>
+            <p class="muted small">Comprobante autorizado por AFIP - Régimen de Facturación Electrónica.</p>
+        </div>
+        <div class="barcode">|| | |||| | ||| |||| || | || ||||<br/>
+            <span class="small" th:text="${invoice.id != null ? #strings.substring(invoice.id.toString(), 0, 16) : '30712345678006'}">30712345678006</span>
+        </div>
+    </div>
+</body>
+</html>

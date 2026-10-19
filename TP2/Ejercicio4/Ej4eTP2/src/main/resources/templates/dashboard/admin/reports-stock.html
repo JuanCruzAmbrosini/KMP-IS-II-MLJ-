@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte de Stock y Semáforo - Zero Shop Admin</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" th:href="@{/styles/styles.css}" href="/styles/styles.css">
+</head>
+<body class="bg-light">
+
+    <!-- Topbar -->
+    <div th:replace="~{common/fragments/dashboard-nav :: dashboard-topbar}"></div>
+
+    <!-- Offcanvas Móvil -->
+    <div th:replace="~{common/fragments/dashboard-nav :: dashboard-offcanvas('reports')}"></div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar Desktop -->
+            <div class="col-md-3 col-lg-2 d-none d-md-block p-0">
+                <div th:replace="~{common/fragments/dashboard-nav :: dashboard-sidebar('reports')}"></div>
+            </div>
+
+            <!-- Contenido Principal -->
+            <main class="col-12 col-md-9 col-lg-10 p-4">
+                <!-- Migas de pan y Título -->
+                <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2 mb-4 pb-2 border-bottom">
+                    <div>
+                        <h1 class="h4 fw-bold text-dark mb-0">Reporte de Stock y Semáforo de Reposición</h1>
+                        <p class="text-muted small mb-0">Evaluación de existencias por sucursal: Bien (>50%), Regular (20-50%) y Malo (&lt;20%)</p>
+                    </div>
+                    <a th:href="@{/dashboard/admin/reports}" class="btn btn-outline-secondary btn-sm">
+                        <i class="bi bi-arrow-left me-1"></i>Volver a Reportes
+                    </a>
+                </div>
+
+                <!-- Resumen de Cantidad Total en Stock -->
+                <div class="row g-3 mb-4">
+                    <div class="col-12 col-sm-6 col-lg-3">
+                        <div class="card border-0 shadow-sm p-3 bg-white">
+                            <span class="text-muted small text-uppercase fw-semibold">Total Productos en Stock</span>
+                            <h3 class="fw-bold text-dark mb-0 mt-1" th:text="${totalStockUnits} + ' unidades'">0 unidades</h3>
+                            <span class="text-muted small">Inventario general</span>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-lg-3">
+                        <div class="card border-0 shadow-sm p-3 bg-white">
+                            <span class="text-muted small text-uppercase fw-semibold">Stock Bien (&gt; 50%)</span>
+                            <h3 class="fw-bold text-success mb-0 mt-1" th:text="${pctGood} + '%'">0%</h3>
+                            <span class="text-success small">Abastecimiento óptimo</span>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-lg-3">
+                        <div class="card border-0 shadow-sm p-3 bg-white">
+                            <span class="text-muted small text-uppercase fw-semibold">Stock Regular (20% - 50%)</span>
+                            <h3 class="fw-bold text-warning-emphasis mb-0 mt-1" th:text="${pctRegular} + '%'">0%</h3>
+                            <span class="text-warning-emphasis small">En monitoreo</span>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-lg-3">
+                        <div class="card border-0 shadow-sm p-3 bg-white">
+                            <span class="text-muted small text-uppercase fw-semibold">Stock Malo (&lt; 20%)</span>
+                            <h3 class="fw-bold text-danger mb-0 mt-1" th:text="${pctBad} + '%'">0%</h3>
+                            <span class="text-danger small">Reposición al 50% por WhatsApp</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabla de Semáforo de Stock por Sucursal -->
+                <div class="card border-0 shadow-sm overflow-hidden">
+                    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                        <h6 class="fw-bold text-dark mb-0">Existencias por Sucursal y Reposición</h6>
+                        <span class="text-muted small">Regla: Alerta WhatsApp solicita enviar la cantidad necesaria para alcanzar el 50%</span>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-custom align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Sucursal</th>
+                                    <th>Producto</th>
+                                    <th>Stock Actual</th>
+                                    <th>Nivel (% Capacidad)</th>
+                                    <th>Estado Semáforo</th>
+                                    <th>Proveedor y WhatsApp</th>
+                                    <th class="text-end">Acción de Reposición</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:if="${stockDetails == null or stockDetails.empty}">
+                                    <td colspan="7" class="text-center py-4 text-muted">
+                                        <i class="bi bi-inbox fs-3 d-block mb-2"></i>
+                                        No hay registros de existencias disponibles en el inventario.
+                                    </td>
+                                </tr>
+                                <tr th:each="item : ${stockDetails}" th:classappend="${item.trafficLight == 'MALO' ? 'table-danger-subtle' : ''}">
+                                    <td class="fw-semibold text-dark" th:text="${item.officeName}">Sucursal Central</td>
+                                    <td>
+                                        <div class="fw-bold text-dark" th:text="${item.productName}">Campera Deportiva Rompeviento</div>
+                                        <small class="text-muted" th:text="'SKU: ' + ${item.productCode} + (${item.productSize != null and !item.productSize.empty} ? ' • Talle ' + ${item.productSize} : '')">SKU: ZR-2081 • Talle M</small>
+                                    </td>
+                                    <td class="fw-bold" th:classappend="${item.trafficLight == 'MALO' ? 'text-danger' : (item.trafficLight == 'REGULAR' ? 'text-warning-emphasis' : 'text-success')}" th:text="${item.quantity} + ' unidades'">4 unidades</td>
+                                    <td th:text="${item.percentage} + '% de ' + ${item.capacity} + ' cap.'">8% de 50 cap.</td>
+                                    <td>
+                                        <span class="badge" th:classappend="${item.trafficLight == 'MALO' ? 'bg-danger' : (item.trafficLight == 'REGULAR' ? 'bg-warning text-dark' : 'bg-success')}" th:text="${item.trafficLight == 'MALO' ? 'Malo (< 20%)' : (item.trafficLight == 'REGULAR' ? 'Regular (20-50%)' : 'Bien (> 50%)')}">Malo (&lt; 20%)</span>
+                                    </td>
+                                    <td>
+                                        <div class="small fw-semibold text-dark" th:text="${item.supplierName != null ? item.supplierName : 'Sin proveedor asignado'}">Distribuidora Textil S.A.</div>
+                                        <span class="text-muted small" th:text="${item.supplierPhone != null ? item.supplierPhone : '-'}">+54 9 11 4444-1234</span>
+                                    </td>
+                                    <td class="text-end">
+                                        <a th:if="${item.trafficLight == 'MALO' and item.whatsappUrl != null}" th:href="${item.whatsappUrl}" target="_blank" class="btn btn-success btn-sm fw-semibold">
+                                            <i class="bi bi-whatsapp me-1"></i><span th:text="'Pedir ' + ${item.neededUnits} + ' un. al 50%'">Pedir 21 un. al 50%</span>
+                                        </a>
+                                        <span th:if="${item.trafficLight == 'REGULAR'}" class="text-muted small">Bajo seguimiento</span>
+                                        <span th:if="${item.trafficLight == 'BIEN'}" class="text-muted small"><i class="bi bi-check2 text-success me-1"></i>Óptimo</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
