@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar Paciente - Versión Java MVC</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8fafc; font-family: 'Segoe UI', system-ui, sans-serif; }
+        .card-custom { border: none; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+    </style>
+</head>
+<body class="py-5">
+<div class="container" style="max-width: 600px;">
+    <div class="card card-custom bg-white p-4">
+        <div class="mb-4">
+            <h2 class="h4 fw-bold text-dark">Registrar Nuevo Paciente</h2>
+            <p class="text-muted small">Carga de datos y archivo de foto (Multipart/form-data procesado por Spring MVC)</p>
+        </div>
+
+        <div th:if="${error != null}" class="alert alert-danger py-2" th:text="${error}">
+            Ocurrió un error.
+        </div>
+
+        <form th:action="@{/mvc/pacientes}" th:object="${paciente}" method="post" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="nombre" class="form-label fw-semibold">Nombre:</label>
+                <input type="text" id="nombre" th:field="*{nombre}" class="form-control" required placeholder="Ej: Carlos">
+            </div>
+
+            <div class="mb-3">
+                <label for="apellido" class="form-label fw-semibold">Apellido:</label>
+                <input type="text" id="apellido" th:field="*{apellido}" class="form-control" required placeholder="Ej: Gómez">
+            </div>
+
+            <div class="mb-3">
+                <label for="documento" class="form-label fw-semibold">Documento / DNI:</label>
+                <input type="text" id="documento" th:field="*{documento}" class="form-control" required placeholder="Ej: 38456123">
+            </div>
+
+            <div class="mb-4">
+                <label for="foto" class="form-label fw-semibold">Fotografía del Paciente (FotoPaciente):</label>
+                <input type="file" id="foto" name="foto" class="form-control" accept="image/*">
+                <div class="form-text">Formatos aceptados: JPG, PNG. Almacenado como []byte en base de datos.</div>
+            </div>
+
+            <div class="d-flex justify-content-end gap-2">
+                <a th:href="@{/mvc/pacientes}" class="btn btn-light px-4">Cancelar</a>
+                <button type="submit" class="btn btn-primary px-4 fw-semibold">Guardar Paciente</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

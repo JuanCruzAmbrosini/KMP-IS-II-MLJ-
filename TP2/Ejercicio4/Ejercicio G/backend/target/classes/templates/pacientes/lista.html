@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Pacientes - Versión Java MVC</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8fafc; font-family: 'Segoe UI', system-ui, sans-serif; }
+        .card-custom { border: none; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        .avatar-img { width: 45px; height: 45px; object-fit: cover; border-radius: 50%; }
+        .avatar-placeholder { width: 45px; height: 45px; border-radius: 50%; background: #e2e8f0; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #64748b; }
+    </style>
+</head>
+<body class="py-4">
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 fw-bold text-dark mb-0">Directorio de Pacientes</h1>
+            <p class="text-muted small">Versión A: Renderizado de Vistas del Lado del Servidor (Spring MVC + Thymeleaf)</p>
+        </div>
+        <a th:href="@{/mvc/pacientes/nuevo}" class="btn btn-primary px-3 py-2 fw-semibold">
+            + Nuevo Paciente
+        </a>
+    </div>
+
+    <div class="card card-custom bg-white p-3">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th style="width: 70px;">Foto</th>
+                        <th>Documento</th>
+                        <th>Nombre Completo</th>
+                        <th class="text-center">Fotos Adjuntas</th>
+                        <th class="text-end">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:if="${#lists.isEmpty(pacientes)}">
+                        <td colspan="5" class="text-center py-4 text-muted">
+                            No hay pacientes registrados activos en el sistema.
+                        </td>
+                    </tr>
+                    <tr th:each="p : ${pacientes}">
+                        <td>
+                            <div th:if="${not #lists.isEmpty(p.fotos)}">
+                                <img th:src="@{'/mvc/pacientes/foto/' + ${p.fotos[0].id}}" class="avatar-img shadow-sm" alt="Foto">
+                            </div>
+                            <div th:if="${#lists.isEmpty(p.fotos)}" class="avatar-placeholder">
+                                <span th:text="${#strings.substring(p.nombre, 0, 1) + #strings.substring(p.apellido, 0, 1)}">PA</span>
+                            </div>
+                        </td>
+                        <td class="fw-medium" th:text="${p.documento}">12345678</td>
+                        <td th:text="${p.apellido + ', ' + p.nombre}">Pérez, Juan</td>
+                        <td class="text-center">
+                            <span class="badge bg-secondary-subtle text-secondary rounded-pill" th:text="${#lists.size(p.fotos)} + ' foto(s)'">0</span>
+                        </td>
+                        <td class="text-end">
+                            <a th:href="@{'/mvc/historias/paciente/' + ${p.id}}" class="btn btn-sm btn-outline-primary me-2">
+                                📋 Historia Clínica
+                            </a>
+                            <form th:action="@{'/mvc/pacientes/' + ${p.id} + '/eliminar'}" method="post" class="d-inline" onsubmit="return confirm('¿Seguro que desea realizar el borrado lógico de este paciente?');">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                    🗑️ Borrar
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>
