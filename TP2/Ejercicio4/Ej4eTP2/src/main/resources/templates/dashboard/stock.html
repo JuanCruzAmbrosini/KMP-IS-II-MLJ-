@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control de Stock - Zero Shop Staff</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" th:href="@{/styles/styles.css}" href="/styles/styles.css">
+</head>
+<body class="bg-light">
+
+    <!-- Topbar -->
+    <div th:replace="~{common/fragments/dashboard-nav :: dashboard-topbar}"></div>
+
+    <!-- Offcanvas Móvil -->
+    <div th:replace="~{common/fragments/dashboard-nav :: dashboard-offcanvas('stock')}"></div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar Desktop -->
+            <div class="col-md-3 col-lg-2 d-none d-md-block p-0">
+                <div th:replace="~{common/fragments/dashboard-nav :: dashboard-sidebar('stock')}"></div>
+            </div>
+
+            <!-- Contenido Principal -->
+            <main class="col-12 col-md-9 col-lg-10 p-4">
+                <!-- Mensajes Flash -->
+                <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="bi bi-check-circle-fill me-2"></i><span th:text="${successMessage}">Éxito</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i><span th:text="${errorMessage}">Error</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+
+                <!-- Migas de pan y Título -->
+                <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2 mb-4 pb-2 border-bottom">
+                    <div>
+                        <h1 class="h4 fw-bold text-dark mb-0">Control de Stock e Inventario</h1>
+                        <p class="text-muted small mb-0">Supervisión en tiempo real de existencias por sucursal y depósito</p>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#newStockModal">
+                            <i class="bi bi-plus-circle me-1"></i>Asignar Stock
+                        </button>
+                        <a th:href="@{/dashboard/purchase-orders}" class="btn btn-primary btn-sm">
+                            <i class="bi bi-cart-plus me-1"></i>Generar Orden de Compra
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Barra de Búsqueda y Filtros de Stock -->
+                <div class="card border-0 shadow-sm p-3 mb-4">
+                    <form id="filterForm" method="get" th:action="@{/dashboard/stock}" class="row g-2 align-items-end">
+                        <input type="hidden" name="page" id="pageInput" th:value="${pageResult != null ? pageResult.pageNumber : 1}">
+
+                        <div class="col-12 col-md-4">
+                            <label for="search" class="form-label small fw-semibold text-muted">Buscar producto o SKU</label>
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                                <input type="text" class="form-control" id="search" name="search" th:value="${search}" placeholder="Nombre o SKU...">
+                            </div>
+                        </div>
+
+                        <div class="col-6 col-md-3">
+                            <label for="officeId" class="form-label small fw-semibold text-muted">Sucursal</label>
+                            <select id="officeId" name="officeId" class="form-select form-select-sm">
+                                <option value="">Todas las sucursales</option>
+                                <option th:each="o : ${offices}" th:value="${o.id}" th:text="${o.name}" th:selected="${officeId != null and officeId == o.id}">Sucursal</option>
+                            </select>
+                        </div>
+
+                        <div class="col-6 col-md-3">
+                            <label for="level" class="form-label small fw-semibold text-muted">Nivel de Stock</label>
+                            <select id="level" name="level" class="form-select form-select-sm">
+                                <option value="">Todos los niveles</option>
+                                <option value="normal" th:selected="${level == 'normal'}">Normal (> 5)</option>
+                                <option value="low" th:selected="${level == 'low'}">Bajo / Crítico (1 - 5)</option>
+                                <option value="out" th:selected="${level == 'out'}">Agotado (0)</option>
+                            </select>
+                        </div>
+
+                        <div class="col-12 col-md-2 d-flex gap-1">
+                            <button type="submit" class="btn btn-primary btn-sm flex-fill" title="Filtrar">
+                                <i class="bi bi-funnel me-1"></i>Filtrar
+                            </button>
+                            <a th:href="@{/dashboard/stock}" class="btn btn-outline-secondary btn-sm" title="Limpiar">
+                                <i class="bi bi-x-lg"></i>
+                            </a>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Tabla de Stock -->
+                <div class="card border-0 shadow-sm overflow-hidden">
+                    <div class="table-responsive">
+                        <table class="table table-custom align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Código</th>
+                                    <th class="cell-wrap">Producto</th>
+                                    <th class="min-w-md">Sucursal</th>
+                                    <th class="min-w-sm">Disponible</th>
+                                    <th class="min-w-sm">Semáforo</th>
+                                    <th class="text-end">Ajuste Rápido</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:if="${#lists.isEmpty(stocks)}">
+                                    <td colspan="6" class="text-center py-4 text-muted">
+                                        <i class="bi bi-inbox fs-3 d-block mb-2"></i>
+                                        No hay registros de inventario cargados. Haz clic en "Asignar Stock" o genera una orden de compra para ingresar productos.
+                                    </td>
+                                </tr>
+                                <tr th:each="st : ${stocks}">
+                                    <td class="fw-semibold text-muted" th:text="${st.product.code}">ZR-1049</td>
+                                    <td class="cell-wrap">
+                                        <div class="fw-bold text-dark" th:text="${st.product.name}">Zapatillas Urbanas Zero</div>
+                                        <small class="text-muted" th:if="${st.product.size != null}" th:text="'Talle: ' + ${st.product.size}">Talle M</small>
+                                    </td>
+                                    <td class="min-w-md" th:text="${st.office.name}">Sucursal Central</td>
+                                    <td>
+                                        <span class="fw-bold" 
+                                              th:classappend="${st.quantity < 3 ? 'text-danger' : (st.quantity <= 10 ? 'text-warning-emphasis' : 'text-dark')}"
+                                              th:text="${st.quantity + ' unidades'}">
+                                            18 unidades
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span th:if="${st.quantity > 10}" class="badge bg-success-subtle text-success">Óptimo</span>
+                                        <span th:if="${st.quantity >= 3 and st.quantity <= 10}" class="badge bg-warning-subtle text-warning-emphasis">Bajo</span>
+                                        <span th:if="${st.quantity < 3 and st.quantity > 0}" class="badge bg-danger-subtle text-danger">Crítico</span>
+                                        <span th:if="${st.quantity <= 0}" class="badge bg-dark-subtle text-dark">Sin Stock</span>
+                                    </td>
+                                    <td class="text-end">
+                                        <form method="post" th:action="@{/dashboard/stock/{id}(id=${st.id})}" class="d-inline-flex gap-1 justify-content-end align-items-center">
+                                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                                            <input type="number" name="adjustment" class="form-control form-control-sm text-center" style="width: 75px;" value="1" title="Sumar o restar unidades">
+                                            <button type="submit" class="btn btn-outline-secondary btn-sm" title="Aplicar Ajuste">
+                                                <i class="bi bi-arrow-repeat"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Paginación Reutilizable -->
+                <div th:replace="~{common/fragments/pagination :: paginationBar(${pageResult})}"></div>
+
+                <!-- Modal Asignar Stock Directo -->
+                <div class="modal fade" id="newStockModal" tabindex="-1" aria-labelledby="newStockModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form method="post" th:action="@{/dashboard/stock}">
+                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                                <div class="modal-header">
+                                    <h5 class="modal-title fw-bold" id="newStockModalLabel">Asignar / Inicializar Stock</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label for="productId" class="form-label fw-semibold">Producto</label>
+                                        <select id="productId" name="productId" class="form-select" required>
+                                            <option value="" disabled selected>Seleccione un producto...</option>
+                                            <option th:each="p : ${products}" th:value="${p.id}" th:text="${p.name + ' (' + p.code + ')'}">Producto</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="officeId" class="form-label fw-semibold">Sucursal / Depósito</label>
+                                        <select id="officeId" name="officeId" class="form-select" required>
+                                            <option value="" disabled selected>Seleccione una sucursal...</option>
+                                            <option th:each="o : ${offices}" th:value="${o.id}" th:text="${o.name}">Sucursal Central</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="quantity" class="form-label fw-semibold">Cantidad Inicial</label>
+                                        <input type="number" id="quantity" name="quantity" class="form-control" min="0" value="10" required>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="submit" class="btn btn-primary">Guardar Stock</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

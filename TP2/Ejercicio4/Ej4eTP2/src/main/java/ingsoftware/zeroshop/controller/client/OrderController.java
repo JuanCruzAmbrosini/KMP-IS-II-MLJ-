@@ -1,0 +1,234 @@
+package ingsoftware.zeroshop.controller.client;
+
+import ingsoftware.zeroshop.dto.PageResult;
+import ingsoftware.zeroshop.entity.transaction.Invoice;
+import ingsoftware.zeroshop.entity.transaction.SaleOrder;
+import ingsoftware.zeroshop.enums.OrderStatus;
+import ingsoftware.zeroshop.service.transaction.PaymentService;
+import ingsoftware.zeroshop.service.transaction.SaleOrderService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import org.springframework.transaction.annotation.Transactional;
+import ingsoftware.zeroshop.service.report.InvoicePdfService;
+
+import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+@Controller("clientOrderController")
+public class OrderController {
+
+    private final SaleOrderService saleOrderService;
+    private final PaymentService paymentService;
+    private final InvoicePdfService invoicePdfService;
+
+    public OrderController(SaleOrderService saleOrderService, PaymentService paymentService,
+                           InvoicePdfService invoicePdfService) {
+        this.saleOrderService = saleOrderService;
+        this.paymentService = paymentService;
+        this.invoicePdfService = invoicePdfService;
+    }
+
+    // GET /orders: Muestra el listado de compras realizadas por el cliente
+    @GetMapping("/orders")
+    @Transactional(readOnly = true)
+    public String getOrders(
+            @RequestParam(name = "search", required = false) String search,
+            @RequestParam(name = "status", required = false) OrderStatus status,
+            @RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
+            Model model, Principal principal) {
+        if (principal == null) {
+            return "redirect:/login";
+        }
+
+        int pageNum = (page != null && page > 0) ? page : 1;
+
+        List<SaleOrder> orders;
+        try {
+            orders = saleOrderService.getClientOrders(principal.getName());
+        } catch (Exception e) {
+            orders = new ArrayList<>();
+        }
+
+        if (search != null && !search.trim().isBlank()) {
+            String q = search.trim().toLowerCase();
+            orders = orders.stream()
+                    .filter(o -> o.getId() != null && o.getId().toString().toLowerCase().contains(q))
+                    .toList();
+        }
+
+        if (status != null) {
+            orders = orders.stream()
+                    .filter(o -> o.getStatus() == status)
+                    .toList();
+        }
+
+        // Ordenar por fecha descendente
+        orders = orders.stream()
+                .sorted((o1, o2) -> {
+                    if (o1.getDate() == null) return 1;
+                    if (o2.getDate() == null) return -1;
+                    return o2.getDate().compareTo(o1.getDate());
+                })
+                .toList();
+
+        PageResult<SaleOrder> pageResult = PageResult.of(orders, pageNum, 5);
+
+        model.addAttribute("orders", pageResult.getContent());
+        model.addAttribute("pageResult", pageResult);
+        model.addAttribute("search", search);
+        model.addAttribute("status", status);
+        model.addAttribute("statuses", OrderStatus.values());
+
+        return "client/orders";
+    }
+
+    // GET /orders/:id: Muestra el detalle y seguimiento de una compra
+    @GetMapping("/orders/{id}")
+    @Transactional(readOnly = true)
+    public String getOrderById(@PathVariable("id") UUID id, Model model, Principal principal) {
+        if (principal == null) {
+            return "redirect:/login";
+        }
+
+        Optional<SaleOrder> orderOpt = saleOrderService.getOrderById(id);
+        if (orderOpt.isEmpty()) {
+            return "redirect:/orders";
+        }
+        SaleOrder order = orderOpt.get();
+
+        model.addAttribute("order", order);
+        model.addAttribute("details", saleOrderService.getOrderDetails(id));
+        model.addAttribute("payments", paymentService.getPaymentsByOrder(id));
+
+        Optional<Invoice> invoiceOpt = paymentService.getInvoiceByOrderId(id);
+        if (invoiceOpt.isEmpty() && (order.getStatus() == OrderStatus.PAID 
+                || order.getStatus() == OrderStatus.PENDING_SHIPPING 
+                || order.getStatus() == OrderStatus.PENDING_DELIVERY 
+                || order.getStatus() == OrderStatus.DELIVERED)) {
+            try {
+                invoiceOpt = Optional.ofNullable(paymentService.createInvoiceForOrder(order));
+            } catch (Exception ignored) {
+            }
+        }
+
+        invoiceOpt.ifPresent(invoice -> {
+            model.addAttribute("invoice", invoice);
+            model.addAttribute("invoiceDetails", paymentService.getInvoiceDetails(invoice.getId()));
+        });
+
+        return "client/order-detail";
+    }
+
+    // GET /orders/:id/invoice: Muestra la factura de compra directamente al cliente
+    @GetMapping("/orders/{id}/invoice")
+    @Transactional(readOnly = true)
+    public String getOrderInvoice(@PathVariable("id") UUID id, Model model, Principal principal) {
+        if (principal == null) {
+            return "redirect:/login";
+        }
+
+        Optional<SaleOrder> orderOpt = saleOrderService.getOrderById(id);
+        if (orderOpt.isEmpty()) {
+            return "redirect:/orders";
+        }
+        SaleOrder order = orderOpt.get();
+
+        Optional<Invoice> invoiceOpt = paymentService.getInvoiceByOrderId(id);
+        if (invoiceOpt.isEmpty() && (order.getStatus() == OrderStatus.PAID 
+                || order.getStatus() == OrderStatus.PENDING_SHIPPING 
+                || order.getStatus() == OrderStatus.PENDING_DELIVERY 
+                || order.getStatus() == OrderStatus.DELIVERED)) {
+            try {
+                invoiceOpt = Optional.ofNullable(paymentService.createInvoiceForOrder(order));
+            } catch (Exception ignored) {
+            }
+        }
+
+        if (invoiceOpt.isEmpty()) {
+            return "redirect:/orders/" + id;
+        }
+
+        Invoice invoice = invoiceOpt.get();
+        model.addAttribute("order", order);
+        model.addAttribute("details", saleOrderService.getOrderDetails(id));
+        model.addAttribute("invoice", invoice);
+        model.addAttribute("invoiceDetails", paymentService.getInvoiceDetails(invoice.getId()));
+
+        return "client/invoice";
+    }
+
+    // GET /orders/:id/invoice/pdf: Descarga la factura en formato PDF
+    @GetMapping("/orders/{id}/invoice/pdf")
+    @Transactional(readOnly = true)
+    public ResponseEntity<byte[]> downloadInvoicePdf(@PathVariable("id") UUID id, Principal principal) {
+        if (principal == null) {
+            return ResponseEntity.status(401).build();
+        }
+
+        Optional<SaleOrder> orderOpt = saleOrderService.getOrderById(id);
+        if (orderOpt.isEmpty() || saleOrderService.getClientOrders(principal.getName()).stream()
+                .noneMatch(order -> id.equals(order.getId()))) {
+            return ResponseEntity.notFound().build();
+        }
+
+        SaleOrder order = orderOpt.get();
+        Optional<Invoice> invoiceOpt = paymentService.getInvoiceByOrderId(id);
+        if (invoiceOpt.isEmpty() && (order.getStatus() == OrderStatus.PAID
+                || order.getStatus() == OrderStatus.PENDING_SHIPPING
+                || order.getStatus() == OrderStatus.PENDING_DELIVERY
+                || order.getStatus() == OrderStatus.DELIVERED)) {
+            invoiceOpt = Optional.ofNullable(paymentService.createInvoiceForOrder(order));
+        }
+        if (invoiceOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Invoice invoice = invoiceOpt.get();
+        byte[] pdf = invoicePdfService.generate(order, invoice,
+                paymentService.getInvoiceDetails(invoice.getId()), saleOrderService.getOrderDetails(id));
+        String filename = "factura-" + invoice.getNumber().replaceAll("[^a-zA-Z0-9-]", "-") + ".pdf";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDisposition(ContentDisposition.attachment().filename(filename).build());
+        headers.setContentLength(pdf.length);
+        return ResponseEntity.ok().headers(headers).body(pdf);
+    }
+
+    // DELETE /orders/:id: Anula una compra
+    @DeleteMapping("/orders/{id}")
+    public String deleteOrder(@PathVariable("id") UUID id, Principal principal, RedirectAttributes redirectAttributes) {
+        if (principal == null) {
+            return "redirect:/login";
+        }
+
+        try {
+            saleOrderService.cancelOrder(id, principal.getName());
+            redirectAttributes.addFlashAttribute("successMessage", "Compra anulada correctamente.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        }
+
+        return "redirect:/orders";
+    }
+
+    // POST /orders/:id/cancel: Soporte para formularios sin DELETE HTTP
+    @PostMapping("/orders/{id}/cancel")
+    public String cancelOrderPost(@PathVariable("id") UUID id, Principal principal, RedirectAttributes redirectAttributes) {
+        return deleteOrder(id, principal, redirectAttributes);
+    }
+
+}

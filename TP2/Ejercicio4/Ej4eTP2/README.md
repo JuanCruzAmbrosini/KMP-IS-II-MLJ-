@@ -1,0 +1,124 @@
+# Zero Shop - E-Commerce Web
+
+Plataforma de comercio electrónico desarrollada con **Java**, **Spring Boot** y **Thymeleaf**. Proyecto desarrollado con fines educativos bajo una arquitectura monolítica MVC con renderizado del lado del servidor (SSR) y autenticación basada en sesiones y roles.
+
+---
+
+## Tecnologías Principales
+
+- **Lenguaje:** Java (compatible con Java 17+)
+- **Framework:** Spring Boot (Web MVC, Data JPA, Security, Mail, Validation)
+- **Motor de Plantillas:** Thymeleaf + Thymeleaf Extras Spring Security
+- **Base de Datos:** PostgreSQL
+- **Herramientas y Utilidades:** Maven, Lombok, Spring Dotenv, Spring DevTools
+
+---
+
+## Requisitos Previos
+
+- **JDK 17** o superior instalado y configurado en el `JAVA_HOME`.
+- **Apache Maven 3.8+** (o el wrapper de Maven).
+- **PostgreSQL 14+** en ejecución local.
+- IDE recomendado: IntelliJ IDEA, VS Code o Eclipse con el plugin de **Lombok** y *Annotation Processing* habilitado.
+
+---
+
+## Instalación y Configuración
+
+### 1. Clonar el repositorio
+
+```bash
+git clone https://github.com/lucianocanovas/zero-shop.git
+cd zero-shop
+```
+
+### 2. Configurar la Base de Datos (PostgreSQL)
+
+Crea la base de datos `zero-shop`:
+
+```sql
+CREATE DATABASE "zero-shop";
+```
+
+Verifica o ajusta tus credenciales en `src/main/resources/application.properties`:
+
+```properties
+spring.datasource.url=jdbc:postgresql://localhost:5432/zero-shop?currentSchema=public
+spring.datasource.username=postgres
+spring.datasource.password=tu_password
+```
+
+### 3. Variables de Entorno (`.env`)
+
+El proyecto utiliza variables de entorno para servicios externos (como el envío de correos). Copia el archivo de ejemplo en la raíz:
+
+```bash
+cp .env.example .env
+```
+
+Edita los valores en `.env` con tus credenciales de correo y de la SDK de MercadoPago si deseas probar el servicio SMTP o los pagos.
+
+---
+
+## Ejecución del Proyecto
+
+1. **Compilar y descargar dependencias:**
+
+   ```bash
+   mvn clean install
+   ```
+
+2. **Ejecutar la aplicación:**
+
+   ```bash
+   mvn spring-boot:run
+   ```
+
+3. **Abrir en el navegador:**
+   [http://localhost:8080](http://localhost:8080)
+
+---
+
+## Credenciales de Prueba por Defecto
+
+Al arrancar por primera vez, el sistema inicializa automáticamente dos usuarios de prueba para facilitar el desarrollo:
+
+| Rol | Correo | Contraseña | Acceso |
+| --- | --- | --- | --- |
+| **Administrador** | `admin@gmail.com` | `admin123` | Panel `/dashboard`, zona `/dashboard/admin`, gestión de usuarios y sucursales |
+| **Empleado** | `employee@gmail.com` | `employee123` | Panel `/dashboard`, zona `/dashboard/employee`, stock, pedidos y compras |
+| **Cliente** | `client@gmail.com` | `client123` | Navegación, catálogo, perfil y compras |
+
+---
+
+## Estructura del Código
+
+```text
+src/main/java/ingsoftware/zeroshop/
+ ├── config/       # Seguridad (Spring Security) e inicializadores de BD
+ ├── controller/   # Controladores Web MVC (rutas y vistas)
+ ├── entity/       # Entidades JPA (tablas de base de datos)
+ ├── enums/        # Enums del dominio (roles, estados)
+ ├── repository/   # Interfaces Spring Data JPA
+ └── service/      # Lógica de negocio y servicios externos
+
+src/main/resources/
+ ├── static/       # CSS, JS e imágenes
+ └── templates/    # Vistas HTML Thymeleaf
+```
+
+---
+
+## Documentación del Proyecto
+
+El directorio `docs/` contiene la documentación exhaustiva del sistema:
+
+- **[docs/TESTS.md](docs/TESTS.md):** Estrategia, arquitectura y catálogo completo de las 70 pruebas (Unitarias, Integración, Carga y Concurrencia).
+- **[docs/PATTERN.md](docs/PATTERN.md):** Documentación formal de los 9 patrones de diseño y arquitectura de software implementados.
+- **[docs/CONTROLLERS.md](docs/CONTROLLERS.md):** Especificación de controladores, endpoints, métodos HTTP y roles de acceso.
+- **[docs/SERVICES.md](docs/SERVICES.md):** Detalle de los servicios de la capa de negocio.
+- **[docs/REPOSITORY.md](docs/REPOSITORY.md):** Catálogo de repositorios Spring Data JPA y métodos de consulta.
+- **[docs/ENTITIES.md](docs/ENTITIES.md):** Modelo de datos relacional y entidades del dominio.
+- **[docs/VIEWS.md](docs/VIEWS.md):** Mapa de navegación y plantillas de presentación Thymeleaf.
+- **[docs/VIEWS.md](docs/DTO.md):** Detalle de los DTO utilizados para la transferencia de datos.
+- **[docs/LOAD_TESTING.md](docs/LOAD_TESTING.md):** Metodología de pruebas de estrés y plan de Apache JMeter (`docs/zeroshop_load_test.jmx`).
