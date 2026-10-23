@@ -1,0 +1,16 @@
+@import './styles/fudoTheme.css';
+@import './styles/floorPlan.css';
+@import './styles/components.css';
+
+/* Global utilities */
+.flex { display: flex; }
+.flex-col { display: flex; flex-direction: column; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.gap-2 { gap: 8px; }
+.gap-3 { gap: 12px; }
+.gap-4 { gap: 16px; }
+.text-muted { color: var(--text-muted); }
+.text-gold { color: var(--text-gold); }
+.font-mono { font-family: var(--font-mono); }
+.font-bold { font-weight: 700; }
