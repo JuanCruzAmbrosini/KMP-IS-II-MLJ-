@@ -1,0 +1,223 @@
+{
+	"info": {
+		"_postman_id": "9bfa5852-5a3d-4c55-8d57-19e09d57a2c1",
+		"name": "TP2 - Ejercicio 5 (f): Biblioteca API REST Segura (JWT)",
+		"description": "Colección de pruebas automáticas para verificar la seguridad con JWT y Spring Security en la API REST de Biblioteca (Ejercicio 2 'b').",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Intento sin Token (Espera 401 Unauthorized)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/personas",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "8080",
+					"path": ["api", "personas"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2. Login como Lector (ROLE_USER)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"pm.environment.set(\"jwt_user_token\", jsonData.token);",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Token exists\", function () {",
+							"    pm.expect(jsonData.token).to.not.be.empty;",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"user\",\n    \"password\": \"user123\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/auth/login",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "8080",
+					"path": ["api", "auth", "login"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3. GET Personas con Token Lector (Espera 200 OK)",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_user_token}}"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/personas",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "8080",
+					"path": ["api", "personas"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "4. POST Persona con Token Lector (Espera 403 Forbidden)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_user_token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nombre\": \"Intento\",\n    \"apellido\": \"Denegado\",\n    \"dni\": 99999999\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/personas",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "8080",
+					"path": ["api", "personas"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "5. Login como Admin (ROLE_ADMIN)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"pm.environment.set(\"jwt_admin_token\", jsonData.token);",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"admin\",\n    \"password\": \"admin123\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/auth/login",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "8080",
+					"path": ["api", "auth", "login"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "6. POST Persona con Token Admin (Espera 201 Created)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_admin_token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nombre\": \"Clara\",\n    \"apellido\": \"Zelaya\",\n    \"dni\": 37456789\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/personas",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "8080",
+					"path": ["api", "personas"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "7. GET Domicilios con Coordenadas Maps (Espera 200 OK)",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_admin_token}}"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/domicilios",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "8080",
+					"path": ["api", "domicilios"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "8. GET /api/auth/me (Espera 200 OK)",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_admin_token}}"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/auth/me",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "8080",
+					"path": ["api", "auth", "me"]
+				}
+			},
+			"response": []
+		}
+	]
+}
+
