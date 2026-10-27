@@ -43,24 +43,7 @@ function showAlert(message, type = 'success') {
     alertBox.classList.remove('hidden');
     setTimeout(() => {
         alertBox.classList.add('hidden');
-    }, 5000);
-}
-
-function updateServerStatus(status) {
-    const statusBadge = document.getElementById('backendStatus');
-    if (!statusBadge) return;
-    const indicator = statusBadge.querySelector('.indicator');
-    const text = statusBadge.querySelector('.status-text');
-    if (status === true || status === 'online') {
-        indicator.style.backgroundColor = 'var(--success)';
-        text.textContent = 'Servidor Conectado';
-    } else if (status === 'loading') {
-        indicator.style.backgroundColor = '#f59e0b';
-        text.textContent = 'Conectando...';
-    } else {
-        indicator.style.backgroundColor = 'var(--danger)';
-        text.textContent = 'Servidor Desconectado';
-    }
+    }, 4500);
 }
 
 function hasValidCoords(lat, lon) {
@@ -72,7 +55,7 @@ function hasValidCoords(lat, lon) {
 // ==========================================
 function initAuth() {
     if (!currentToken) {
-        // Por defecto loguear como admin para facilitar la primera experiencia interactiva
+        // Por defecto loguear como admin para facilitar la primera experiencia de uso
         quickLogin('admin', 'admin123', false);
     } else {
         updateAuthUI();
@@ -86,21 +69,40 @@ function updateAuthUI() {
     const btnRegister = document.getElementById('btnShowRegister');
     const btnToken = document.getElementById('btnViewToken');
     const btnLogout = document.getElementById('btnLogout');
+    const toolbarBtnToken = document.getElementById('toolbarBtnToken');
+
+    const chipAdmin = document.getElementById('chipAdmin');
+    const chipUser = document.getElementById('chipUser');
+    const chipGuest = document.getElementById('chipGuest');
+
+    if (chipAdmin) chipAdmin.classList.remove('active-chip');
+    if (chipUser) chipUser.classList.remove('active-chip');
+    if (chipGuest) chipGuest.classList.remove('active-chip');
 
     if (currentToken && currentUser) {
         pill.className = 'auth-pill authenticated';
-        text.textContent = `Autenticado: ${currentUser.username} (${currentUser.rol || 'ROLE_USER'})`;
-        btnLogin.classList.add('hidden');
-        btnRegister.classList.add('hidden');
-        btnToken.classList.remove('hidden');
-        btnLogout.classList.remove('hidden');
+        text.textContent = `${currentUser.username} (${currentUser.rol || 'ROLE_USER'})`;
+        if (btnLogin) btnLogin.classList.add('hidden');
+        if (btnRegister) btnRegister.classList.add('hidden');
+        if (btnToken) btnToken.classList.remove('hidden');
+        if (btnLogout) btnLogout.classList.remove('hidden');
+        if (toolbarBtnToken) toolbarBtnToken.classList.remove('hidden');
+
+        if (currentUser.username === 'admin' && chipAdmin) {
+            chipAdmin.classList.add('active-chip');
+        } else if (currentUser.username === 'user' && chipUser) {
+            chipUser.classList.add('active-chip');
+        }
     } else {
         pill.className = 'auth-pill unauthenticated';
-        text.textContent = 'No autenticado (Sin Token)';
-        btnLogin.classList.remove('hidden');
-        btnRegister.classList.remove('hidden');
-        btnToken.classList.add('hidden');
-        btnLogout.classList.add('hidden');
+        text.textContent = 'No autenticado';
+        if (btnLogin) btnLogin.classList.remove('hidden');
+        if (btnRegister) btnRegister.classList.remove('hidden');
+        if (btnToken) btnToken.classList.add('hidden');
+        if (btnLogout) btnLogout.classList.add('hidden');
+        if (toolbarBtnToken) toolbarBtnToken.classList.add('hidden');
+
+        if (chipGuest) chipGuest.classList.add('active-chip');
     }
 }
 
@@ -123,33 +125,29 @@ async function authFetch(url, options = {}) {
         options.headers['Authorization'] = 'Bearer ' + currentToken;
     }
 
-    try {
-        const res = await fetch(url, options);
+    const res = await fetch(url, options);
 
-        if (res.status === 401) {
-            let errorData = null;
-            try { errorData = await res.json(); } catch(e){}
-            const msg = (errorData && errorData.message)
-                ? errorData.message
-                : 'Acceso Denegado (401 Unauthorized): Se requiere Token JWT Bearer valido.';
-            showAlert(`🔒 [401 No Autorizado]: ${msg}`, 'error');
-            throw new Error(msg);
-        }
-
-        if (res.status === 403) {
-            let errorData = null;
-            try { errorData = await res.json(); } catch(e){}
-            const msg = (errorData && errorData.message)
-                ? errorData.message
-                : 'Acción Prohibida (403 Forbidden): Se requiere permisos de Administrador (ROLE_ADMIN).';
-            showAlert(`⛔ [403 Prohibido]: ${msg}`, 'error');
-            throw new Error(msg);
-        }
-
-        return res;
-    } catch (err) {
-        throw err;
+    if (res.status === 401) {
+        let errorData = null;
+        try { errorData = await res.json(); } catch(e){}
+        const msg = (errorData && errorData.message)
+            ? errorData.message
+            : 'Acceso Denegado (401 Unauthorized): Se requiere Token JWT Bearer válido.';
+        showAlert(`[401 No Autorizado] ${msg}`, 'error');
+        throw new Error(msg);
     }
+
+    if (res.status === 403) {
+        let errorData = null;
+        try { errorData = await res.json(); } catch(e){}
+        const msg = (errorData && errorData.message)
+            ? errorData.message
+            : 'Acción Prohibida (403 Forbidden): Se requieren permisos de Administrador (ROLE_ADMIN).';
+        showAlert(`[403 Prohibido] ${msg}`, 'error');
+        throw new Error(msg);
+    }
+
+    return res;
 }
 
 async function quickLogin(username, password, triggerLoad = true) {
@@ -162,7 +160,7 @@ async function quickLogin(username, password, triggerLoad = true) {
 
         if (!res.ok) {
             const err = await res.json();
-            throw new Error(err.message || 'Error en inicio de sesión rápido');
+            throw new Error(err.message || 'Error en inicio de sesión');
         }
 
         const data = await res.json();
@@ -177,10 +175,10 @@ async function quickLogin(username, password, triggerLoad = true) {
         localStorage.setItem('jwt_user', JSON.stringify(currentUser));
 
         updateAuthUI();
-        showAlert(`Sesión iniciada con éxito como ${data.username} (${data.rol})`, 'success');
+        showAlert(`Sesión iniciada como ${data.username} (${data.rol})`, 'success');
         if (triggerLoad) await loadAll();
     } catch (e) {
-        showAlert(`Fallo al autenticar: ${e.message}`, 'error');
+        showAlert(`Error al autenticar: ${e.message}`, 'error');
     }
 }
 
@@ -190,7 +188,7 @@ function simulateUnauthenticated() {
     localStorage.removeItem('jwt_token');
     localStorage.removeItem('jwt_user');
     updateAuthUI();
-    showAlert('Simulando cliente SIN TOKEN: los endpoints protegidos retornarán 401 Unauthorized', 'error');
+    showAlert('Cliente sin token: las operaciones protegidas responderán 401 Unauthorized', 'error');
     loadAll();
 }
 
@@ -200,7 +198,7 @@ function logout() {
     localStorage.removeItem('jwt_token');
     localStorage.removeItem('jwt_user');
     updateAuthUI();
-    showAlert('Sesión cerrada correctamente', 'success');
+    showAlert('Sesión finalizada', 'success');
     loadAll();
 }
 
@@ -222,7 +220,10 @@ function openRegisterModal() {
 }
 
 function openTokenModal() {
-    if (!currentToken) return;
+    if (!currentToken) {
+        showAlert('No hay un token activo para visualizar. Inicie sesión primero.', 'error');
+        return;
+    }
     document.getElementById('rawTokenText').value = currentToken;
     const decoded = parseJwt(currentToken);
     document.getElementById('decodedTokenPayload').textContent = JSON.stringify(decoded, null, 2);
@@ -233,7 +234,7 @@ function copyToken() {
     const raw = document.getElementById('rawTokenText');
     raw.select();
     navigator.clipboard.writeText(raw.value);
-    showAlert('Token JWT copiado al portapapeles', 'success');
+    showAlert('Token copiado al portapapeles', 'success');
 }
 
 async function handleLoginSubmit(e) {
@@ -250,7 +251,7 @@ async function handleLoginSubmit(e) {
         });
 
         if (!res.ok) {
-            let msg = 'Credenciales invalidas';
+            let msg = 'Credenciales inválidas';
             try {
                 const err = await res.json();
                 if (err.message) msg = err.message;
@@ -271,7 +272,7 @@ async function handleLoginSubmit(e) {
 
         closeModal('loginModal');
         updateAuthUI();
-        showAlert(`Bienvenido, ${data.username}! Sesión iniciada con rol ${data.rol}`, 'success');
+        showAlert(`Sesión iniciada como ${data.username} (${data.rol})`, 'success');
         await loadAll();
     } catch (err) {
         errBox.textContent = err.message;
@@ -317,7 +318,7 @@ async function handleRegisterSubmit(e) {
 
         closeModal('registerModal');
         updateAuthUI();
-        showAlert(`Usuario ${data.username} registrado con éxito y autenticado`, 'success');
+        showAlert(`Usuario ${data.username} registrado y autenticado`, 'success');
         await loadAll();
     } catch (err) {
         errBox.textContent = err.message;
@@ -334,7 +335,6 @@ function closeModal(modalId) {
 // CARGA GLOBAL
 // ==========================================
 async function loadAll() {
-    updateServerStatus('loading');
     try {
         await Promise.all([
             loadLocalidades(),
@@ -343,10 +343,8 @@ async function loadAll() {
             loadLibros()
         ]);
         await loadPersonas();
-        updateServerStatus(true);
     } catch (e) {
-        console.error('Error cargando datos iniciales:', e);
-        updateServerStatus(false);
+        console.error('Error cargando datos:', e);
     }
 }
 
@@ -367,11 +365,11 @@ async function loadLocalidades() {
 
         tbody.innerHTML = cachedLocalidades.map(loc => `
             <tr>
-                <td><strong>#${loc.id}</strong></td>
-                <td>${loc.denominacion}</td>
-                <td>
-                    <button class="btn btn-secondary btn-sm" onclick="editLocalidad(${loc.id})">Editar</button>
-                    <button class="btn btn-danger btn-sm" onclick="deleteLocalidad(${loc.id})">Eliminar</button>
+                <td><code>#${loc.id}</code></td>
+                <td><strong>${loc.denominacion}</strong></td>
+                <td style="text-align: right;">
+                    <button class="btn btn-sm btn-outline" onclick="editLocalidad(${loc.id})">Editar</button>
+                    <button class="btn btn-sm btn-subtle-danger" onclick="deleteLocalidad(${loc.id})">Eliminar</button>
                 </td>
             </tr>
         `).join('');
@@ -387,7 +385,7 @@ async function loadLocalidades() {
 function populateLocalidadesSelect() {
     const select = document.getElementById('domicilioLocalidad');
     if (!select) return;
-    select.innerHTML = '<option value="">-- Seleccione Localidad --</option>' +
+    select.innerHTML = '<option value="">Seleccione Localidad</option>' +
         cachedLocalidades.map(l => `<option value="${l.id}">${l.denominacion}</option>`).join('');
 }
 
@@ -420,7 +418,7 @@ async function saveLocalidad(e) {
         if (!res.ok) throw new Error('Error al guardar localidad');
         
         closeModal('localidadModal');
-        showAlert(`Localidad ${id ? 'actualizada' : 'creada'} con éxito`);
+        showAlert(`Localidad ${id ? 'actualizada' : 'creada'} correctamente`);
         await loadLocalidades();
     } catch (err) {
         showAlert(err.message, 'error');
@@ -428,7 +426,7 @@ async function saveLocalidad(e) {
 }
 
 async function deleteLocalidad(id) {
-    if (!confirm('¿Seguro que deseas eliminar esta localidad?')) return;
+    if (!confirm('¿Desea eliminar esta localidad?')) return;
     try {
         const res = await authFetch(`${API_BASE}/localidades/${id}`, { method: 'DELETE' });
         if (!res.ok) throw new Error('Error al eliminar localidad');
@@ -460,23 +458,23 @@ async function loadDomicilios() {
                 ? `https://www.google.com/maps?q=${encodeURIComponent(String(d.latitud).trim())},${encodeURIComponent(String(d.longitud).trim())}`
                 : '#';
             const coordsContent = hasCoords
-                ? `<span style="font-family:monospace;font-size:0.8rem;color:var(--text-secondary)">${d.latitud}, ${d.longitud}</span>`
-                : '<em style="color:var(--text-secondary);font-size:0.85rem">Sin coordenadas</em>';
+                ? `<span class="coords-text">${d.latitud}, ${d.longitud}</span>`
+                : '<span class="muted-text">Sin datos</span>';
 
             const mapsBtn = hasCoords
-                ? `<a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="btn-maps" title="Abrir en Google Maps">📍 Google Maps</a>`
-                : '<span style="color:var(--text-secondary);font-size:0.8rem">-</span>';
+                ? `<a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="link-maps">Google Maps &nearr;</a>`
+                : '<span class="muted-text">-</span>';
 
             return `
                 <tr>
-                    <td><strong>#${d.id}</strong></td>
-                    <td>${d.calle} ${d.numero}</td>
-                    <td>${d.localidad ? d.localidad.denominacion : '<em style="color:var(--text-secondary)">Sin localidad</em>'}</td>
+                    <td><code>#${d.id}</code></td>
+                    <td><strong>${d.calle} ${d.numero}</strong></td>
+                    <td>${d.localidad ? d.localidad.denominacion : '<span class="muted-text">Sin asignar</span>'}</td>
                     <td>${coordsContent}</td>
                     <td>${mapsBtn}</td>
-                    <td>
-                        <button class="btn btn-secondary btn-sm" onclick="editDomicilio(${d.id})">Editar</button>
-                        <button class="btn btn-danger btn-sm" onclick="deleteDomicilio(${d.id})">Eliminar</button>
+                    <td style="text-align: right;">
+                        <button class="btn btn-sm btn-outline" onclick="editDomicilio(${d.id})">Editar</button>
+                        <button class="btn btn-sm btn-subtle-danger" onclick="deleteDomicilio(${d.id})">Eliminar</button>
                     </td>
                 </tr>
             `;
@@ -493,10 +491,10 @@ async function loadDomicilios() {
 function populateDomiciliosSelect() {
     const select = document.getElementById('personaDomicilio');
     if (!select) return;
-    select.innerHTML = '<option value="">-- Sin Domicilio --</option>' +
+    select.innerHTML = '<option value="">Sin Domicilio</option>' +
         cachedDomicilios.map(d => {
             const locName = d.localidad ? ` (${d.localidad.denominacion})` : '';
-            const coordsInfo = hasValidCoords(d.latitud, d.longitud) ? ' [📍 Maps OK]' : '';
+            const coordsInfo = hasValidCoords(d.latitud, d.longitud) ? ' [Maps]' : '';
             return `<option value="${d.id}">${d.calle} ${d.numero}${locName}${coordsInfo}</option>`;
         }).join('');
 }
@@ -550,7 +548,7 @@ async function saveDomicilio(e) {
         if (!res.ok) throw new Error('Error al guardar domicilio');
 
         closeModal('domicilioModal');
-        showAlert(`Domicilio ${id ? 'actualizado' : 'creado'} con éxito`);
+        showAlert(`Domicilio ${id ? 'actualizado' : 'creado'} correctamente`);
         await loadDomicilios();
         await loadPersonas();
     } catch (err) {
@@ -559,7 +557,7 @@ async function saveDomicilio(e) {
 }
 
 async function deleteDomicilio(id) {
-    if (!confirm('¿Seguro que deseas eliminar este domicilio?')) return;
+    if (!confirm('¿Desea eliminar este domicilio?')) return;
     try {
         const res = await authFetch(`${API_BASE}/domicilios/${id}`, { method: 'DELETE' });
         if (!res.ok) throw new Error('Error al eliminar domicilio');
@@ -588,12 +586,12 @@ async function loadAutores() {
 
         tbody.innerHTML = cachedAutores.map(a => `
             <tr>
-                <td><strong>#${a.id}</strong></td>
+                <td><code>#${a.id}</code></td>
                 <td><strong>${a.nombre} ${a.apellido}</strong></td>
-                <td>${a.biografia || '<em style="color:var(--text-secondary)">Sin biografía</em>'}</td>
-                <td>
-                    <button class="btn btn-secondary btn-sm" onclick="editAutor(${a.id})">Editar</button>
-                    <button class="btn btn-danger btn-sm" onclick="deleteAutor(${a.id})">Eliminar</button>
+                <td><span class="muted-text">${a.biografia || 'Sin reseña'}</span></td>
+                <td style="text-align: right;">
+                    <button class="btn btn-sm btn-outline" onclick="editAutor(${a.id})">Editar</button>
+                    <button class="btn btn-sm btn-subtle-danger" onclick="deleteAutor(${a.id})">Eliminar</button>
                 </td>
             </tr>
         `).join('');
@@ -610,7 +608,7 @@ function renderAutoresCheckboxList(selectedIds = []) {
     const container = document.getElementById('libroAutoresList');
     if (!container) return;
     if (cachedAutores.length === 0) {
-        container.innerHTML = '<span style="color:var(--text-secondary);font-size:0.85rem">No hay autores registrados aún</span>';
+        container.innerHTML = '<span class="muted-text">No hay autores registrados</span>';
         return;
     }
     container.innerHTML = cachedAutores.map(a => {
@@ -657,7 +655,7 @@ async function saveAutor(e) {
         if (!res.ok) throw new Error('Error al guardar autor');
 
         closeModal('autorModal');
-        showAlert(`Autor ${id ? 'actualizado' : 'creado'} con éxito`);
+        showAlert(`Autor ${id ? 'actualizado' : 'creado'} correctamente`);
         await loadAutores();
         await loadLibros();
     } catch (err) {
@@ -666,7 +664,7 @@ async function saveAutor(e) {
 }
 
 async function deleteAutor(id) {
-    if (!confirm('¿Seguro que deseas eliminar este autor?')) return;
+    if (!confirm('¿Desea eliminar este autor?')) return;
     try {
         const res = await authFetch(`${API_BASE}/autores/${id}`, { method: 'DELETE' });
         if (!res.ok) throw new Error('Error al eliminar autor');
@@ -695,21 +693,21 @@ async function loadLibros() {
 
         tbody.innerHTML = cachedLibros.map(lib => {
             const autoresList = (lib.autores && lib.autores.length > 0)
-                ? lib.autores.map(a => `<span class="badge badge-autor">${a.nombre} ${a.apellido}</span>`).join(' ')
-                : '<em style="color:var(--text-secondary);font-size:0.85rem">Sin autores asignados</em>';
+                ? lib.autores.map(a => `<span class="tag">${a.nombre} ${a.apellido}</span>`).join(' ')
+                : '<span class="muted-text">Sin vincular</span>';
 
             return `
                 <tr>
-                    <td><strong>#${lib.id}</strong></td>
+                    <td><code>#${lib.id}</code></td>
                     <td><strong>${lib.titulo}</strong></td>
-                    <td><span class="badge badge-libro">${lib.genero}</span></td>
+                    <td><span class="tag">${lib.genero}</span></td>
                     <td>${lib.fecha}</td>
-                    <td>${lib.paginas} págs</td>
+                    <td>${lib.paginas}</td>
                     <td>${lib.autor || '-'}</td>
                     <td>${autoresList}</td>
-                    <td>
-                        <button class="btn btn-secondary btn-sm" onclick="editLibro(${lib.id})">Editar</button>
-                        <button class="btn btn-danger btn-sm" onclick="deleteLibro(${lib.id})">Eliminar</button>
+                    <td style="text-align: right;">
+                        <button class="btn btn-sm btn-outline" onclick="editLibro(${lib.id})">Editar</button>
+                        <button class="btn btn-sm btn-subtle-danger" onclick="deleteLibro(${lib.id})">Eliminar</button>
                     </td>
                 </tr>
             `;
@@ -727,7 +725,7 @@ function renderPersonasLibrosCheckboxList(selectedIds = []) {
     const container = document.getElementById('personaLibrosList');
     if (!container) return;
     if (cachedLibros.length === 0) {
-        container.innerHTML = '<span style="color:var(--text-secondary);font-size:0.85rem">No hay libros registrados aún</span>';
+        container.innerHTML = '<span class="muted-text">No hay libros registrados</span>';
         return;
     }
     container.innerHTML = cachedLibros.map(l => {
@@ -796,7 +794,7 @@ async function saveLibro(e) {
         if (!res.ok) throw new Error('Error al guardar libro');
 
         closeModal('libroModal');
-        showAlert(`Libro ${id ? 'actualizado' : 'creado'} con éxito`);
+        showAlert(`Libro ${id ? 'actualizado' : 'creado'} correctamente`);
         await loadLibros();
         await loadPersonas();
     } catch (err) {
@@ -805,7 +803,7 @@ async function saveLibro(e) {
 }
 
 async function deleteLibro(id) {
-    if (!confirm('¿Seguro que deseas eliminar este libro?')) return;
+    if (!confirm('¿Desea eliminar este libro?')) return;
     try {
         const res = await authFetch(`${API_BASE}/libros/${id}`, { method: 'DELETE' });
         if (!res.ok) throw new Error('Error al eliminar libro');
@@ -833,7 +831,7 @@ async function loadPersonas() {
         }
 
         tbody.innerHTML = personas.map(p => {
-            let domicilioText = '<em style="color:var(--text-secondary)">Sin domicilio asignado</em>';
+            let domicilioText = '<span class="muted-text">Sin domicilio</span>';
             if (p.domicilio) {
                 const locInfo = p.domicilio.localidad ? `, ${p.domicilio.localidad.denominacion}` : '';
                 const hasCoords = hasValidCoords(p.domicilio.latitud, p.domicilio.longitud);
@@ -842,31 +840,31 @@ async function loadPersonas() {
                     : '#';
 
                 const mapsBtn = hasCoords
-                    ? `<a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="btn-maps" title="Ver en Google Maps">📍 Google Maps</a>`
+                    ? `<a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="link-maps">Google Maps &nearr;</a>`
                     : '';
 
                 domicilioText = `
                     <div>
                         <strong>${p.domicilio.calle} ${p.domicilio.numero}</strong>${locInfo}
+                        ${mapsBtn ? `<span style="margin-left: 8px;">${mapsBtn}</span>` : ''}
                     </div>
-                    ${mapsBtn}
                 `;
             }
 
             const librosList = (p.libros && p.libros.length > 0)
-                ? p.libros.map(lib => `<span class="badge badge-libro">📖 ${lib.titulo}</span>`).join(' ')
-                : '<em style="color:var(--text-secondary);font-size:0.85rem">Sin libros asignados</em>';
+                ? p.libros.map(lib => `<span class="tag">${lib.titulo}</span>`).join(' ')
+                : '<span class="muted-text">Sin libros</span>';
 
             return `
                 <tr>
-                    <td><strong>#${p.id}</strong></td>
+                    <td><code>#${p.id}</code></td>
                     <td><strong>${p.nombre} ${p.apellido}</strong></td>
                     <td>${p.dni}</td>
                     <td>${domicilioText}</td>
                     <td>${librosList}</td>
-                    <td>
-                        <button class="btn btn-secondary btn-sm" onclick="editPersona(${p.id})">Editar</button>
-                        <button class="btn btn-danger btn-sm" onclick="deletePersona(${p.id})">Eliminar</button>
+                    <td style="text-align: right;">
+                        <button class="btn btn-sm btn-outline" onclick="editPersona(${p.id})">Editar</button>
+                        <button class="btn btn-sm btn-subtle-danger" onclick="deletePersona(${p.id})">Eliminar</button>
                     </td>
                 </tr>
             `;
@@ -941,7 +939,7 @@ async function savePersona(e) {
         if (!res.ok) throw new Error('Error al guardar persona');
 
         closeModal('personaModal');
-        showAlert(`Persona ${id ? 'actualizada' : 'creada'} con éxito`);
+        showAlert(`Persona ${id ? 'actualizada' : 'creada'} correctamente`);
         await loadPersonas();
     } catch (err) {
         showAlert(err.message, 'error');
@@ -949,7 +947,7 @@ async function savePersona(e) {
 }
 
 async function deletePersona(id) {
-    if (!confirm('¿Seguro que deseas eliminar esta persona?')) return;
+    if (!confirm('¿Desea eliminar este registro?')) return;
     try {
         const res = await authFetch(`${API_BASE}/personas/${id}`, { method: 'DELETE' });
         if (!res.ok) throw new Error('Error al eliminar persona');

@@ -3,61 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Biblioteca API REST con Seguridad JWT</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <title>Biblioteca API REST</title>
+    <link rel="stylesheet" href="css/styles.css?v=20261024_02">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- HEADER MINIMALISTA -->
     <header class="navbar">
-        <div class="logo">
-            <span class="icon">📚</span>
-            <h1>Biblioteca <span>REST + JWT Security</span></h1>
+        <div class="navbar-brand">
+            <h1 class="logo-title">Biblioteca</h1>
+            <span class="logo-tag">API REST &middot; JWT</span>
         </div>
-        <div class="navbar-right">
+        <div class="navbar-actions">
             <div id="authStatusPill" class="auth-pill unauthenticated">
                 <span class="auth-dot"></span>
-                <span id="authStatusText">No autenticado (Sin Token)</span>
+                <span id="authStatusText">No autenticado</span>
             </div>
             <div class="nav-buttons">
-                <button id="btnShowLogin" class="btn btn-sm btn-primary" onclick="openLoginModal()">Iniciar Sesión</button>
-                <button id="btnShowRegister" class="btn btn-sm btn-secondary" onclick="openRegisterModal()">Registrarse</button>
-                <button id="btnViewToken" class="btn btn-sm btn-info hidden" onclick="openTokenModal()">🔍 Ver Token</button>
-                <button id="btnLogout" class="btn btn-sm btn-danger hidden" onclick="logout()">Cerrar Sesión</button>
-            </div>
-            <div class="status-badge" id="backendStatus">
-                <span class="indicator"></span>
-                <span class="status-text">Conectando...</span>
+                <button id="btnShowLogin" class="btn btn-sm" onclick="openLoginModal()">Iniciar Sesión</button>
+                <button id="btnShowRegister" class="btn btn-sm btn-outline" onclick="openRegisterModal()">Registrarse</button>
+                <button id="btnViewToken" class="btn btn-sm btn-outline hidden" onclick="openTokenModal()">Ver Token</button>
+                <button id="btnLogout" class="btn btn-sm btn-subtle-danger hidden" onclick="logout()">Cerrar Sesión</button>
             </div>
         </div>
     </header>
 
-    <!-- BANNER DE SEGURIDAD Y ACCIONES RÁPIDAS -->
-    <div class="security-banner">
-        <div class="security-info">
-            <span class="shield-icon">🛡️</span>
-            <div>
-                <strong>Seguridad API REST (Spring Security 6 + JWT Stateless):</strong>
-                <span>Todos los EndPoints del BackEnd están protegidos. El Token Bearer se envía en la cabecera <code>Authorization: Bearer &lt;token&gt;</code>.</span>
+    <!-- BARRA DE ACCESOS RÁPIDOS DE SEGURIDAD -->
+    <section class="quick-toolbar">
+        <div class="toolbar-left">
+            <span class="toolbar-label">Accesos rápidos de prueba:</span>
+            <div class="quick-buttons">
+                <button id="chipAdmin" class="btn-chip" onclick="quickLogin('admin', 'admin123')" title="Iniciar sesión como Administrador (ROLE_ADMIN)">Admin (ROLE_ADMIN)</button>
+                <button id="chipUser" class="btn-chip" onclick="quickLogin('user', 'user123')" title="Iniciar sesión como Lector (ROLE_USER)">Lector (ROLE_USER)</button>
+                <button id="chipGuest" class="btn-chip btn-chip-muted" onclick="simulateUnauthenticated()" title="Limpiar token para simular cliente anónimo">Sin Token (401)</button>
+                <button id="toolbarBtnToken" class="btn-chip btn-chip-info" onclick="openTokenModal()" title="Inspeccionar el token JWT actual">Ver Token</button>
             </div>
         </div>
-        <div class="quick-actions">
-            <span class="quick-title">Accesos Rápidos de Prueba:</span>
-            <button class="pill-btn admin" onclick="quickLogin('admin', 'admin123')">🔑 Admin (ROLE_ADMIN - CRUD)</button>
-            <button class="pill-btn user" onclick="quickLogin('user', 'user123')">📖 Lector (ROLE_USER - Solo GET)</button>
-            <button class="pill-btn guest" onclick="simulateUnauthenticated()">🚫 Sin Token (Simular 401)</button>
+        <div class="toolbar-right">
+            <span class="toolbar-hint">Cabecera: <code>Authorization: Bearer &lt;token&gt;</code></span>
         </div>
-    </div>
+    </section>
 
-    <div class="container">
-        <!-- Navegación por pestañas -->
+    <main class="container">
+        <!-- Navegación por pestañas minimalista -->
         <nav class="tabs">
-            <button class="tab-btn active" data-tab="personas">👤 Personas</button>
-            <button class="tab-btn" data-tab="libros">📖 Libros</button>
-            <button class="tab-btn" data-tab="autores">✍️ Autores</button>
-            <button class="tab-btn" data-tab="localidades">🏙️ Localidades</button>
-            <button class="tab-btn" data-tab="domicilios">🏠 Domicilios</button>
+            <button class="tab-btn active" data-tab="personas">Personas</button>
+            <button class="tab-btn" data-tab="libros">Libros</button>
+            <button class="tab-btn" data-tab="autores">Autores</button>
+            <button class="tab-btn" data-tab="localidades">Localidades</button>
+            <button class="tab-btn" data-tab="domicilios">Domicilios</button>
         </nav>
 
         <div id="alertBox" class="alert-box hidden"></div>
@@ -66,26 +62,26 @@
         <section id="tab-personas" class="tab-content active">
             <div class="section-header">
                 <div>
-                    <h2>Gestión de Personas</h2>
-                    <p class="subtitle">Relación 1 a 1 con Domicilio (con ubicación Google Maps) y 1 a * (Composición) con Libros</p>
+                    <h2>Personas</h2>
+                    <p class="subtitle">Relación 1 a 1 con Domicilio y 1 a * con Libros</p>
                 </div>
-                <button class="btn btn-primary" onclick="openPersonaModal()">+ Nueva Persona</button>
+                <button class="btn btn-primary" onclick="openPersonaModal()">Nueva Persona</button>
             </div>
 
             <div class="table-container">
                 <table class="data-table">
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            <th style="width: 70px;">ID</th>
                             <th>Nombre Completo</th>
-                            <th>DNI</th>
-                            <th>Domicilio / Ubicación (Google Maps)</th>
+                            <th style="width: 120px;">DNI</th>
+                            <th>Domicilio</th>
                             <th>Libros Asignados</th>
-                            <th>Acciones</th>
+                            <th style="width: 150px; text-align: right;">Acciones</th>
                         </tr>
                     </thead>
                     <tbody id="personasTableBody">
-                        <tr><td colspan="6" class="loading">Cargando personas...</td></tr>
+                        <tr><td colspan="6" class="loading">Cargando registros...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -95,28 +91,28 @@
         <section id="tab-libros" class="tab-content">
             <div class="section-header">
                 <div>
-                    <h2>Catálogo de Libros</h2>
-                    <p class="subtitle">Relación * a * con Autores y datos bibliográficos</p>
+                    <h2>Libros</h2>
+                    <p class="subtitle">Catálogo bibliográfico y autores asociados</p>
                 </div>
-                <button class="btn btn-primary" onclick="openLibroModal()">+ Nuevo Libro</button>
+                <button class="btn btn-primary" onclick="openLibroModal()">Nuevo Libro</button>
             </div>
 
             <div class="table-container">
                 <table class="data-table">
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            <th style="width: 70px;">ID</th>
                             <th>Título</th>
                             <th>Género</th>
-                            <th>Año</th>
-                            <th>Páginas</th>
-                            <th>Autor Referencial</th>
+                            <th style="width: 80px;">Año</th>
+                            <th style="width: 90px;">Páginas</th>
+                            <th>Autor Principal</th>
                             <th>Autores Vinculados</th>
-                            <th>Acciones</th>
+                            <th style="width: 150px; text-align: right;">Acciones</th>
                         </tr>
                     </thead>
                     <tbody id="librosTableBody">
-                        <tr><td colspan="8" class="loading">Cargando libros...</td></tr>
+                        <tr><td colspan="8" class="loading">Cargando registros...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -126,24 +122,24 @@
         <section id="tab-autores" class="tab-content">
             <div class="section-header">
                 <div>
-                    <h2>Registro de Autores</h2>
-                    <p class="subtitle">Entidad Autor y su bibliografía</p>
+                    <h2>Autores</h2>
+                    <p class="subtitle">Registro de autores y reseñas biográficas</p>
                 </div>
-                <button class="btn btn-primary" onclick="openAutorModal()">+ Nuevo Autor</button>
+                <button class="btn btn-primary" onclick="openAutorModal()">Nuevo Autor</button>
             </div>
 
             <div class="table-container">
                 <table class="data-table">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Nombre Completo</th>
+                            <th style="width: 70px;">ID</th>
+                            <th>Nombre</th>
                             <th>Biografía</th>
-                            <th>Acciones</th>
+                            <th style="width: 150px; text-align: right;">Acciones</th>
                         </tr>
                     </thead>
                     <tbody id="autoresTableBody">
-                        <tr><td colspan="4" class="loading">Cargando autores...</td></tr>
+                        <tr><td colspan="4" class="loading">Cargando registros...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -156,20 +152,20 @@
                     <h2>Localidades</h2>
                     <p class="subtitle">División territorial para domicilios</p>
                 </div>
-                <button class="btn btn-primary" onclick="openLocalidadModal()">+ Nueva Localidad</button>
+                <button class="btn btn-primary" onclick="openLocalidadModal()">Nueva Localidad</button>
             </div>
 
             <div class="table-container">
                 <table class="data-table">
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            <th style="width: 70px;">ID</th>
                             <th>Denominación</th>
-                            <th>Acciones</th>
+                            <th style="width: 150px; text-align: right;">Acciones</th>
                         </tr>
                     </thead>
                     <tbody id="localidadesTableBody">
-                        <tr><td colspan="3" class="loading">Cargando localidades...</td></tr>
+                        <tr><td colspan="3" class="loading">Cargando registros...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -180,30 +176,30 @@
             <div class="section-header">
                 <div>
                     <h2>Domicilios</h2>
-                    <p class="subtitle">Direcciones con integración a Google Maps (* a 1 con Localidad)</p>
+                    <p class="subtitle">Direcciones y geolocalización en Google Maps</p>
                 </div>
-                <button class="btn btn-primary" onclick="openDomicilioModal()">+ Nuevo Domicilio</button>
+                <button class="btn btn-primary" onclick="openDomicilioModal()">Nuevo Domicilio</button>
             </div>
 
             <div class="table-container">
                 <table class="data-table">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Calle y Número</th>
+                            <th style="width: 70px;">ID</th>
+                            <th>Dirección</th>
                             <th>Localidad</th>
-                            <th>Coordenadas Lat / Long</th>
-                            <th>Google Maps</th>
-                            <th>Acciones</th>
+                            <th>Coordenadas</th>
+                            <th style="width: 120px;">Mapa</th>
+                            <th style="width: 150px; text-align: right;">Acciones</th>
                         </tr>
                     </thead>
                     <tbody id="domiciliosTableBody">
-                        <tr><td colspan="6" class="loading">Cargando domicilios...</td></tr>
+                        <tr><td colspan="6" class="loading">Cargando registros...</td></tr>
                     </tbody>
                 </table>
             </div>
         </section>
-    </div>
+    </main>
 
     <!-- ==================== MODALES ==================== -->
 
@@ -211,22 +207,22 @@
     <div id="loginModal" class="modal-overlay hidden">
         <div class="modal">
             <div class="modal-header">
-                <h3>Iniciar Sesión en API REST</h3>
+                <h3>Iniciar Sesión</h3>
                 <button class="btn-close" onclick="closeModal('loginModal')">&times;</button>
             </div>
             <form id="loginForm" onsubmit="handleLoginSubmit(event)">
                 <div class="form-group">
-                    <label for="loginUsername">Nombre de Usuario *</label>
+                    <label for="loginUsername">Usuario</label>
                     <input type="text" id="loginUsername" required placeholder="admin o user">
                 </div>
                 <div class="form-group">
-                    <label for="loginPassword">Contraseña *</label>
+                    <label for="loginPassword">Contraseña</label>
                     <input type="password" id="loginPassword" required placeholder="admin123 o user123">
                 </div>
                 <div id="loginError" class="modal-error hidden"></div>
                 <div class="modal-actions">
                     <button type="button" class="btn btn-secondary" onclick="closeModal('loginModal')">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Autenticar & Obtener Token</button>
+                    <button type="submit" class="btn btn-primary">Ingresar</button>
                 </div>
             </form>
         </div>
@@ -236,37 +232,37 @@
     <div id="registerModal" class="modal-overlay hidden">
         <div class="modal">
             <div class="modal-header">
-                <h3>Registrar Nuevo Usuario</h3>
+                <h3>Registrar Usuario</h3>
                 <button class="btn-close" onclick="closeModal('registerModal')">&times;</button>
             </div>
             <form id="registerForm" onsubmit="handleRegisterSubmit(event)">
                 <div class="form-group">
-                    <label for="regUsername">Usuario *</label>
-                    <input type="text" id="regUsername" required placeholder="Ej: lector2026">
+                    <label for="regUsername">Usuario</label>
+                    <input type="text" id="regUsername" required placeholder="Nombre de usuario">
                 </div>
                 <div class="form-group">
-                    <label for="regPassword">Contraseña *</label>
-                    <input type="password" id="regPassword" required placeholder="Mínimo 4 caracteres">
+                    <label for="regPassword">Contraseña</label>
+                    <input type="password" id="regPassword" required placeholder="Contraseña">
                 </div>
                 <div class="form-group">
                     <label for="regNombre">Nombre Completo</label>
-                    <input type="text" id="regNombre" placeholder="Ej: Sofía Martínez">
+                    <input type="text" id="regNombre" placeholder="Nombre y Apellido">
                 </div>
                 <div class="form-group">
                     <label for="regEmail">Correo Electrónico</label>
-                    <input type="email" id="regEmail" placeholder="sofia@biblioteca.com">
+                    <input type="email" id="regEmail" placeholder="correo@ejemplo.com">
                 </div>
                 <div class="form-group">
-                    <label for="regRol">Rol Asignado *</label>
+                    <label for="regRol">Rol</label>
                     <select id="regRol">
-                        <option value="ROLE_USER">ROLE_USER (Lector - Solo Lectura)</option>
-                        <option value="ROLE_ADMIN">ROLE_ADMIN (Administrador - CRUD Completo)</option>
+                        <option value="ROLE_USER">ROLE_USER (Solo lectura)</option>
+                        <option value="ROLE_ADMIN">ROLE_ADMIN (Acceso total)</option>
                     </select>
                 </div>
                 <div id="registerError" class="modal-error hidden"></div>
                 <div class="modal-actions">
                     <button type="button" class="btn btn-secondary" onclick="closeModal('registerModal')">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Registrar y Autenticar</button>
+                    <button type="submit" class="btn btn-primary">Registrar</button>
                 </div>
             </form>
         </div>
@@ -276,17 +272,21 @@
     <div id="tokenModal" class="modal-overlay hidden">
         <div class="modal modal-large">
             <div class="modal-header">
-                <h3>Detalles del Token JWT Actual (Bearer)</h3>
+                <h3>Token JWT Actual</h3>
                 <button class="btn-close" onclick="closeModal('tokenModal')">&times;</button>
             </div>
             <div class="token-viewer">
-                <label>Token JWT en Formato Compacto (RFC 7519):</label>
-                <textarea id="rawTokenText" readonly rows="4" class="token-textarea"></textarea>
-                <div class="token-actions">
-                    <button class="btn btn-sm btn-secondary" onclick="copyToken()">📋 Copiar Token</button>
+                <div class="form-group">
+                    <label>Token Bearer Compacto:</label>
+                    <textarea id="rawTokenText" readonly rows="3" class="token-textarea"></textarea>
+                    <div style="margin-top: 0.5rem; text-align: right;">
+                        <button class="btn btn-sm btn-secondary" onclick="copyToken()">Copiar Token</button>
+                    </div>
                 </div>
-                <h4 style="margin-top: 1rem; margin-bottom: 0.5rem;">Claims Decodificados (Payload):</h4>
-                <pre id="decodedTokenPayload" class="code-box"></pre>
+                <div class="form-group" style="margin-top: 1rem;">
+                    <label>Claims Decodificados (Payload):</label>
+                    <pre id="decodedTokenPayload" class="code-box"></pre>
+                </div>
             </div>
             <div class="modal-actions">
                 <button type="button" class="btn btn-secondary" onclick="closeModal('tokenModal')">Cerrar</button>
@@ -305,26 +305,26 @@
                 <input type="hidden" id="personaId">
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="personaNombre">Nombre *</label>
+                        <label for="personaNombre">Nombre</label>
                         <input type="text" id="personaNombre" required>
                     </div>
                     <div class="form-group">
-                        <label for="personaApellido">Apellido *</label>
+                        <label for="personaApellido">Apellido</label>
                         <input type="text" id="personaApellido" required>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="personaDni">DNI *</label>
+                    <label for="personaDni">DNI</label>
                     <input type="number" id="personaDni" required>
                 </div>
                 <div class="form-group">
-                    <label for="personaDomicilio">Domicilio (1 a 1)</label>
+                    <label for="personaDomicilio">Domicilio</label>
                     <select id="personaDomicilio">
-                        <option value="">-- Sin Domicilio --</option>
+                        <option value="">Sin Domicilio</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Libros que lee/posee (1 a * Composición):</label>
+                    <label>Libros Asignados:</label>
                     <div id="personaLibrosList" class="checkbox-list"></div>
                 </div>
                 <div class="modal-actions">
@@ -345,31 +345,31 @@
             <form id="libroForm" onsubmit="saveLibro(event)">
                 <input type="hidden" id="libroId">
                 <div class="form-group">
-                    <label for="libroTitulo">Título *</label>
+                    <label for="libroTitulo">Título</label>
                     <input type="text" id="libroTitulo" required>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="libroGenero">Género *</label>
+                        <label for="libroGenero">Género</label>
                         <input type="text" id="libroGenero" required>
                     </div>
                     <div class="form-group">
-                        <label for="libroFecha">Año de Publicación *</label>
+                        <label for="libroFecha">Año</label>
                         <input type="number" id="libroFecha" required min="0" max="2100">
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="libroPaginas">Páginas *</label>
+                        <label for="libroPaginas">Páginas</label>
                         <input type="number" id="libroPaginas" required min="1">
                     </div>
                     <div class="form-group">
-                        <label for="libroAutorTexto">Nombre Autor (Referencial) *</label>
-                        <input type="text" id="libroAutorTexto" required placeholder="Ej: Gabriel García Márquez">
+                        <label for="libroAutorTexto">Autor Referencial</label>
+                        <input type="text" id="libroAutorTexto" required placeholder="Nombre de autor">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>Autores Asociados (* a *):</label>
+                    <label>Autores Asociados:</label>
                     <div id="libroAutoresList" class="checkbox-list"></div>
                 </div>
                 <div class="modal-actions">
@@ -391,17 +391,17 @@
                 <input type="hidden" id="autorId">
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="autorNombre">Nombre *</label>
+                        <label for="autorNombre">Nombre</label>
                         <input type="text" id="autorNombre" required>
                     </div>
                     <div class="form-group">
-                        <label for="autorApellido">Apellido *</label>
+                        <label for="autorApellido">Apellido</label>
                         <input type="text" id="autorApellido" required>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="autorBiografia">Biografía</label>
-                    <textarea id="autorBiografia" rows="3" placeholder="Reseña del autor..."></textarea>
+                    <textarea id="autorBiografia" rows="3" placeholder="Reseña o datos biográficos"></textarea>
                 </div>
                 <div class="modal-actions">
                     <button type="button" class="btn btn-secondary" onclick="closeModal('autorModal')">Cancelar</button>
@@ -421,8 +421,8 @@
             <form id="localidadForm" onsubmit="saveLocalidad(event)">
                 <input type="hidden" id="localidadId">
                 <div class="form-group">
-                    <label for="localidadDenominacion">Denominación *</label>
-                    <input type="text" id="localidadDenominacion" required placeholder="Ej. Godoy Cruz">
+                    <label for="localidadDenominacion">Denominación</label>
+                    <input type="text" id="localidadDenominacion" required placeholder="Nombre de la localidad">
                 </div>
                 <div class="modal-actions">
                     <button type="button" class="btn btn-secondary" onclick="closeModal('localidadModal')">Cancelar</button>
@@ -443,28 +443,28 @@
                 <input type="hidden" id="domicilioId">
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="domicilioCalle">Calle *</label>
+                        <label for="domicilioCalle">Calle</label>
                         <input type="text" id="domicilioCalle" required>
                     </div>
                     <div class="form-group">
-                        <label for="domicilioNumero">Número *</label>
+                        <label for="domicilioNumero">Número</label>
                         <input type="number" id="domicilioNumero" required>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="domicilioLocalidad">Localidad (1 a *)</label>
+                    <label for="domicilioLocalidad">Localidad</label>
                     <select id="domicilioLocalidad">
-                        <option value="">-- Seleccione Localidad --</option>
+                        <option value="">Seleccione Localidad</option>
                     </select>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="domicilioLatitud">Latitud (Google Maps)</label>
-                        <input type="text" id="domicilioLatitud" placeholder="Ej: -32.88970575178735">
+                        <label for="domicilioLatitud">Latitud</label>
+                        <input type="text" id="domicilioLatitud" placeholder="-32.889705">
                     </div>
                     <div class="form-group">
-                        <label for="domicilioLongitud">Longitud (Google Maps)</label>
-                        <input type="text" id="domicilioLongitud" placeholder="Ej: -68.84457510855037">
+                        <label for="domicilioLongitud">Longitud</label>
+                        <input type="text" id="domicilioLongitud" placeholder="-68.844575">
                     </div>
                 </div>
                 <div class="modal-actions">
@@ -475,6 +475,6 @@
         </div>
     </div>
 
-    <script src="js/app.js"></script>
+    <script src="js/app.js?v=20261024_02"></script>
 </body>
 </html>
