@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seguridad JWT - Parte B (springboot-jwt-auth-demo)</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <header class="topbar">
+        <div class="container topbar-inner">
+            <div>
+                <span class="badge">Spring Boot 3 + Spring Security 6 + JWT</span>
+                <h1>Seguridad JWT — Parte B (<code>com.masterlab.springboot_jwt_auth_demo</code>)</h1>
+            </div>
+            <div class="status-pill" id="authStatusPill">Sin Token Activo</div>
+        </div>
+    </header>
+
+    <main class="container grid-layout">
+        <!-- Panel 1: Login & Register -->
+        <section class="card">
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('login')">Iniciar Sesión (<code>POST /api/auth/login</code>)</button>
+                <button class="tab-btn" onclick="switchTab('register')">Registro (<code>POST /api/auth/register</code>)</button>
+            </div>
+
+            <!-- Login Form -->
+            <form id="loginForm" class="tab-content active" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="loginUsername">Username</label>
+                    <input type="text" id="loginUsername" value="admin" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" value="password" required>
+                </div>
+                <div class="btn-row">
+                    <button type="submit" class="btn btn-primary">Autenticar y Generar JWT</button>
+                    <button type="button" class="btn btn-outline" onclick="fillCredentials('admin', 'password')">Usar admin / password</button>
+                </div>
+            </form>
+
+            <!-- Register Form -->
+            <form id="registerForm" class="tab-content" onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <label for="regUsername">Username / Email</label>
+                    <input type="text" id="regUsername" placeholder="usuario@correo.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="regPassword">Password</label>
+                    <input type="password" id="regPassword" placeholder="********" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="regFirstname">Firstname</label>
+                        <input type="text" id="regFirstname" placeholder="Admin" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regLastname">Lastname</label>
+                        <input type="text" id="regLastname" placeholder="MasterLab" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="regCountry">Country</label>
+                    <input type="text" id="regCountry" value="Argentina" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Registrar Usuario y Obtener JWT</button>
+            </form>
+        </section>
+
+        <!-- Panel 2: Protected Endpoint & Token Inspector -->
+        <section class="card">
+            <h2>Prueba de Endpoint Protegido (<code>/api/hello</code>)</h2>
+            <p class="muted">Verifica el filtro <code>JwtFilter</code> enviando peticiones con o sin cabecera <code>Authorization: Bearer &lt;token&gt;</code>.</p>
+            <div class="btn-row">
+                <button class="btn btn-success" onclick="callProtectedEndpoint(true)">Probar CON Token Bearer</button>
+                <button class="btn btn-danger" onclick="callProtectedEndpoint(false)">Probar SIN Token (403/401)</button>
+                <button class="btn btn-outline" onclick="clearToken()">Limpiar Token</button>
+            </div>
+
+            <div class="response-box">
+                <div class="response-header">
+                    <span>Respuesta HTTP</span>
+                    <span id="httpStatusBadge" class="http-badge">Listo</span>
+                </div>
+                <pre id="apiResponseOutput">// Ejecuta Login, Register o prueba el endpoint protegido...</pre>
+            </div>
+
+            <div class="token-inspector">
+                <h3>Inspector de Token JWT Activo</h3>
+                <textarea id="jwtRawInput" rows="3" placeholder="El token JWT generado aparecerá aquí..." oninput="decodeJwtDisplay()"></textarea>
+                <div class="jwt-decoded-grid">
+                    <div>
+                        <h4>Header</h4>
+                        <pre id="jwtHeaderOutput">{}</pre>
+                    </div>
+                    <div>
+                        <h4>Payload (Claims)</h4>
+                        <pre id="jwtPayloadOutput">{}</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        window.APP_CONFIG = {
+            loginUrl: '/api/auth/login',
+            registerUrl: '/api/auth/register',
+            protectedUrl: '/api/hello',
+            protectedMethod: 'GET'
+        };
+    </script>
+    <script src="/js/app.js"></script>
+</body>
+</html>
+
