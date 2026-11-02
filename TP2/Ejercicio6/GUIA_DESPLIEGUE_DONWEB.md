@@ -185,6 +185,7 @@ Abre tu terminal local (PowerShell, Bash o CMD) y conéctate:
 ```bash
 ssh root@<IP_PUBLICA_DONWEB>
 ```
+
 *(Ingresa la contraseña de `root` cuando sea solicitada)*.
 
 ---
@@ -256,6 +257,7 @@ Pega los valores de producción:
 DB_ROOT_PASSWORD=SuperPasswordProduccion2026!
 JWT_SECRET=ClaveSecretaDeProduccionParaFirmarJwtDeAlMenos256Bits1234567890
 ```
+
 *(Para guardar en `nano`: presiona `Ctrl + O`, luego `Enter` y sal con `Ctrl + X`)*.
 
 ---
